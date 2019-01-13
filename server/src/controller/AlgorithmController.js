@@ -10,11 +10,14 @@ class AlgorithmController extends AbstractController{
     }
 
     getAction() {
-        return new ApiErrorModel(405, `method not allowed`);
+        let name = this.param('input', "");
+        if(name !== "") {
+            
+        }
     }
 
     postAction() {
-        return new ApiErrorModel(405, `method not allowed`);
+        return new JsonModel(this.respsonse);
     }
 }
 

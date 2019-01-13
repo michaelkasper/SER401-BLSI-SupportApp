@@ -10,10 +10,17 @@ const fs = require('fs');
 const ejs = require('ejs');
 const bodyParser = require('body-parser');
 
+//Controllers
 const AlgorithmController = require('./controller/AlgorithmController');
 
-//const Calculator = require('./model/Calculator'); Replace with model for algorthms
+//Models
 const ApiErrorModel = require('./model/ApiErrorModel');
+const AlgorithmModel = require('./model/store_model/AlgorithmModel');
+const QuestionModel = require('./model/store_model/QuestionModel');
+const QuestionAnswerModel = require('./model/store_model/QuestionAnswerModel');
+const QuestionOptionModel = require('./model/store_model/QuestionOptionModel');
+const RecommendationModel = require('./model/store_model/RecommendationModel');
+const StateModel = require('./model/store_model/StateModel');
 
 const dispatcher = (controller, req, res, next) => {
     (new controller(req, res, serviceManager)).dispatch();
@@ -26,7 +33,12 @@ const routes = {
 
 const serviceManager = {
     routes: routes,
-    //calculator: new Calculator(),
+    algorithm: AlgorithmModel,
+    question: QuestionModel,
+    questionAnswer: QuestionAnswerModel,
+    questionOption: QuestionOptionModel,
+    recommendation: RecommendationModel,
+    state: StateModel
 };
 
 const app = express();
