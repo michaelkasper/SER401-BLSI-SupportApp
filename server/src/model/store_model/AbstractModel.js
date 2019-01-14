@@ -8,38 +8,6 @@ class AbstractModel {
         this.storage = storage; //contains hosted storage and workspace storage methods
         this.id = null;
         this.state = null; 
-        this.algorithmParent = null; //identifies the algorithm that it is a part of.
-        this.dataType = null; //identifies whether a question, recommendation, or algo part.
-    }
-
-    existsInHosted() {
-        if (this.dataType === null || 
-            this.id === null || 
-            this.state === null) {
-                return;
-            }
-
-        //query datatype in database and check for id
-    }
-
-    saveToHosted() {
-        if (this.existsInHost())
-            return;
-    }
-
-    existsInWorkspace() {
-        if (this.dataType === null ||
-            this.id === null ||
-            this.state === null) {
-            return;
-        }
-
-        //query datatype in database and check for id
-    }
-
-    saveToWorkspace() {
-        if (this.existsInHost())
-            return;
     }
 
     fromObj(json) {

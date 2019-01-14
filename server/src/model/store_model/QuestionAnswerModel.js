@@ -9,9 +9,9 @@ class QuestionAnswerModel extends AbstractModel {
         //this.storage = storage;
         //this.id = null;
         //this.state = null;
-        //this.algorithmParent = null;
-        //this.dataType = null;
+        this.dataType = "question-answer";
         
+        this.algorithmParent = null; //identifies the algorithm that it is a part of.
         this.question = null;
         this.questionId = null;
         this.optionId = null;

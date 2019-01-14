@@ -9,9 +9,9 @@ class QuestionOptionModel extends AbstractModel {
         //this.storage = storage;
         //this.id = null;
         //this.state = null;
-        //this.algorithmParent = null;
-        //this.dataType = null;
+        this.dataType = "question-option";
         
+        this.algorithmParent = null; //identifies the algorithm that it is a part of.
         this.label = "";
         this.minValue = null;
         this.maxValue = null;
