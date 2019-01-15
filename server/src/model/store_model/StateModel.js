@@ -8,7 +8,6 @@ class StateModel extends AbstractModel {
         // Abstract Model values
         //this.storage = storage;
         //this.id = null;
-        //this.state = null;
         this.dataType = "state";
 
         this.algorithmParent = null; //identifies the algorithm that it is a part of.

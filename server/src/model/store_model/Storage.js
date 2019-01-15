@@ -1,16 +1,29 @@
 'use strict';
 
 const AbstractModel = require("./AbstractModel");
+const Algorithm = require("./AlgorithmModel");
 
-class Store extends AbstractModel{
+class Storage extends AbstractModel{
     constructor(storage) {
         super(storage);
         // Abstract Model values
         //this.storage = storage;
         //this.id = null;
-        //this.state = null;
 
+        this.currentId = 0; //iterator to hold curent identifier to be used by new algorithms algorithm
         this.algorithms = [];
+    }
+
+    getAlgorithm(id) {
+        return this.algorithms[id];
+    }
+
+    addAlgorithm(name) {
+        let  algorithm = new Algorithm(this.storage, name);
+        algorithm.id = this.currentId;
+
+        this.algorithms[this.currentId++] = algorithm;
+        return algorithm.id;
     }
 
     //Add comparison of questions and recommendations
@@ -29,6 +42,7 @@ class Store extends AbstractModel{
         //query datatype in storage and check for id
     }
 
+    //Saves to hosted db. Not needed until we have need to setup hosting.
     saveToHosted() {
         if (this.existsInHost())
             return;
@@ -75,10 +89,8 @@ class Store extends AbstractModel{
         else {
             this.algorithms.push(algorithm);
         }
-            
 
-        
     }
 }
 
-module.exports = Store;
+module.exports = Storage;

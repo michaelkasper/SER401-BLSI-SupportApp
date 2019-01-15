@@ -7,7 +7,6 @@ class AbstractModel {
     constructor(storage) {
         this.storage = storage; //contains hosted storage and workspace storage methods
         this.id = null;
-        this.state = null; 
     }
 
     fromObj(json) {

@@ -43,6 +43,9 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
+[Docker](https://www.docker.com/products/docker-desktop) can be setup by downloading the desktop client. Then after logging in on your device, run: ```docker pull mysql```.
+This will pull the [MySQL image](https://hub.docker.com/_/mysql) off of Docker. Then run: ```docker-compose -f docker-compose.yml up``` to get the docker container running.
+
 ### Code Splitting
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting

@@ -8,15 +8,18 @@ class QuestionOptionModel extends AbstractModel {
         // Abstract Model values
         //this.storage = storage;
         //this.id = null;
-        //this.state = null;
-        this.dataType = "question-option";
-        
+        this.dataType = "question-option"; //used to easily identify the datatype when sent individually
+
+        this.question = null;
         this.algorithmParent = null; //identifies the algorithm that it is a part of.
+
         this.label = "";
         this.minValue = null;
         this.maxValue = null;
         this.isGood = null; //boolean 
     }
+
+
 }
 
 module.exports = QuestionOptionModel;
