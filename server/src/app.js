@@ -21,6 +21,7 @@ const QuestionAnswerModel = require('./model/store_model/QuestionAnswerModel');
 const QuestionOptionModel = require('./model/store_model/QuestionOptionModel');
 const RecommendationModel = require('./model/store_model/RecommendationModel');
 const StateModel = require('./model/store_model/StateModel');
+const Storage = require("./model/store_model/Storage");
 
 const dispatcher = (controller, req, res, next) => {
     (new controller(req, res, serviceManager)).dispatch();
@@ -33,6 +34,7 @@ const routes = {
 
 const serviceManager = {
     routes: routes,
+    storage: Storage, 
     algorithm: AlgorithmModel,
     question: QuestionModel,
     questionAnswer: QuestionAnswerModel,
