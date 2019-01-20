@@ -15,12 +15,13 @@ const AlgorithmController = require('./controller/AlgorithmController');
 
 //Models
 const ApiErrorModel = require('./model/ApiErrorModel');
-const AlgorithmModel = require('./model/store_model/AlgorithmModel');
-const QuestionModel = require('./model/store_model/QuestionModel');
-const QuestionAnswerModel = require('./model/store_model/QuestionAnswerModel');
-const QuestionOptionModel = require('./model/store_model/QuestionOptionModel');
-const RecommendationModel = require('./model/store_model/RecommendationModel');
-const StateModel = require('./model/store_model/StateModel');
+//const AlgorithmModel = require('./model/store_model/AlgorithmModel');
+//const QuestionModel = require('./model/store_model/QuestionModel');
+//const QuestionAnswerModel = require('./model/store_model/QuestionAnswerModel');
+//const QuestionOptionModel = require('./model/store_model/QuestionOptionModel');
+//const RecommendationModel = require('./model/store_model/RecommendationModel');
+//const StateModel = require('./model/store_model/StateModel');
+const Storage = require("./model/store_model/Storage");
 
 const dispatcher = (controller, req, res, next) => {
     (new controller(req, res, serviceManager)).dispatch();
@@ -33,12 +34,7 @@ const routes = {
 
 const serviceManager = {
     routes: routes,
-    algorithm: AlgorithmModel,
-    question: QuestionModel,
-    questionAnswer: QuestionAnswerModel,
-    questionOption: QuestionOptionModel,
-    recommendation: RecommendationModel,
-    state: StateModel
+    storage: new Storage()
 };
 
 const app = express();
@@ -46,6 +42,7 @@ const port = process.env.PORT || 3001;
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/view');
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -72,8 +69,8 @@ app.use('/', function (req, res, next) {
 });
 
 
-app.use('/', express.static(__dirname + "/../../public", {
-    index: "index.html"
+app.use('/', express.static(__dirname + "/test/", {
+    index: "test.html"
 }));
 
 
