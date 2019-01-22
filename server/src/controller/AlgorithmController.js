@@ -20,7 +20,7 @@ class AlgorithmController extends AbstractController{
             let algo = this.serviceManager.storage.getAlgorithm(id);
             return new JsonModel(JSON.stringify(algo));
         } else if(name !== "") {
-            let algorithmMatches = this.serviceManager.storage.findAlgorithms(id);
+            let algorithmMatches = this.serviceManager.storage.findAlgorithms(name);
             return new JsonModel(JSON.stringify(algorithmMatches));
         }
     }
@@ -33,6 +33,11 @@ class AlgorithmController extends AbstractController{
             return new ApiErrorModel(405, `parameters not allowed`);
         }
 
+        let algorithmMatches = this.serviceManager.storage.findAlgorithms(name);
+        if (algorithmMatches !== []) {
+            return new ApiErrorModel(403, `request denied`);
+        }
+        
         try {
             let id = this.serviceManager.storage.addAlgorithm(name);
             this.serviceManager.storage.algorithms[id] = this.request.body.algorithm;
