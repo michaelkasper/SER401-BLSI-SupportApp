@@ -4,25 +4,47 @@
 <head>
     <meta charset="utf-8" />
     <title>API Test</title>
+    <link href="test.css" type="text/stylesheet">
 </head>
 
 <body>
-    <div id="error"></div>
-    <input id="id" type='textfield' placeholder='ID'>
-    <input id="name" type='textfield' placeholder='Name'><br/>
-    <input type='button' value='Algorithm', onclick="send('algorithm')">
-    <input type='button' value='Question', onclick="send('question')">
-    <input type='button' value='Recommendation', onclick="send('recommendation')">
-    <input type='button' value='Question Option', onclick="send('question_option')">
-    <input type='button' value='Question Answer', onclick="send('question_answer')"><br/>
+    <header><h1>API Test Interface</h1></header>
+    <span id="error"></span>
 
-    <input id="GET" type='radio' name="type" value='get' checked>Get
-    <input id="PUT" type='radio' name="type" value='put'>Put
-    <input id="POST" type='radio' name="type" value='post'>Post
+    <div class="parameters">
+        Id: <input id="id" type='textfield' placeholder='ID'> 
+        <br/>Name: <input id="name" type='textfield' placeholder='Name'>
+        <br/>Question: <input id="questionId" type='textfield' placeholder='QuestionId'>
+        <br/>Recommendation: <input id="recommendationId" type='textfield' placeholder='RecommendationId'>
+        <br/>Question Option: <input id="questionOptionId" type='textfield' placeholder='QuestionOptionId'>
+        <br/>Question: <input id="questionAnswerId" type='textfield' placeholder='QuestionAnswerId'>
+        <br/><br/>
+        
 
-    
+        <div class="info">
+            <br/>
+            <p>*Can only use Name when retrieving algorithms</p>
+        </div>
+    </div>
+
+    <input id="GET" type='radio' name="type" value='get' onClick="showPayload('false')" checked>Get
+    <input id="PUT" type='radio' name="type" value='put' onClick="showPayload('true')">Put
+    <input id="POST" type='radio' name="type" value='post' onClick="showPayload('true')">Post
+    <br/>
+    <div id="payload" hidden>
+        <input id="jsonPayload" type='textfield' placeholder='JSON Payload'><br/><br/>
+    </div>
+
+    <footer>
+        <input type='button' value='Algorithm' , onclick="send('algorithm')">
+        <input type='button' value='Question' , onclick="send('question')">
+        <input type='button' value='Recommendation' , onclick="send('recommendation')">
+        <input type='button' value='Question Option' , onclick="send('question_option')">
+        <input type='button' value='Question Answer' , onclick="send('question_answer')">
+    </footer>
 </body>
 
 </html>
 
-<script src="test.js" type="text/javascript"></script>
+<script src="scripts/fetch.js" type="text/javascript"></script>
+<script src="scripts/onClickMethods.js" type="text/javascript"></script>
