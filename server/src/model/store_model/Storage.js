@@ -26,6 +26,26 @@ class Storage extends AbstractModel{
         return algorithm.id;
     }
 
+    findAlgorithms(name) {
+        let algos = [];
+        for(let a in this.algorithms) {
+            if(a.name.includes(name)) {
+                algos.push(a);
+            }
+        }
+        return JSON.stringify(algos);
+    }
+
+    getAlgorithmByName(name) {
+        let algos = [];
+        for(let a in this.algorithms) {
+            if(a.name === name) {
+                algos.push(a);
+            }
+        }
+        return JSON.stringify(algos);
+    }
+
     //Add comparison of questions and recommendations
     //Will be used to indicate the a change in the algoritm
     changesMade(algorithmId) {

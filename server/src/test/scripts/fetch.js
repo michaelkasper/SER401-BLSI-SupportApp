@@ -18,8 +18,9 @@ async function post(url, data) {
             console.log(resp.status + ' ' + resp.statusText);
             error.innerHTML = resp.status + ' ' + resp.statusText;
         }
+        return resp.json();
     }).then((json) => {
-        console.log(JSON.stringify(json));
+        console.log(json);
     });
 }
 
@@ -41,8 +42,9 @@ async function get(url) {
             console.log(resp.status + ' ' + resp.statusText);
             error.innerHTML = resp.status + ' ' + resp.statusText;
         }
+        return resp.json();
     }).then((json) => {
-        console.log(JSON.stringify(json));   
+        console.log(json);   
     });
 }
 
@@ -65,7 +67,8 @@ async function put(url, data) {
             console.log(resp.status + ' ' + resp.statusText);
             error.innerHTML = resp.status + ' ' + resp.statusText;
         }
+        return resp.json();
     }).then((json) => {
-        console.log(JSON.stringify(json));
+        console.log(json);
     });
 }

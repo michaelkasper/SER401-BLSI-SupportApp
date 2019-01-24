@@ -12,45 +12,43 @@ class AlgorithmController extends AbstractController{
     }
 
     getAction() {              
-        let id = this.param('id', ""); //query data from id to get exact algorithm
-        let name = this.param("name", ""); //query data from name to search algorithm
-        if(id === "" && name === "") { //if both values are missing
+        let id = this.request.query.id; //query data from id to get exact algorithm
+        if(id === "" ) { //if both values are missing
              return new ApiErrorModel(405, `method not allowed`);
-        } else if(id !== "") {
+        } else {
             let algo = this.serviceManager.storage.getAlgorithm(id);
-            return new JsonModel(JSON.stringify(algo));
-        } else if(name !== "") {
-            let algorithmMatches = this.serviceManager.storage.findAlgorithms(name);
-            return new JsonModel(JSON.stringify(algorithmMatches));
+            console.log(algo);
+            return new JsonModel(algo);
         }
     }
 
     //Put in new algorithm
     putAction() {
-        let name = this.param("name", ""); //query data from name to add to database
-        let key = this.param("key", "");
-        if (key === "" || name === "") { //if any value is missing
+        let key = this.request.query.key;
+        let name = this.request.body.name;
+        if (key === "") { //if any value is missing
             return new ApiErrorModel(405, `parameters not allowed`);
         }
 
-        let algorithmMatches = this.serviceManager.storage.findAlgorithms(name);
-        if (algorithmMatches !== []) {
+        let algorithmMatches = this.serviceManager.storage.getAlgorithmByName(name);
+        if (algorithmMatches === []) {
             return new ApiErrorModel(403, `request denied`);
         }
         
+        let id;
         try {
-            let id = this.serviceManager.storage.addAlgorithm(name);
-            this.serviceManager.storage.algorithms[id] = this.request.body.algorithm;
+            id = this.serviceManager.storage.addAlgorithm(name);
         } catch(e) {
             return new JsonModel({"success" : false});
         }
-        return new JsonModel({"success" : true});
+        console.log({"success" : true, "id": id});
+        return new JsonModel({"success" : true, "id": id});
     }
 
     //Post an update
     postAction() {
-        let id = this.param("id", ""); //query data from name to add to database
-        let key = this.param("key", "");
+        let id = this.request.query.id ; //query data from name to add to database
+        let key = this.request.query.key;
         if (key === "" || id === "") { //if any value is missing
             return new ApiErrorModel(405, `parameters not allowed`);
         }

@@ -12,37 +12,36 @@ function showPayload(){
 //BUTTON CLICKS
 function send(pressed) {
     let url = document.URL + pressed;
-    let name = document.getElementById("name").value;
+    let key = document.getElementById("key").value;
     let id = document.getElementById("id").value;
     let questionId = document.getElementById("questionId").value;
     let questionOptionId = document.getElementById("questionOptionId").value;
     let questionAnswerId = document.getElementById("questionAnswerId").value;
     let recommendationId = document.getElementById("recommendationId").value;
 
-    //QUERY PARAMETERS
-    if (name !== "") {
-        console.log("NAME", name);
-        url += '?name=' + document.getElementById("name").value;
+    if (key !== "") {
+        console.log("Key", key);
+        url += '?key=' + key;
     }
     if (id !== "") {
         console.log("ID", id);
-        url += '?id=' + document.getElementById("id").value;
+        url += '?id=' + id;
     }
     if (questionId !== "") {
         console.log("QuestionId", questionId);
-        url += '?questionId=' + document.getElementById("questionId").value;
+        url += '?questionId=' + questionId;
     }
     if (questionOptionId !== "") {
         console.log("QuestionId", questionOptionId);
-        url += '?questionOptionId=' + document.getElementById("questionOptionId").value;
+        url += '?questionOptionId=' + questionOptionId;
     }
     if (questionAnswerId !== "") {
         console.log("QuestionId", questionAnswerId);
-        url += '?questionAnswerId=' + document.getElementById("questionAnswerId").value;
+        url += '?questionAnswerId=' + questionAnswerId;
     }
     if (recommendationId !== "") {
         console.log("RecommendationId", recommendationId);
-        url += '?recommendationId=' + document.getElementById("recommendationId").value;
+        url += '?recommendationId=' + recommendationId;
     }
 
     //METHODS
@@ -57,6 +56,7 @@ function send(pressed) {
             post(url, data);
         } catch (e) {
             console.log(e.toString(), "Incorrect JSON format");
+            document.getElementById("error").innerHTML = e.toString();
         }
     } else {
         console.log("PUT", url);
@@ -66,6 +66,7 @@ function send(pressed) {
             put(url, data);
         } catch (e) {
             console.log(e.toString(), "Incorrect JSON format");
+            document.getElementById("error").innerHTML = e.toString();
         }
     }
 }
