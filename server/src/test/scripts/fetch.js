@@ -14,11 +14,12 @@ async function post(url, data) {
         let error = document.getElementById("error");
         if (resp.ok) {
             error.innerHTML = "";
+            return resp.json();
         } else {
             console.log(resp.status + ' ' + resp.statusText);
             error.innerHTML = resp.status + ' ' + resp.statusText;
         }
-        return resp.json();
+
     }).then((json) => {
         console.log(json);
     });
@@ -38,11 +39,11 @@ async function get(url) {
         let error = document.getElementById("error");
         if (resp.ok) {
             error.innerHTML = "";
+            return resp.json();
         } else {
             console.log(resp.status + ' ' + resp.statusText);
             error.innerHTML = resp.status + ' ' + resp.statusText;
         }
-        return resp.json();
     }).then((json) => {
         console.log(json);   
     });
@@ -63,11 +64,11 @@ async function put(url, data) {
         let error = document.getElementById("error");
         if (resp.ok) {
             error.innerHTML = "";
+            return resp.json();
         } else {
             console.log(resp.status + ' ' + resp.statusText);
             error.innerHTML = resp.status + ' ' + resp.statusText;
         }
-        return resp.json();
     }).then((json) => {
         console.log(json);
     });

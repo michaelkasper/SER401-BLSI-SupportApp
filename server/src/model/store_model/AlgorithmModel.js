@@ -11,18 +11,25 @@ class AlgorithmModel extends AbstractModel{
         //this.storage = storage;
         //this.id = null;
 
+        this.name = "";
         this.currentId = 0;
         this.startId = null;
-        this.name = name;
         this.description = null;
         this.shortDescription = null;
-
         this.questions = []; //id points to index
         this.recommendations = [];
+
+        //this.name = name;
     }
 
     getQuestion(id) {
-        return this.questions[id];
+        let question;
+        try {
+            question = this.questions[parseInt(id)];
+        } catch (e) {
+            return null;
+        }
+        return question;
     }
 
     getRecommendation(id) {

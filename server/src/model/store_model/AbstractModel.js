@@ -11,7 +11,8 @@ class AbstractModel {
 
     fromObj(json) {
         for (let field in json) {
-            if (field in this) {
+            if (field in this && 
+                (this[field] !== this["id"] || this[field] !== this["storage"])) {
                 this[field] = json[field];
             }
         }
@@ -19,7 +20,7 @@ class AbstractModel {
     }
 
     toJson() {
-        let ignore = ['store'];
+        let ignore = ['storage'];
 
         let arrayConverter = (array) => {
             return array.map(item => {

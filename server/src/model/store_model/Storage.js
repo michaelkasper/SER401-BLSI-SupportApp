@@ -21,12 +21,19 @@ class Storage extends AbstractModel{
         } catch (e) {
             return null;
         }
-        return this.algorithms[parseInt(id)];
+        return algo;
     }
 
     addAlgorithm(name) {
         this.algorithms[this.currentId] = new Algorithm(this.storage, name);
         this.algorithms[this.currentId].id = this.currentId++;
+        return this.currentId - 1;
+    }
+
+    addAlgorithmFromData(data) {
+        this.algorithms[this.currentId] = new Algorithm(this.storage);
+        this.algorithms[this.currentId].fromObject(data);
+        this.algorithms[this.currentId].id = this.currentId++; //overwrite id
         return this.currentId - 1;
     }
 
