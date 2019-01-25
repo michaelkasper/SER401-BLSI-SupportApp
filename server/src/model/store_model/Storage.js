@@ -15,15 +15,19 @@ class Storage extends AbstractModel{
     }
 
     getAlgorithm(id) {
-        return this.algorithms[id];
+        let algo;
+        try {
+            algo = this.algorithms[parseInt(id)];
+        } catch (e) {
+            return null;
+        }
+        return this.algorithms[parseInt(id)];
     }
 
     addAlgorithm(name) {
-        let  algorithm = new Algorithm(this.storage, name);
-        algorithm.id = this.currentId;
-
-        this.algorithms[this.currentId++] = algorithm;
-        return algorithm.id;
+        this.algorithms[this.currentId] = new Algorithm(this.storage, name);
+        this.algorithms[this.currentId].id = this.currentId++;
+        return this.currentId - 1;
     }
 
     findAlgorithms(name) {

@@ -13,11 +13,11 @@ class AlgorithmController extends AbstractController{
 
     getAction() {              
         let id = this.request.query.id; //query data from id to get exact algorithm
-        if(id === "" ) { //if both values are missing
+        if(id === "" || id === undefined) { //if both values are missing
              return new ApiErrorModel(405, `method not allowed`);
         } else {
             let algo = this.serviceManager.storage.getAlgorithm(id);
-            console.log(algo);
+            console.log(id, algo);
             return new JsonModel(algo);
         }
     }
@@ -26,7 +26,7 @@ class AlgorithmController extends AbstractController{
     putAction() {
         let key = this.request.query.key;
         let name = this.request.body.name;
-        if (key === "") { //if any value is missing
+        if (key === "" || key === undefined) { //if any value is missing
             return new ApiErrorModel(405, `parameters not allowed`);
         }
 
