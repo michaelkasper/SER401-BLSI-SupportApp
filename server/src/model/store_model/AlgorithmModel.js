@@ -18,8 +18,6 @@ class AlgorithmModel extends AbstractModel{
         this.shortDescription = null;
         this.questions = []; //id points to index
         this.recommendations = [];
-
-        //this.name = name;
     }
 
     getQuestion(id) {
@@ -33,7 +31,13 @@ class AlgorithmModel extends AbstractModel{
     }
 
     getRecommendation(id) {
-        return this.recommendations[id];
+        let recommend;
+        try {
+            recommend = this.recommendations[parseInt(id)];
+        } catch (e) {
+            return null;
+        }
+        return recommend;
     }
 
     addQuestion(prompt) {
@@ -41,13 +45,11 @@ class AlgorithmModel extends AbstractModel{
             this.startId = 0;
         }
 
-        let question = new Question(this.storage);
-        question.id = this.currentId; //Set to current, but increase after
-        question.algorithmParent = this;
-        question.promt = prompt;
-
-        this.question[this.currentId++] = question; //Set to array with current id, but increase after
-        return question.id;
+        this.questions[this.currentId] = new Question(this.storage);
+        this.questions[this.currentId].id = this.currentId++;
+        this.questions[this.currentId].prompt = prompt;
+        this.questions[this.currentId].algorithmParent = this;
+        return this.currentId - 1;
     }
 
     addRecommendation(title, description) {
@@ -55,14 +57,26 @@ class AlgorithmModel extends AbstractModel{
             this.startId = 0;
         }
 
-        let recommend = new Recommendation(this.storage);
-        recommend.id = this.currentId;
-        recommend.algorithmParent = this;
-        recommend.title = title;
-        recommend.description = description;
+        this.recommendations[this.currentId] = new Recommendation(this.storage); 
+        this.recommendations[this.currentId].id = this.currentId++;
+        this.recommendations[this.currentId].title = title;
+        this.recommendations[this.currentId].description = description;
+        this.recommendations[this.currentId].algorithmParent = this;
+        return this.currentId - 1;
+    }
 
-        this.recommendation[this.currentId++] = recommend; //Set to array with current id, but increase after
-        return recommend.id;
+    addQuestionFromData(data) {
+        this.questions[this.currentId] = new Question(this.storage);
+        this.questions[this.currentId].fromObject(data);
+        this.questions[this.currentId].id = this.currentId++; //overwrite id
+        return this.currentId - 1;
+    }
+
+    addRecommendationFromData(data) {
+        this.recommendations[this.currentId] = new Recommendation(this.storage);
+        this.recommendations[this.currentId].fromObject(data);
+        this.recommendations[this.currentId].id = this.currentId++; //overwrite id
+        return this.currentId - 1;
     }
 
     setStart(id) {

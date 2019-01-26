@@ -12,6 +12,7 @@ const bodyParser = require('body-parser');
 
 //Controllers
 const AlgorithmController = require('./controller/AlgorithmController');
+const QuestionController = require('./controller/QuestionController');
 
 //Models
 const ApiErrorModel = require('./model/ApiErrorModel');
@@ -30,6 +31,7 @@ const dispatcher = (controller, req, res, next) => {
 
 const routes = {
     "algorithm": AlgorithmController,
+    "question": QuestionController,
 };
 
 const serviceManager = {

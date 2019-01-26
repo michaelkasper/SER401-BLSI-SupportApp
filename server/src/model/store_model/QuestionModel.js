@@ -10,10 +10,9 @@ class QuestionModel extends AbstractModel {
         // Abstract Model values
         //this.storage = storage;
         //this.id = null;
-        this.dataType = "question"; //used to easily identify the datatype when sent individually
+
         this.currentId = 0;
         this.algorithmParent = null; //identifies the algorithm that it is a part of.
-
 
         this.prompt = "";
         this.typeKey = null;

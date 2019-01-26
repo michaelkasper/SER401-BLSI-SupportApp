@@ -13,7 +13,8 @@ class AlgorithmController extends AbstractController{
 
     getAction() {              
         let id = this.request.query.id; //query data from id to get exact algorithm
-        if(id === "" || id === undefined) { //if both values are missing
+        let key = this.request.query.key;
+        if ((key === "" || key === "") || (id === "" || id === undefined)) { //if both values are missing
              return new ApiErrorModel(405, `method not allowed`);
         } else {
             let algo = this.serviceManager.storage.getAlgorithm(id);
