@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * Written by Taylor Greeff (tgreeff)
+ */
+
 //Add for later handling of Algorithm routing
 var AbstractController = require('./AbstractController');
 var ApiErrorModel = require('./../model/ApiErrorModel');
@@ -16,7 +20,8 @@ class AlgorithmController extends AbstractController{
         let key = this.request.query.key;
         console.log("id", id);
         console.log("key", key);
-        if ((key === "" || key === "") || (id === "" || id === undefined)) { //if both values are missing
+        if ((key === "" || key === "") || 
+            (id === "" || id === undefined)) { //if both values are missing
              return new ApiErrorModel(405, `method not allowed`);
         }
 
@@ -32,6 +37,7 @@ class AlgorithmController extends AbstractController{
     //Put in new algorithm
     //json data: {"name" : "tester"}
     //json data: {"algorithm":{"name": "test", "currentId": 0, "description": null, "id": 0, "questions": [], "recommendations" : [], "shortDescription" : "testers", "startId": null}}
+    // {"name": "test", "currentId": 0, "description": null, "id": 0, "questions": [], "recommendations" : [], "shortDescription" : "testers", "startId": null}
     putAction() {
         console.log("==== PUT ====");
         let key = this.request.query.key;
@@ -40,31 +46,21 @@ class AlgorithmController extends AbstractController{
             return new ApiErrorModel(405, `parameters not allowed`);
         }
         
-        
-        
         //Make and return id
         let id;
         try {
             let data = JSON.parse(this.request.body.data); //Verify data
             console.log("Data", data);
 
-            //Get name of algorithm
-            let name = data["name"]; //fetch sends with data named object with string json
-            console.log("Name",name);
-
-            //Check for existing name
-            let algorithmMatches = this.serviceManager.storage.getAlgorithmByName(name);
-            console.log("Matches", algorithmMatches);
-            if (algorithmMatches === []) {
-                return new ApiErrorModel(403, `request denied`);
+            //Check format of data
+            let algo = data.question;
+            console.log(algo);
+            if (algo === undefined) {
+                algo = data;
             }
 
-            if(Object.keys(data).length === 1) {
-                id = this.serviceManager.storage.addAlgorithm(name);
-            }
-            else {
-                id = this.serviceManager.storage.addAlgorithmFromData(data); //id is overwritten if included
-            }
+            id = this.serviceManager.storage.addAlgorithmFromData(algo); //id is overwritten if included
+            
         } catch(e) {
             console.log(e.toString());
             return new ApiErrorModel(405, `needs data object. Parameter invalid`);
@@ -74,7 +70,8 @@ class AlgorithmController extends AbstractController{
     }
 
     //Post an update
-    //json data: {"algorithm":{"name": "test", "currentId": 0, "description": null, "id": 0, "questions": [], "recommendations" : [], "shortDescription" : "testers", "startId": null}}
+    //json data: {"algorithm":{"name": "tester", "currentId": 0, "description": null, "id": 0, "questions": [], "recommendations" : [], "shortDescription" : "testers", "startId": null}}
+    //{"name": "tester", "currentId": 0, "description": null, "id": 0, "questions": [], "recommendations" : [], "shortDescription" : "testers", "startId": null}
     postAction() {
         console.log("==== POST ====");
 
@@ -98,8 +95,12 @@ class AlgorithmController extends AbstractController{
                 return new ApiErrorModel(404, `not found`);
             }
 
-            algo = data.algorithm
-            console.log("Update for Algorithm", algo);
+            //Check format of data and swap
+            algo = data.question;
+            console.log(algo);
+            if (algo === undefined) {
+                algo = data;
+            }
             
             this.serviceManager.storage.algorithms[id].fromObj(algo);
         } catch (e) {

@@ -13,15 +13,10 @@ const bodyParser = require('body-parser');
 //Controllers
 const AlgorithmController = require('./controller/AlgorithmController');
 const QuestionController = require('./controller/QuestionController');
+const RecommendationController = require('./controller/RecommendationController');
 
 //Models
 const ApiErrorModel = require('./model/ApiErrorModel');
-//const AlgorithmModel = require('./model/store_model/AlgorithmModel');
-//const QuestionModel = require('./model/store_model/QuestionModel');
-//const QuestionAnswerModel = require('./model/store_model/QuestionAnswerModel');
-//const QuestionOptionModel = require('./model/store_model/QuestionOptionModel');
-//const RecommendationModel = require('./model/store_model/RecommendationModel');
-//const StateModel = require('./model/store_model/StateModel');
 const Storage = require("./model/store_model/Storage");
 
 const dispatcher = (controller, req, res, next) => {
@@ -32,6 +27,7 @@ const dispatcher = (controller, req, res, next) => {
 const routes = {
     "algorithm": AlgorithmController,
     "question": QuestionController,
+    "recommendation": RecommendationController,
 };
 
 const serviceManager = {
