@@ -2,6 +2,7 @@
 
 const AbstractModel = require("./AbstractModel");
 const Algorithm = require("./AlgorithmModel");
+const State = require("./StateModel");
 
 class Storage extends AbstractModel{
     constructor() {
@@ -12,12 +13,14 @@ class Storage extends AbstractModel{
         this.currentId = 0; //iterator to hold curent identifier to be used by new algorithms algorithm
         this.algorithms = [];
         this.keys = [];
+        this.states = [];
     }
 
     keyExists(key) {
         try {
             return this.keys[key];
         } catch (e) {
+            console.log(e.toString());
             return null;
         }
     }
@@ -26,6 +29,7 @@ class Storage extends AbstractModel{
         try {
             this.keys[key] = key;
         } catch (e) {
+            console.log(e.toString());
             return null;
         }
         return key;
@@ -39,15 +43,9 @@ class Storage extends AbstractModel{
         }
     }
 
-    addAlgorithm(name) {
-        this.algorithms[this.currentId] = new Algorithm(name);
-        this.algorithms[this.currentId].id = this.currentId++;
-        return this.currentId - 1;
-    }
-
     addAlgorithmFromData(data) {
         this.algorithms[this.currentId] = new Algorithm();
-        this.algorithms[this.currentId].fromObject(data);
+        this.algorithms[this.currentId].fromObj(data);
         this.algorithms[this.currentId].id = this.currentId++; //overwrite id
         return this.currentId - 1;
     }

@@ -31,7 +31,7 @@ function send(pressed) {
     for(let x = 0; x < query.length; x++) {
         let keyName = Object.keys(query[x])[0];
         if (query[x][keyName] === "" || query[x][keyName] === undefined)
-            break;
+            continue;
             
         let queryChar = firstQuery ? '?' : '&';
         firstQuery = false; //make query char = & after first use

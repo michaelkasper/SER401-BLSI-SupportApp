@@ -11,7 +11,8 @@ class AlgorithmModel extends AbstractModel{
         //this.id = null;
 
         this.name = "";
-        this.currentId = 0;
+        this.currentQuestionId = 0;
+        this.currentRecommendationId = 0;
         this.startId = null;
         this.description = null;
         this.shortDescription = null;
@@ -24,6 +25,7 @@ class AlgorithmModel extends AbstractModel{
         try {
             question = this.questions[parseInt(id)];
         } catch (e) {
+            console.log(e.toString());
             return null;
         }
         return question;
@@ -34,48 +36,26 @@ class AlgorithmModel extends AbstractModel{
         try {
             recommend = this.recommendations[parseInt(id)];
         } catch (e) {
+            console.log(e.toString());
             return null;
         }
         return recommend;
     }
 
-    addQuestion(prompt) {
-        if(this.startId === null) {
-            this.startId = 0;
-        }
-        
-        this.questions[this.currentId] = new Question();
-        this.questions[this.currentId].prompt = prompt;
-        this.questions[this.currentId].algorithmParent = this.id;
-        this.questions[this.currentId].id = this.currentId++;
-        return this.currentId - 1;
-    }
-
-    addRecommendation(title, description) {
-        if (this.startId == null) {
-            this.startId = 0;
-        }
-        
-        this.recommendations[this.currentId] = new Recommendation(); 
-        this.recommendations[this.currentId].title = title;
-        this.recommendations[this.currentId].description = description;
-        this.recommendations[this.currentId].algorithmParent = this.id;
-        this.recommendations[this.currentId].id = this.currentId++;
-        return this.currentId - 1;
-    }
-
     addQuestionFromData(data) {
-        this.questions[this.currentId] = new Question();
-        this.questions[this.currentId].fromObject(data);
-        this.questions[this.currentId].id = this.currentId++; //overwrite id
-        return this.currentId - 1;
+        this.questions[this.currentQuestionId] = new Question();
+        this.questions[this.currentQuestionId].fromObj(data);
+        this.questions[this.currentQuestionId].algorithmParent  = this.id;
+        this.questions[this.currentQuestionId].id = this.currentQuestionId++; //overwrite id
+        return this.currentQuestionId - 1;
     }
 
     addRecommendationFromData(data) {
-        this.recommendations[this.currentId] = new Recommendation();
-        this.recommendations[this.currentId].fromObject(data);
-        this.recommendations[this.currentId].id = this.currentId++; //overwrite id
-        return this.currentId - 1;
+        this.recommendations[this.currentRecommendationId] = new Recommendation();
+        this.recommendations[this.currentRecommendationId].fromObj(data);
+        this.recommendations[this.currentRecommendationId].algorithmParent = this.id;
+        this.recommendations[this.currentRecommendationId].id = this.currentRecommendationId++; //overwrite id
+        return this.currentRecommendationId - 1;
     }
 
     setStart(id) {
