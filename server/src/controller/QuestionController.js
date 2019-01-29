@@ -4,7 +4,6 @@
 var AbstractController = require('./AbstractController');
 var ApiErrorModel = require('../model/ApiErrorModel');
 var JsonModel = require('../model/JsonModel');
-var KeyModel = require("./../model/KeyModel");
 
 class QuestionController extends AbstractController{
     dispatch() {
@@ -12,10 +11,14 @@ class QuestionController extends AbstractController{
     }
 
     //Get question from algo
-    getAction() {              
+    getAction() {   
+        console.log("==== GET ====");           
         let id = this.request.query.id; //query data from id to get exact algorithm
         let key = this.request.query.key;
         let questionId = this.request.query.questionId; //query data for question id to seach question
+        console.log("id", id);
+        console.log("key", key);
+        console.log("questionId", questionId);
         if ((key === "" || key === "") ||
             (id === "" || id === undefined) ||
             (questionId === "" || questionId === undefined)) { //if any value is missing
@@ -23,38 +26,44 @@ class QuestionController extends AbstractController{
         } 
             
         let algo = this.serviceManager.storage.getAlgorithm(id);
-        if (algo === undefined) {
+        console.log("Algorithm", algo);
+        if (algo === undefined || algo === null) {
             return new ApiErrorModel(404, `not found`);
         }
 
         let question = algo.getQuestion(id);
-        if (question === undefined) {
+        console.log("Question", question)
+        if (question === undefined || question === null) {
             return new ApiErrorModel(404, `not found`);
         }
         return new JsonModel(question);
     }
 
     //Put in new question
+    //{"prompt":"What?"}
+    //{"question" { "id": 0, "currentId": 0, "algorithmParent": 0, "prompt": 'What?', "typeKey": null, "options": [], "answers": [] }}
+
     putAction() {
+        console.log("==== PUT ====");
         let id = this.request.query.id; //query data from id to get exact algorithm
         let key = this.request.query.key;
+        console.log("id", id);
+        console.log("key", key);
         if ((key === "" || key === "") || (id === "" || id === undefined)) { //id is query
             return new ApiErrorModel(405, `parameters not allowed`);
         }
 
         //Get body data
-        let data; //verify data
-        try {
-            data = JSON.parse(this.request.body.data);
-        } catch (e) {
-            return new ApiErrorModel(405, `needs data object. Parameter invalid`);
-        }
-
-        //Make and return id
+        let data; 
         let questionId;
-        try {
+        try {   
+            //verify data
+            data = JSON.parse(this.request.body.data);
+            console.log("Data", data);
+
             //Check if the algorithm exists
             let algo = this.serviceManager.storage.getAlgorithm(id);
+            console.log("Algorithm", algo);
             if (algo === undefined) {
                 return new ApiErrorModel(404, `not found`);
             }
@@ -62,43 +71,43 @@ class QuestionController extends AbstractController{
             id = parseInt(id);
             if(Object.keys(data).length === 1) {
                 let prompt = data["prompt"];
-                console.log(prompt);
-                questionId = this.serviceManager.storage
-                    .algorithms[id].addQuestion(prompt);
+                console.log("Question Prompt", prompt);
+                questionId = this.serviceManager.storage.algorithms[id].addQuestion(prompt);
             }
             else {
-                questionId = this.serviceManager.storage
-                    .algorithms[id].addQuestionByData(data); //id is overwritten if included
+                questionId = this.serviceManager.storage.algorithms[id].addQuestionFromData(data); //id is overwritten if included
             }
         } catch(e) {
-            console.log({"questionId": questionId});
-            return new JsonModel({"success" : false});
+            console.log(e.toString(),  questionId);
+            return new ApiErrorModel(405, `needs data object. Parameter invalid`);
         }
-        console.log({"success" : true, "questionId": questionId});
+        console.log("questionId", questionId);
         return new JsonModel({"success" : true, "questionId": questionId});
     }
 
     //Post an update to a question
+    //{"question" : { "id": 0, "currentId": 0, "algorithmParent": 0, "prompt": "What update?", "typeKey": null, "options": [], "answers": [] }}
     postAction() {
+        console.log("==== POST ====");
         let id = this.request.query.id; //query data from id to get exact algorithm
         let key = this.request.query.key;
         let questionId = this.request.query.questionId; //query data for question id to seach question
+        console.log("id", id);
+        console.log("key", key);
+        console.log("questionId", questionId);
         if ((key === "" || key === "") || 
             (id === "" || id === undefined) || 
             (questionId === "" || questionId === undefined)) { //if any value is missing
             return new ApiErrorModel(405, `parameters not allowed`);
         }
 
-        //Get body data
-        let data; //verify data
+        //Get body data and checkfor algo and question
         try {
-            data = JSON.parse(this.request.body.data);
-        } catch (e) {
-            return new ApiErrorModel(405, `needs data object. Parameter invalid`);
-        }
+            //Get body data
+            let data = JSON.parse(this.request.body.data);
+            console.log("Data", data);
 
-        try {
-            id = parseInt(id);
+            id = parseInt(id); //Make sure id is an int 
 
             //Check if there is an algorithm
             let algo = this.serviceManager.storage.getAlgorithm(id);
@@ -106,7 +115,7 @@ class QuestionController extends AbstractController{
                 return new ApiErrorModel(404, `not found`);
             }
 
-            let question = this.serviceManager.storage.algorithms[id].getAlgorithm(id);
+            let question = this.serviceManager.storage.algorithms[id].getQuestion(id);
             if (question === undefined) {
                 return new ApiErrorModel(404, `not found`);
             }
@@ -118,7 +127,8 @@ class QuestionController extends AbstractController{
                 .algorithms[id]
                 .questions[questionId].fromObj(question);
         } catch (e) {
-            return new JsonModel({"success": false});
+            console.log(e.toString());
+            return new ApiErrorModel(405, `needs data object. Parameter invalid`);
         }
         return new JsonModel({"success": true});
     }

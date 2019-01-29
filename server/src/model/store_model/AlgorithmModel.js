@@ -5,10 +5,9 @@ const Question = require("./QuestionModel");
 const Recommendation = require("./RecommendationModel");
 
 class AlgorithmModel extends AbstractModel{
-    constructor(storage, name) {
-        super(storage);
+    constructor(name) {
+        super();
         // Abstract Model values
-        //this.storage = storage;
         //this.id = null;
 
         this.name = "";
@@ -41,14 +40,14 @@ class AlgorithmModel extends AbstractModel{
     }
 
     addQuestion(prompt) {
-        if(this.startId == null) {
+        if(this.startId === null) {
             this.startId = 0;
         }
-
-        this.questions[this.currentId] = new Question(this.storage);
-        this.questions[this.currentId].id = this.currentId++;
+        
+        this.questions[this.currentId] = new Question();
         this.questions[this.currentId].prompt = prompt;
-        this.questions[this.currentId].algorithmParent = this;
+        this.questions[this.currentId].algorithmParent = this.id;
+        this.questions[this.currentId].id = this.currentId++;
         return this.currentId - 1;
     }
 
@@ -56,24 +55,24 @@ class AlgorithmModel extends AbstractModel{
         if (this.startId == null) {
             this.startId = 0;
         }
-
-        this.recommendations[this.currentId] = new Recommendation(this.storage); 
-        this.recommendations[this.currentId].id = this.currentId++;
+        
+        this.recommendations[this.currentId] = new Recommendation(); 
         this.recommendations[this.currentId].title = title;
         this.recommendations[this.currentId].description = description;
-        this.recommendations[this.currentId].algorithmParent = this;
+        this.recommendations[this.currentId].algorithmParent = this.id;
+        this.recommendations[this.currentId].id = this.currentId++;
         return this.currentId - 1;
     }
 
     addQuestionFromData(data) {
-        this.questions[this.currentId] = new Question(this.storage);
+        this.questions[this.currentId] = new Question();
         this.questions[this.currentId].fromObject(data);
         this.questions[this.currentId].id = this.currentId++; //overwrite id
         return this.currentId - 1;
     }
 
     addRecommendationFromData(data) {
-        this.recommendations[this.currentId] = new Recommendation(this.storage);
+        this.recommendations[this.currentId] = new Recommendation();
         this.recommendations[this.currentId].fromObject(data);
         this.recommendations[this.currentId].id = this.currentId++; //overwrite id
         return this.currentId - 1;

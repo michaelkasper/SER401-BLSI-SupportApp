@@ -4,15 +4,14 @@
  * Based off same Abstract model used in the app.
  */
 class AbstractModel {
-    constructor(storage) {
-        this.storage = storage; //contains hosted storage and workspace storage methods
+    constructor() {
         this.id = null;
     }
 
     fromObj(json) {
         for (let field in json) {
-            if (field in this && 
-                (this[field] !== this["id"] || this[field] !== this["storage"])) {
+            if (field in this 
+                && this[field] !== this["id"]) {
                 this[field] = json[field];
             }
         }
@@ -20,7 +19,6 @@ class AbstractModel {
     }
 
     toJson() {
-        let ignore = ['storage'];
 
         let arrayConverter = (array) => {
             return array.map(item => {
@@ -47,9 +45,7 @@ class AbstractModel {
 
         let resultObj = {};
         Object.keys(this).forEach(field => {
-            if (!(ignore.includes(field))) {
-                resultObj[field] = valConverter(this[field]);
-            }
+            resultObj[field] = valConverter(this[field]); 
         });
         return resultObj;
     }
