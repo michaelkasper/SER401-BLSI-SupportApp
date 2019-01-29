@@ -3,13 +3,10 @@
 const AbstractModel = require("./AbstractModel");
 
 class QuestionOptionModel extends AbstractModel {
-    constructor(storage) {
-        super(storage);
+    constructor() {
+        super();
         // Abstract Model values
-        //this.storage = storage;
         //this.id = null;
-        this.dataType = "question-option"; //used to easily identify the datatype when sent individually
-
         this.question = null;
         this.algorithmParent = null; //identifies the algorithm that it is a part of.
 
