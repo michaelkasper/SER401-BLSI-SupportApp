@@ -5,16 +5,13 @@ const Option = require("./QuestionOptionModel");
 const Answer = require("./QuestionAnswerModel");
 
 class QuestionModel extends AbstractModel {
-    constructor(storage) {
-        super(storage);
+    constructor() {
+        super();
         // Abstract Model values
-        //this.storage = storage;
         //this.id = null;
-        this.dataType = "question"; //used to easily identify the datatype when sent individually
+
         this.currentId = 0;
         this.algorithmParent = null; //identifies the algorithm that it is a part of.
-
-
         this.prompt = "";
         this.typeKey = null;
         this.options = []; //id points to index
@@ -30,7 +27,7 @@ class QuestionModel extends AbstractModel {
     }
 
     addQuestionAnswer() {
-        let answer = new Answer(this.storage);
+        let answer = new Answer();
         answer.id = this.currentId; //Set to current, but increase after
         answer.algorithmParent = this.algorithmParent;
         answer.question = this;
@@ -40,7 +37,7 @@ class QuestionModel extends AbstractModel {
     }
 
     addQuestionOption() {
-        let option = new Option(this.storage);
+        let option = new Option();
         option.id = this.currentId; //Set to current, but increase after
         option.algorithmParent = this.algorithmParent;
         option.question = this;

@@ -11,38 +11,33 @@ function showPayload(){
 
 //BUTTON CLICKS
 function send(pressed) {
+    let query = [];
+
     let url = document.URL + pressed;
-    let name = document.getElementById("name").value;
+    let key = document.getElementById("key").value;
     let id = document.getElementById("id").value;
     let questionId = document.getElementById("questionId").value;
     let questionOptionId = document.getElementById("questionOptionId").value;
     let questionAnswerId = document.getElementById("questionAnswerId").value;
     let recommendationId = document.getElementById("recommendationId").value;
 
-    //QUERY PARAMETERS
-    if (name !== "") {
-        console.log("NAME", name);
-        url += '?name=' + document.getElementById("name").value;
-    }
-    if (id !== "") {
-        console.log("ID", id);
-        url += '?id=' + document.getElementById("id").value;
-    }
-    if (questionId !== "") {
-        console.log("QuestionId", questionId);
-        url += '?questionId=' + document.getElementById("questionId").value;
-    }
-    if (questionOptionId !== "") {
-        console.log("QuestionId", questionOptionId);
-        url += '?questionOptionId=' + document.getElementById("questionOptionId").value;
-    }
-    if (questionAnswerId !== "") {
-        console.log("QuestionId", questionAnswerId);
-        url += '?questionAnswerId=' + document.getElementById("questionAnswerId").value;
-    }
-    if (recommendationId !== "") {
-        console.log("RecommendationId", recommendationId);
-        url += '?recommendationId=' + document.getElementById("recommendationId").value;
+    query.push({key : key});
+    query.push({id : id});
+    query.push({questionId : questionId});
+    query.push({questionOptionId : questionOptionId});
+    query.push({questionAnswerId : questionAnswerId});
+    query.push({recommendationId : recommendationId});
+    let firstQuery = true
+    for(let x = 0; x < query.length; x++) {
+        let keyName = Object.keys(query[x])[0];
+        if (query[x][keyName] === "" || query[x][keyName] === undefined)
+            continue;
+            
+        let queryChar = firstQuery ? '?' : '&';
+        firstQuery = false; //make query char = & after first use
+        
+        console.log(keyName, query[x]);
+        url += queryChar + keyName + '=' + query[x][keyName];
     }
 
     //METHODS
@@ -57,6 +52,7 @@ function send(pressed) {
             post(url, data);
         } catch (e) {
             console.log(e.toString(), "Incorrect JSON format");
+            document.getElementById("error").innerHTML = e.toString();
         }
     } else {
         console.log("PUT", url);
@@ -66,6 +62,7 @@ function send(pressed) {
             put(url, data);
         } catch (e) {
             console.log(e.toString(), "Incorrect JSON format");
+            document.getElementById("error").innerHTML = e.toString();
         }
     }
 }

@@ -12,19 +12,34 @@
     <span id="error"></span>
 
     <div class="parameters">
-        Id: <input id="id" type='textfield' placeholder='ID'> 
-        <br/>Name: <input id="name" type='textfield' placeholder='Name'>
+        Key: <input id="key" type='textfield' placeholder='Key'> *Key needed for put/posts
+        <br/><br/>Id: <input id="id" type='textfield' placeholder='ID'> 
         <br/>Question: <input id="questionId" type='textfield' placeholder='QuestionId'>
         <br/>Recommendation: <input id="recommendationId" type='textfield' placeholder='RecommendationId'>
         <br/>Question Option: <input id="questionOptionId" type='textfield' placeholder='QuestionOptionId'>
         <br/>Question: <input id="questionAnswerId" type='textfield' placeholder='QuestionAnswerId'>
         <br/><br/>
-        
+    </div>
 
-        <div class="info">
-            <br/>
-            <p>*Can only use Name when retrieving algorithms</p>
-        </div>
+    <div>
+        <p>
+        Testing Data for Algorithm: <br/>
+        PUT (EMPTY): {"name" : "tester"} <br />
+        PUT/POST (FILLED): {"algorithm":{"name": "test", "currentId": 0, "description": null, "id": 0, "questions": [], "recommendations" : [],"shortDescription" : "testers", "startId": null}}
+        <br/><br/>{"name": "test", "currentId": 0, "description": null, "id": 0, "questions": [], "recommendations" : [],"shortDescription" : "testers", "startId": null}
+        </p>
+        <p>
+        Testing Data for Questions: <br />
+        PUT (EMPTY): {"prompt":"What?"} <br />
+        PUT/POST (FILLED): {"question" :{ "id": 0, "currentId": 0, "algorithmParent": 0, "prompt": "What?", "typeKey": null, "options": [], "answers": [] }}
+        <br/><br/>{ "id": 0, "currentId": 0, "algorithmParent": 0, "prompt": "What?", "typeKey": null, "options": [], "answers": [] }
+        </p>
+        <p>
+        Testing Data for Recommendation: <br/>
+        PUT (EMPTY): {"title": "Recommendation", "description" : "This is the description."}<br />
+        PUT/POST (FILLED): {"recommendation" : {"id": 1,"algorithmParent": 0,"title": "Recommendation", "description": "This is the description modified.", "contentContinued": [] }}
+        <br/><br/>{"id": 1,"algorithmParent": 0,"title": "Recommendation", "description": "This is the description modified.", "contentContinued": [] }
+        </p>
     </div>
 
     <input id="GET" type='radio' name="type" value='get' onClick="showPayload('false')" checked>Get
