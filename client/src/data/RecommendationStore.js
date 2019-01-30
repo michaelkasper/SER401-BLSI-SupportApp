@@ -3,7 +3,7 @@ import RecommendationModel from "./model/RecommendationModel";
 
 export default class RecommendationStore extends AbstractStore {
 
-    constructor(transporter) {
-        super(RecommendationModel, transporter);
+    constructor(transporter, rootStore) {
+        super(RecommendationModel, transporter, rootStore);
     }
 }

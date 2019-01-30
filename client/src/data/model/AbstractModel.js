@@ -5,6 +5,10 @@ export default class AbstractModel {
         this.store = store;
     }
 
+    get rootStore() {
+        return this.store.rootStore;
+    }
+
     static get primaryKey() {
         return "id";
     }

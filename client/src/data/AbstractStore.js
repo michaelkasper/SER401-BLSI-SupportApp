@@ -3,6 +3,7 @@ import {observable} from "mobx";
 import BluebirdPromise from "../common/BluebirdPromise";
 
 class AbstractStore {
+    rootStore;
     transportLayer;
     @observable collection = {};
     primaryKey;
@@ -13,7 +14,8 @@ class AbstractStore {
      * @param model
      * @param transportLayer
      */
-    constructor(model, transportLayer) {
+    constructor(model, transportLayer, rootStore) {
+        this.rootStore      = rootStore;
         this.model          = model;
         this.primaryKey     = model.primaryKey;
         this.collectionKey  = model.collectionKey;
@@ -31,6 +33,14 @@ class AbstractStore {
 
     get(id) {
         return this.collection[id];
+    }
+
+    fetch(query) {
+        return new BluebirdPromise((resolve, reject) => {
+            setTimeout(() => {
+                resolve([])
+            }, 10);
+        });
     }
 
     getAll() {

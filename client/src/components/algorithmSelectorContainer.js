@@ -77,6 +77,13 @@ class AlgorithmSelectorContainer extends React.Component {
         this.onSelect(this.algorithmStore.new(this.state.localModel));
     };
 
+    onSubmit = (e) => {
+        e.preventDefault();
+        if (this.state.createNew) {
+            this.onCreateNew();
+        }
+    };
+
     render() {
 
         let {showModal, selectedAlgorithm, createNew, localModel} = this.state;
@@ -109,7 +116,7 @@ class AlgorithmSelectorContainer extends React.Component {
                             Select or Create a new algorithm
                         </Typography>
                         <Typography variant="subtitle1" id="simple-modal-description">
-                            <form className={classes.root} autoComplete="off">
+                            <form className={classes.root} autoComplete="off" onSubmit={this.onSubmit}>
                                 <FormControl className={classes.formControl}>
                                     <InputLabel htmlFor="algorithm">Algorithm</InputLabel>
                                     <Select
