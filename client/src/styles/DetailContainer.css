@@ -1,0 +1,59 @@
+.detailContainer {
+    display: flex;
+    flex-direction: column;
+    color: #000000;
+    width: 300px;
+    border: 1px solid #000000;
+}
+
+.detailContainer > div {
+    padding: 5px 10px;
+}
+
+.stateHeader {
+    display: flex;
+    align-items: center;
+    background-color: #cccccc;
+    height: 40px;
+    font-size: 16px;
+}
+
+.stateId {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    font-size: 14px;
+}
+
+.addQuestions {
+    font-size: 14px;
+    border-top: 1px solid #000000;
+}
+
+.addRecommendations {
+    font-size: 14px;
+    border-top: 1px solid #000000;
+}
+
+.nextState {
+    font-size: 14px;
+    border-top: 1px solid #000000;
+}
+
+.nextStateSelectEmpty {
+    background-color: #eeeeee;
+    border-radius: 5px;
+    border: 1px dashed #868686;
+    padding: 0 10px;
+    margin: 5px 0;
+    color: #666666;
+}
+
+.nextStateSelectFilled {
+    background-color: #ffffff;
+    border-radius: 5px;
+    border: 1px solid #868686;
+    padding: 0 10px;
+    margin: 5px 0;
+    color: #000000;
+}

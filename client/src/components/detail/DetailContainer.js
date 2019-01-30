@@ -1,5 +1,5 @@
 import React from 'react';
-import './DetailContainer.css';
+import '../../styles/DetailContainer.css';
 
 class DetailContainer extends React.Component {
     render() {
@@ -16,9 +16,18 @@ class DetailContainer extends React.Component {
                 </div>
                 <div className='addRecommendations'>
                     <p>Recommendations</p>
+                    <div className='addRecommendationsList'>
+
+                    </div>
                 </div>
-                <div className='nextStates'>
+                <div className='nextState'>
                     <p>Next States</p>
+                    <div className='nextStateSelectEmpty'>
+                        <p>Drop to add good state</p>
+                    </div>
+                    <div className='nextStateSelectFilled'>
+                        <p>Bad State: 45 (Drop to replace)</p>
+                    </div>
                 </div>
             </div>
         );

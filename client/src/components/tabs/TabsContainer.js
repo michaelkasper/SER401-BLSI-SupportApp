@@ -1,14 +1,12 @@
-import React, {Fragment} from 'react';
+import React from 'react';
+import '../../styles/TabsContainer.css';
 
 class TabsContainer extends React.Component {
-
     render() {
-
         return (
-            <Fragment>
+            <div className='tabsContainer'>
 
-            </Fragment>
-
+            </div>
         );
     }
 }
