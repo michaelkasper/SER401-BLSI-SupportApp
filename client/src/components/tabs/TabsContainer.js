@@ -29,24 +29,35 @@ class TabsContainer extends React.Component {
 
         return (
             <div className={classes.root}>
-                <AppBar position="static" color="primary">
-                    <Tabs
-                        value={this.state.view}
-                        onChange={this.handleChange}
-                        indicatorColor="secondary"
-                        textColor="secondary"
-                        variant="fullWidth"
-                        classes={{indicator: classes.indicator}}
-                    >
-                        <Tab label="States" classes={{root: classes.tabRoot, selected: classes.tabSelected}}/>
-                        <Tab label="Questions" classes={{root: classes.tabRoot, selected: classes.tabSelected}}/>
-                        <Tab label="Recommendations" classes={{root: classes.tabRoot, selected: classes.tabSelected}}/>
-                    </Tabs>
-                </AppBar>
+                <div className={classes.header}>
+                    <AppBar position="static" color="primary">
+                        <Tabs
+                            value={this.state.view}
+                            onChange={this.handleChange}
+                            indicatorColor="secondary"
+                            textColor="secondary"
+                            variant="fullWidth"
+                            classes={{indicator: classes.indicator}}
+                        >
+                            <Tab label="States" classes={{root: classes.tabRoot, selected: classes.tabSelected}}/>
+                            <Tab label="Questions" classes={{root: classes.tabRoot, selected: classes.tabSelected}}/>
+                            <Tab label="Recommendations"
+                                 classes={{root: classes.tabRoot, selected: classes.tabSelected}}/>
+                        </Tabs>
+                    </AppBar>
+                </div>
 
-                {view === 0 && <TabContainer dir={theme.direction} content={algorithm.states}/>}
-                {view === 1 && <TabContainer dir={theme.direction} content={algorithm.questions}/>}
-                {view === 2 && <TabContainer dir={theme.direction} content={algorithm.recommendations}/>}
+                <div className={classes.tabsContent}>
+                    <div className={classes.tabContent}>
+                        {view === 0 && <TabContainer dir={theme.direction} content={algorithm.states}/>}
+                        {view === 1 && <TabContainer dir={theme.direction} content={algorithm.questions}/>}
+                        {view === 2 && <TabContainer dir={theme.direction} content={algorithm.recommendations}/>}
+                    </div>
+                </div>
+
+                <div>
+
+                </div>
             </div>
         );
     }
@@ -56,6 +67,7 @@ const styles = theme => ({
     root       : {
         backgroundColor: theme.palette.background.default,
         width          : 400,
+        height         : '100%',
     },
     tabRoot    : {
         textTransform  : 'initial',
@@ -90,7 +102,24 @@ const styles = theme => ({
     },
     indicator  : {
         backgroundColor: '#FFFFFF',
-    }
+    },
+    tabsContent: {
+        overflow: "hidden",
+        flexGrow: "1",
+        position: "relative"
+    },
+    tabContent : {
+        position: "absolute",
+        top     : 0,
+        left    : 0,
+        right   : 0,
+        bottom  : 0,
+        overflow: "auto"
+    },
+    header     : {
+        flexGrow: 0
+    },
+
 });
 
 export default withStyles(styles, {withTheme: true})(TabsContainer);

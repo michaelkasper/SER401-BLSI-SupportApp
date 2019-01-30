@@ -39,7 +39,7 @@ class AbstractStore {
         return new BluebirdPromise((resolve, reject) => {
             setTimeout(() => {
                 resolve([])
-            }, 10);
+            }, 1);
         });
     }
 
@@ -51,7 +51,7 @@ class AbstractStore {
         return new BluebirdPromise((resolve, reject) => {
             setTimeout(() => {
                 resolve([])
-            }, 2000);
+            }, 1);
         });
     }
 

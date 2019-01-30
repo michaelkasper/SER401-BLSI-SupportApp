@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Created by Michael Kasper - mkasper 
+ * Created by Michael Kasper - mkasper
  */
 const ApiErrorModel = require('./../model/ApiErrorModel');
 
@@ -11,8 +11,12 @@ class AbstractController {
         this.request        = request;
         this.response       = response;
         this.serviceManager = serviceManager;
-        
+
         this.response.set('Cache-Control', 'no-cache, private, no-store, must-revalidate');
+    }
+
+    get requestMethod() {
+        return this.request.method + (!("id" in this.request.params && this.request.params.id) ? "_ALL" : "");
     }
 
     get algorithmManager() {
@@ -29,35 +33,52 @@ class AbstractController {
             return;
         }
 
-        switch (this.request.method) {
+        let key = this.request.query.key;
+        if (!key || key === "") {
+            return new ApiErrorModel(405, `method not allowed`);
+        }
+
+        switch (this.requestMethod) {
+            case "GET_ALL" :
+                this.response.response = this.getAllAction();
+                break;
             case "GET" :
-                this.response.response = this.getAction();
-                return;
+                this.response.response = this.getAction(this.request.params.id);
+                break;
             case "POST" :
                 this.response.response = this.postAction();
-                return;
+                break;
             case "HEAD" :
                 this.response.response = this.headAction();
-                return;
+                break;
             case "PUT" :
                 this.response.response = this.putAction();
-                return;
+                break;
             case "DELETE" :
                 this.response.response = this.deleteAction();
-                return;
+                break;
             case "CONNECT" :
                 this.response.response = this.connectAction();
-                return;
+                break;
             case "TRACE" :
                 this.response.response = this.traceAction();
-                return;
+                break;
             case "PATCH" :
                 this.response.response = this.patchAction();
-                return;
+                break;
             default:
                 this.response.response = new ApiErrorModel(405, 'method not allowed');
-                return;
+                break;
         }
+
+        let old                = this.response.response;
+        this.response.response = new Promise((resolve, reject) => {
+            resolve(old);
+        })
+    }
+
+    getAllAction() {
+        return new ApiErrorModel(403, `method not allowed`);
     }
 
     getAction() {

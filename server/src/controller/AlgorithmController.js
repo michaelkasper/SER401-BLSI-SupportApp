@@ -6,32 +6,43 @@
 
 //Add for later handling of Algorithm routing
 var AbstractController = require('./AbstractController');
-var ApiErrorModel = require('./../model/ApiErrorModel');
-var JsonModel = require('./../model/JsonModel');
+var ApiErrorModel      = require('./../model/ApiErrorModel');
+var JsonModel          = require('./../model/JsonModel');
 
-class AlgorithmController extends AbstractController{
+class AlgorithmController extends AbstractController {
     dispatch() {
         return super.dispatch(false);
     }
 
-    getAction() {   
+    getAllAction() {
+        console.log("==== GET All ====");
+
+        // return
+        return new JsonModel({collection: this.serviceManager.storage.getAlgorithms()});
+        // .then(algos => {
+        //     console.log(id, algos);
+        //
+        //     if (algos === undefined) {
+        //         throw "Not Found";
+        //     }
+        //
+        //     return new JsonModel(algos);
+        // });
+    }
+
+    getAction(id) {
         console.log("==== GET ====");
-        let id = this.request.query.id; //query data from id to get exact algorithm
-        let key = this.request.query.key;
-        console.log("id", id);
-        console.log("key", key);
-        if ((key === "" || key === "") || 
-            (id === "" || id === undefined)) { //if both values are missing
-             return new ApiErrorModel(405, `method not allowed`);
-        }
 
-        let algo = this.serviceManager.storage.getAlgorithm(id);
-        console.log(id, algo);
-        if (algo === undefined) {
-            return new ApiErrorModel(404, `not found`);
-        }
+        return this.serviceManager.storage.getAlgorithm(id)
+            .then(algo => {
+                console.log(id, algo);
 
-        return new JsonModel(algo);
+                if (algo === undefined) {
+                    throw "Not Found";
+                }
+
+                return new JsonModel(algo);
+            });
     }
 
     //Put in new algorithm
@@ -45,7 +56,7 @@ class AlgorithmController extends AbstractController{
         if (key === "" || key === undefined) { //if any value is missing
             return new ApiErrorModel(405, `parameters not allowed`);
         }
-        
+
         //Make and return id
         let id;
         try {
@@ -60,13 +71,13 @@ class AlgorithmController extends AbstractController{
             }
 
             id = this.serviceManager.storage.addAlgorithmFromData(algo); //id is overwritten if included
-            
-        } catch(e) {
+
+        } catch (e) {
             console.log(e.toString());
             return new ApiErrorModel(405, `needs data object. Parameter invalid`);
         }
-        console.log({"success" : true, "id": id});
-        return new JsonModel({"success" : true, "id": id});
+        console.log({"success": true, "id": id});
+        return new JsonModel({"success": true, "id": id});
     }
 
     //Post an update
@@ -75,9 +86,9 @@ class AlgorithmController extends AbstractController{
     postAction() {
         console.log("==== POST ====");
 
-        let id = this.request.query.id ; //query data from name to add to database
+        let id  = this.request.query.id; //query data from name to add to database
         let key = this.request.query.key;
-        if (key === "" || key === undefined || 
+        if (key === "" || key === undefined ||
             id === "" || id === undefined) { //if any value is missing
             return new ApiErrorModel(405, `parameters not allowed`);
         }
@@ -101,7 +112,7 @@ class AlgorithmController extends AbstractController{
             if (algo === undefined) {
                 algo = data;
             }
-            
+
             this.serviceManager.storage.algorithms[id].fromObj(algo);
         } catch (e) {
             console.log(e.toString());

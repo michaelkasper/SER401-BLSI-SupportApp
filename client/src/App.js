@@ -4,6 +4,7 @@ import AlgorithmContainer from "./components/algorithmContainer";
 import {inject, observer} from "mobx-react";
 import AlgorithmSelectorContainer from "./components/algorithmSelectorContainer";
 import Loading from "./components/ui/Loading";
+import withStyles from "@material-ui/core/es/styles/withStyles";
 
 @inject("rootStore")
 @observer
@@ -28,7 +29,7 @@ class App extends Component {
     };
 
     render() {
-
+        let {classes}            = this.props;
         let {algorithm, loading} = this.state;
 
         if (loading) {
@@ -36,7 +37,7 @@ class App extends Component {
         }
 
         return (
-            <div className="App">
+            <div className={classes.root}>
                 <AlgorithmSelectorContainer onSelect={this.onSelect}/>
                 {
                     algorithm &&
@@ -47,4 +48,10 @@ class App extends Component {
     }
 }
 
-export default App;
+const styles = theme => ({
+    root: {
+        height: '100%'
+    }
+});
+
+export default withStyles(styles)(App);

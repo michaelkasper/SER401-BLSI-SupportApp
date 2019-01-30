@@ -4,9 +4,8 @@ const AbstractModel = require("./AbstractModel");
 const Algorithm = require("./AlgorithmModel");
 const State = require("./StateModel");
 
-class Storage extends AbstractModel{
+class Storage{
     constructor() {
-        super();
         // Abstract Model values
         //this.id = null;
 
@@ -38,6 +37,14 @@ class Storage extends AbstractModel{
     getAlgorithm(id) {
         try {
             return this.algorithms[parseInt(id)];
+        } catch (e) {
+            return null;
+        }
+    }
+
+    getAlgorithms() {
+        try {
+            return Object.values(this.algorithms);
         } catch (e) {
             return null;
         }

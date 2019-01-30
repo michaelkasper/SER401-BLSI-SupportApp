@@ -5,19 +5,19 @@
  * Modified for use by Taylor Greeff - tgreeff
  */
 
-const express = require('express');
-const fs = require('fs');
-const ejs = require('ejs');
+const express    = require('express');
+const fs         = require('fs');
+const ejs        = require('ejs');
 const bodyParser = require('body-parser');
 
 //Controllers
-const AlgorithmController = require('./controller/AlgorithmController');
-const QuestionController = require('./controller/QuestionController');
+const AlgorithmController      = require('./controller/AlgorithmController');
+const QuestionController       = require('./controller/QuestionController');
 const RecommendationController = require('./controller/RecommendationController');
 
 //Models
 const ApiErrorModel = require('./model/ApiErrorModel');
-const Storage = require("./model/store_model/Storage");
+const Storage       = require("./model/store_model/Storage");
 
 const dispatcher = (controller, req, res, next) => {
     (new controller(req, res, serviceManager)).dispatch();
@@ -25,27 +25,27 @@ const dispatcher = (controller, req, res, next) => {
 };
 
 const routes = {
-    "algorithm": AlgorithmController,
-    "question": QuestionController,
+    "algorithm"     : AlgorithmController,
+    "question"      : QuestionController,
     "recommendation": RecommendationController,
 };
 
 const serviceManager = {
-    routes: routes,
+    routes : routes,
     storage: new Storage()
 };
 
-const app = express();
+const app  = express();
 const port = process.env.PORT || 3001;
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/view');
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 Object.keys(routes).forEach(route => {
-    app.all(`/${route}`, (req, res, next) => dispatcher(routes[route], req, res, next));
+    app.all(`/${route}(/:id)?`, (req, res, next) => dispatcher(routes[route], req, res, next));
 });
 
 app.use('/', function (req, res, next) {
@@ -74,7 +74,11 @@ app.use('/', express.static(__dirname + "/test/", {
 
 app.use(function (req, res, next) {
     if ('response' in res) {
-        res.response.render(res);
+        if (res.response instanceof Promise) {
+            res.response.then(r => r.render(res));
+        } else {
+            res.response.render(res);
+        }
     }
 });
 
