@@ -1,7 +1,9 @@
-export default class StateStore {
-    transporter;
+import StateModel from "./model/StateModel";
+import AbstractStore from "./AbstractStore";
+
+export default class StateStore extends AbstractStore {
 
     constructor(transporter) {
-        this.transporter = transporter;
+        super(StateModel, transporter);
     }
 }

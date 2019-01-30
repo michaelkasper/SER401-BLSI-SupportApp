@@ -1,6 +1,6 @@
-export default class RecommendationModel {
+import AbstractModel from "./AbstractModel";
 
-    constructor(store) {
-        this.store = store;
-    }
+export default class RecommendationModel extends AbstractModel{
+
+
 }

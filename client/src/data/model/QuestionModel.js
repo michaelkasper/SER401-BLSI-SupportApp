@@ -1,6 +1,5 @@
-export default class QuestionModel {
+import AbstractModel from "./AbstractModel";
 
-    constructor(store) {
-        this.store = store;
-    }
+export default class QuestionModel extends AbstractModel{
+
 }

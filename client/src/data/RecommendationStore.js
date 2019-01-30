@@ -1,7 +1,9 @@
-export default class RecommendationStore {
-    transporter;
+import AbstractStore from "./AbstractStore";
+import RecommendationModel from "./model/RecommendationModel";
+
+export default class RecommendationStore extends AbstractStore {
 
     constructor(transporter) {
-        this.transporter = transporter;
+        super(RecommendationModel, transporter);
     }
 }

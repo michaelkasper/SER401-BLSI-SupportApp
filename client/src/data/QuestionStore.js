@@ -1,7 +1,9 @@
-export default class QuestionStore {
-    transporter;
+import AbstractStore from "./AbstractStore";
+import QuestionModel from "./model/QuestionModel";
+
+export default class QuestionStore extends AbstractStore{
 
     constructor(transporter) {
-        this.transporter = transporter;
+        super(QuestionModel, transporter);
     }
 }

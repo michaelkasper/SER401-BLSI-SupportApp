@@ -1,28 +1,50 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
 import './App.css';
+import AlgorithmContainer from "./components/algorithmContainer";
+import {inject, observer} from "mobx-react";
+import AlgorithmSelectorContainer from "./components/algorithmSelectorContainer";
+import Loading from "./components/ui/Loading";
 
+@inject("rootStore")
+@observer
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Hello world
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+
+    state = {
+        algorithm: null,
+        loading  : true
+    };
+
+    componentDidMount() {
+        this.props.rootStore.algorithmStore.fetchAll()
+            .then(() => {
+                this.setState({loading: false})
+            })
+    }
+
+    onSelect = (algorithm) => {
+        this.setState({
+            algorithm: algorithm
+        });
+    };
+
+    render() {
+
+        let {algorithm, loading} = this.state;
+
+        if (loading) {
+            return <Loading/>
+        }
+
+        return (
+            <div className="App">
+                <AlgorithmSelectorContainer onSelect={this.onSelect}/>
+                {
+                    algorithm &&
+                    <AlgorithmContainer algorithm={algorithm}/>
+                }
+            </div>
+        );
+    }
 }
 
 export default App;
