@@ -3,12 +3,10 @@
 const AbstractModel = require("./AbstractModel");
 
 class StateModel extends AbstractModel {
-    constructor(storage) {
-        super(storage);
+    constructor() {
+        super();
         // Abstract Model values
-        //this.storage = storage;
         //this.id = null;
-        this.dataType = "state";
 
         this.algorithmParent = null; //identifies the algorithm that it is a part of.
         this.nextIdGood = null;
