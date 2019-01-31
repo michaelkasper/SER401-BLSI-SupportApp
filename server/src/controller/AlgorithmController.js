@@ -14,111 +14,66 @@ class AlgorithmController extends AbstractController {
         return super.dispatch(false);
     }
 
-    getAllAction() {
+    getAllAction(params) {
         console.log("==== GET All ====");
-
-        // return
-        return new JsonModel({collection: this.serviceManager.storage.getAlgorithms()});
-        // .then(algos => {
-        //     console.log(id, algos);
-        //
-        //     if (algos === undefined) {
-        //         throw "Not Found";
-        //     }
-        //
-        //     return new JsonModel(algos);
-        // });
+        return new JsonModel({collection: this.storage.getAlgorithms()});
     }
 
-    getAction(id) {
+    getAction(params) {
         console.log("==== GET ====");
 
-        return this.serviceManager.storage.getAlgorithm(id)
-            .then(algo => {
-                console.log(id, algo);
+        let id = parseInt(params.id); //Make sure id is an int
+        if ((id === "" || id === undefined)) { //if any value is missing
+            return new ApiErrorModel(405, `parameters not allowed`);
+        }
 
-                if (algo === undefined) {
-                    throw "Not Found";
-                }
-
-                return new JsonModel(algo);
-            });
+        let algo = this.storage.getAlgorithm(id).minify();
+        console.log("Algorithm", algo);
+        if (!algo) {
+            return new ApiErrorModel(404, `not found`);
+        }
+        return new JsonModel(algo);
     }
 
     //Put in new algorithm
     //json data: {"name" : "tester"}
     //json data: {"algorithm":{"name": "test", "currentId": 0, "description": null, "id": 0, "questions": [], "recommendations" : [], "shortDescription" : "testers", "startId": null}}
     // {"name": "test", "currentId": 0, "description": null, "id": 0, "questions": [], "recommendations" : [], "shortDescription" : "testers", "startId": null}
-    putAction() {
+    putAction(params, data) {
         console.log("==== PUT ====");
-        let key = this.request.query.key;
-        console.log("key", key);
-        if (key === "" || key === undefined) { //if any value is missing
-            return new ApiErrorModel(405, `parameters not allowed`);
-        }
+        let id = this.storage.addAlgorithmFromData(data); //id is overwritten if included
 
-        //Make and return id
-        let id;
-        try {
-            let data = JSON.parse(this.request.body.data); //Verify data
-            console.log("Data", data);
-
-            //Check format of data
-            let algo = data.question;
-            console.log(algo);
-            if (algo === undefined) {
-                algo = data;
-            }
-
-            id = this.serviceManager.storage.addAlgorithmFromData(algo); //id is overwritten if included
-
-        } catch (e) {
-            console.log(e.toString());
-            return new ApiErrorModel(405, `needs data object. Parameter invalid`);
-        }
-        console.log({"success": true, "id": id});
-        return new JsonModel({"success": true, "id": id});
+        return new JsonModel({
+            "success": true,
+            "id": id
+        });
     }
 
     //Post an update
     //json data: {"algorithm":{"name": "tester", "currentId": 0, "description": null, "id": 0, "questions": [], "recommendations" : [], "shortDescription" : "testers", "startId": null}}
     //{"name": "tester", "currentId": 0, "description": null, "id": 0, "questions": [], "recommendations" : [], "shortDescription" : "testers", "startId": null}
-    postAction() {
+    postAction(params, data) {
         console.log("==== POST ====");
-
-        let id  = this.request.query.id; //query data from name to add to database
-        let key = this.request.query.key;
-        if (key === "" || key === undefined ||
-            id === "" || id === undefined) { //if any value is missing
+        let id = parseInt(params.id); //Make sure id is an int
+        if ((id === "" || id === undefined)) { //if any value is missing
             return new ApiErrorModel(405, `parameters not allowed`);
         }
 
-        try {
-            let data = JSON.parse(this.request.body.data);
-            console.log("Data", data);
-
-            id = parseInt(id); //Make sure id is an int
-
-            //find the algorithm
-            let algo = this.serviceManager.storage.getAlgorithm(id);
-            console.log("Algorithm", algo);
-            if (algo === undefined) {
-                return new ApiErrorModel(404, `not found`);
-            }
-
-            //Check format of data and swap
-            algo = data.question;
-            console.log(algo);
-            if (algo === undefined) {
-                algo = data;
-            }
-
-            this.serviceManager.storage.algorithms[id].fromObj(algo);
-        } catch (e) {
-            console.log(e.toString());
-            return new ApiErrorModel(405, `needs data object. Parameter invalid`);
+        let algo = this.storage.getAlgorithm(id);
+        console.log("Algorithm", algo);
+        if (!algo) {
+            return new ApiErrorModel(404, `not found`);
         }
-        return new JsonModel({"success": true});
+
+        if (data.algorithm) {
+            data = data.algorithm;
+        }
+
+        this.storage.algorithms[id].fromObj(data);
+        //find the algorithm
+        return new JsonModel({
+            "success": true
+        });      
     }
 }
 

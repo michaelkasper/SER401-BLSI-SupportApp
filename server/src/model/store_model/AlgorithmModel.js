@@ -3,6 +3,7 @@
 const AbstractModel = require("./AbstractModel");
 const Question = require("./QuestionModel");
 const Recommendation = require("./RecommendationModel");
+const State = require("./StateModel");
 
 class AlgorithmModel extends AbstractModel{
     constructor(name) {
@@ -18,6 +19,7 @@ class AlgorithmModel extends AbstractModel{
         this.shortDescription = null;
         this.questions = []; //id points to index
         this.recommendations = [];
+        this.states = [];
     }
 
     getQuestion(id) {
@@ -40,6 +42,17 @@ class AlgorithmModel extends AbstractModel{
             return null;
         }
         return recommend;
+    }
+
+    getState(id) {
+        let state;
+        try {
+            state = this.states[parseInt(id)];
+        } catch (e) {
+            console.log(e.toString());
+            return null;
+        }
+        return state;
     }
 
     addQuestionFromData(data) {
@@ -70,6 +83,15 @@ class AlgorithmModel extends AbstractModel{
             }
         }
         return null;
+    }
+
+    minify() {
+        return {
+            name: this.name, 
+            startId: this.startId,
+            description: this.description,
+            shortDescription: this.shortDescription
+        }
     }
 }
 

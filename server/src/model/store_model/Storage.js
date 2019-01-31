@@ -2,7 +2,6 @@
 
 const AbstractModel = require("./AbstractModel");
 const Algorithm = require("./AlgorithmModel");
-const State = require("./StateModel");
 
 class Storage{
     constructor() {
@@ -12,7 +11,6 @@ class Storage{
         this.currentId = 0; //iterator to hold curent identifier to be used by new algorithms algorithm
         this.algorithms = [];
         this.keys = [];
-        this.states = [];
     }
 
     keyExists(key) {

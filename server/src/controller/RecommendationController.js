@@ -14,30 +14,37 @@ class RecommendationController extends AbstractController {
         return super.dispatch(false);
     }
 
-    //Get recommendation from algo
-    getAction() {
-        console.log("==== GET ====");
-        let id = this.request.query.id; //query data from id to get exact algorithm
-        let key = this.request.query.key;
-        let recommendationId = this.request.query.recommendationId; //query data for recommendation id to seach recommendation
-        console.log("id", id);
-        console.log("key", key);
-        console.log("recommendationId", recommendationId);
-        if ((key === "" || key === "") ||
-            (id === "" || id === undefined) ||
-            (recommendationId === "" || recommendationId === undefined)) { //if any value is missing
-            return new ApiErrorModel(405, `parameters not allowed`);
-        }
+    getAllAction(params) {
+        console.log("==== GET All ====");
+        let id = parseInt(params.id); //Make sure id is an int
+        let recommendationId = parseInt(params.recommendationId);
+        let collect = this.storage.getAlgorithm(id).recommendations;
 
-        let algo = this.serviceManager.storage.getAlgorithm(id);
-        console.log("Algorithm", algo);
-        if (algo === undefined || algo === null) {
+        return new JsonModel({
+            collection: collect
+        });
+    }
+
+    //Get recommendation from algo
+    getAction(params) {
+        console.log("==== GET ====");
+        let id = parseInt(params.id); //Make sure id is an int
+        let recommendationId = parseInt(params.recommendationId);
+
+        if ((id === "" || id === undefined) ||
+            (recommendationId === "" || recommendationId === undefined)) { //if any value is missing
             return new ApiErrorModel(404, `not found`);
         }
 
-        let recommendation = algo.getRecommendation(id);
-        console.log("Recommendation", recommendation)
-        if (recommendation === undefined || recommendation === null) {
+        let algo = this.storage.algorithms[id];
+        console.log("Algorithm", algo);
+        if (!algo) {
+            return new ApiErrorModel(404, `not found`);
+        }
+
+        let recommendation = algo.getRecommendation(recommendationId).minify();
+        console.log("recommendation", recommendation)
+        if (!recommendation) {
             return new ApiErrorModel(404, `not found`);
         }
         return new JsonModel(recommendation);
@@ -48,45 +55,25 @@ class RecommendationController extends AbstractController {
     //{"recommendation" : {"id": 1,"algorithmParent": 0,"title": "Recommendation", "description": "This is the description modified.", "contentContinued": [] }}
     //{"id": 1,"algorithmParent": 0,"title": "Recommendation", "description": "This is the description modified.", "contentContinued": [] }
 
-    putAction() {
+    putAction(params, data) {
         console.log("==== PUT ====");
-        let id = this.request.query.id; //query data from id to get exact algorithm
-        let key = this.request.query.key;
-        console.log("id", id);
-        console.log("key", key);
-        if ((key === "" || key === "") || (id === "" || id === undefined)) { //id is query
+        let id = parseInt(params.id); //query data from id to get exact algorithm
+        if ((id === "" || id === undefined)) { //id is query
             return new ApiErrorModel(405, `parameters not allowed`);
         }
 
-        //Get body data
-        let data;
-        let recommendationId;
-        try {
-            //verify data
-            data = JSON.parse(this.request.body.data);
-            console.log("Data", data);
-
-            //Check format of data
-            let recommendation = data.recommendation;
-            console.log(recommendation);
-            if (recommendation === undefined) {
-                recommendation = data;
-            }
-
-            //Check if the algorithm exists
-            let algo = this.serviceManager.storage.getAlgorithm(id);
-            console.log("Algorithm", algo);
-            if (algo === undefined) {
-                return new ApiErrorModel(404, `not found`);
-            }
-
-            id = parseInt(id);
-            recommendationId = this.serviceManager.storage.algorithms[id].addRecommendationFromData(data); //id is overwritten if included 
-        } catch (e) {
-            console.log(e.toString(), recommendationId);
-            return new ApiErrorModel(405, `needs data object. Parameter invalid`);
+        if (data.recommendation) {
+            data = data.recommendation;
         }
-        console.log("recommendationId", recommendationId);
+
+        //Check if the algorithm exists
+        let algo = this.serviceManager.storage.getAlgorithm(id);
+        console.log("Algorithm", algo);
+        if (!algo) {
+            return new ApiErrorModel(404, `not found`);
+        }
+
+        let recommendationId = this.storage.algorithms[id].addRecommendationFromData(data); //id is overwritten if included
         return new JsonModel({
             "success": true,
             "recommendationId": recommendationId
@@ -96,53 +83,31 @@ class RecommendationController extends AbstractController {
     //Post an update to a recommendation
     //{"recommendation" : {"id": 1,"algorithmParent": 0,"title": "Recommendation", "description": "This is the description modified.", "contentContinued": [] }}
     //{"id": 1,"algorithmParent": 0,"title": "Recommendation", "description": "This is the description modified.", "contentContinued": [] }
-    postAction() {
+    postAction(params, data) {
         console.log("==== POST ====");
-        let id = this.request.query.id; //query data from id to get exact algorithm
-        let key = this.request.query.key;
-        let recommendationId = this.request.query.recommendationId; //query data for recommendation id to seach recommendation
-        console.log("id", id);
-        console.log("key", key);
-        console.log("recommendationId", recommendationId);
-        if ((key === "" || key === "") ||
-            (id === "" || id === undefined) ||
+        let id = parseInt(params.id); //query data from id to get exact algorithm
+        let recommendationId = parseInt(params.recommendationId); //query data for recommendation id to seach recommendation
+        if ((id === "" || id === undefined) ||
             (recommendationId === "" || recommendationId === undefined)) { //if any value is missing
             return new ApiErrorModel(405, `parameters not allowed`);
         }
 
-        //Get body data and check for algo and recommendation
-        try {
-            //Get body data
-            let data = JSON.parse(this.request.body.data);
-            console.log("Data", data);
-
-            id = parseInt(id); //Make sure id is an int 
-
-            //Check if there is an algorithm
-            let algo = this.serviceManager.storage.getAlgorithm(id);
-            if (algo === undefined) {
-                return new ApiErrorModel(404, `not found`);
-            }
-
-            let recommendation = this.serviceManager.storage.algorithms[id].getRecommendation(id);
-            if (recommendation === undefined) {
-                return new ApiErrorModel(404, `not found`);
-            }
-
-            //Check for different data and swap
-            recommendation = data.recommendation;
-            console.log(recommendation);
-            if(recommendation === undefined) { 
-                recommendation = data;
-            }
-
-            this.serviceManager.storage
-                .algorithms[id]
-                .recommendations[recommendationId].fromObj(recommendation);
-        } catch (e) {
-            console.log(e.toString());
-            return new ApiErrorModel(405, `needs data object. Parameter invalid`);
+        //Check if there is an algorithm
+        let algo = this.serviceManager.storage.getAlgorithm(id);
+        if (algo === undefined) {
+            return new ApiErrorModel(404, `not found`);
         }
+
+        let recommendation = this.serviceManager.storage.algorithms[id].getRecommendation(id);
+        if (recommendation === undefined) {
+            return new ApiErrorModel(404, `not found`);
+        }
+
+        if (data.recommendation) {
+            data = data.recommendation;
+        }
+
+        this.storage.algorithms[id].recommendations[recommendationId].fromObj(data);
         return new JsonModel({
             "success": true
         });

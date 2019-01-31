@@ -17,6 +17,14 @@ class RecommendationModel extends AbstractModel {
     addContentContinued(information) {
         this.contentContinued.push(information);
     }
+
+    minify() {
+        return {
+            title: this.title,
+            description: this.description,
+            contentContinued: this.contentContinued
+        }
+    }
 }
 
 module.exports = RecommendationModel;

@@ -16,76 +16,95 @@ class AbstractController {
     }
 
     get requestMethod() {
-        return this.request.method + (!("id" in this.request.params && this.request.params.id) ? "_ALL" : "");
+        return this.request.method + ((this.request.method.includes("GET") && !this.request.params.id) ? "_ALL" : "");
     }
 
     get algorithmManager() {
         return this.serviceManager.algorithmAPI;
     }
 
+    get params() {
+        return this.request.params;
+    }
+    get body() {
+        if (this.request.body.data) {
+             return this.request.body.data;
+        }
+        return this.request.body;
+    }
+
     get clientKey() {
         return this.request.query.key;
     }
 
+    get storage() {
+        return this.serviceManager.storage;
+    }
+
     dispatch(secure = true) {
-        if (secure && !this.clientKey) {
-            this.response.response = new ApiErrorModel(400, 'missing client key');
-            return;
-        }
+        try {
+            if (secure && !this.clientKey) {
+                this.response.response = new ApiErrorModel(400, 'missing client key');
+                return;
+            }
 
-        let key = this.request.query.key;
-        if (!key || key === "") {
-            return new ApiErrorModel(405, `method not allowed`);
-        }
+            console.log(this.request.params);
+            console.log(this.body);
 
-        switch (this.requestMethod) {
-            case "GET_ALL" :
-                this.response.response = this.getAllAction();
-                break;
-            case "GET" :
-                this.response.response = this.getAction(this.request.params.id);
-                break;
-            case "POST" :
-                this.response.response = this.postAction();
-                break;
-            case "HEAD" :
-                this.response.response = this.headAction();
-                break;
-            case "PUT" :
-                this.response.response = this.putAction();
-                break;
-            case "DELETE" :
-                this.response.response = this.deleteAction();
-                break;
-            case "CONNECT" :
-                this.response.response = this.connectAction();
-                break;
-            case "TRACE" :
-                this.response.response = this.traceAction();
-                break;
-            case "PATCH" :
-                this.response.response = this.patchAction();
-                break;
-            default:
-                this.response.response = new ApiErrorModel(405, 'method not allowed');
-                break;
+            switch (this.requestMethod) {
+                case "GET_ALL":
+                    this.response.response = this.getAllAction(this.params);
+                    break;
+                case "GET":
+                    this.response.response = this.getAction(this.params);
+                    break;
+                case "POST":
+                    this.response.response = this.postAction(this.params, this.body);
+                    break;
+                case "HEAD":
+                    this.response.response = this.headAction();
+                    break;
+                case "PUT":
+                    this.response.response = this.putAction(this.params, this.body);
+                    break;
+                case "DELETE":
+                    this.response.response = this.deleteAction(this.params);
+                    break;
+                case "CONNECT":
+                    this.response.response = this.connectAction();
+                    break;
+                case "TRACE":
+                    this.response.response = this.traceAction();
+                    break;
+                case "PATCH":
+                    this.response.response = this.patchAction();
+                    break;
+                default:
+                    this.response.response = new ApiErrorModel(405, 'method not allowed');
+                    break;
+            }
+        } catch (e) {
+            console.log(e.toString());
+            this.response.response = new ApiErrorModel(500, 'Invalid input');
         }
-
-        let old                = this.response.response;
-        this.response.response = new Promise((resolve, reject) => {
-            resolve(old);
-        })
+            let old = this.response.response;
+            console.log(this.response.response);
+            this.response.response = new Promise((resolve, reject) => {
+                resolve(old);
+            })
+        
+        
     }
 
     getAllAction() {
         return new ApiErrorModel(403, `method not allowed`);
     }
 
-    getAction() {
+    getAction(params) {
         return new ApiErrorModel(405, `method not allowed`);
     }
 
-    postAction() {
+    postAction(params, data) {
         return new ApiErrorModel(405, `method not allowed`);
     }
 
@@ -93,7 +112,7 @@ class AbstractController {
         return new ApiErrorModel(405, `method not allowed`);
     }
 
-    putAction() {
+    putAction(params, data) {
         return new ApiErrorModel(405, `method not allowed`);
     }
 

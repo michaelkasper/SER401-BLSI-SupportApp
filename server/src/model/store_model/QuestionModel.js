@@ -61,6 +61,13 @@ class QuestionModel extends AbstractModel {
     setTypeDropdown() {
         this.typeKey = 'dropdown';
     }
+
+    minify() {
+        return {
+            prompt: this.prompt,
+            typeKey: this.typeKey
+        }
+    }
 }
 
 module.exports = QuestionModel;
