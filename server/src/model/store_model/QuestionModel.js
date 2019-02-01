@@ -2,7 +2,6 @@
 
 const AbstractModel = require("./AbstractModel");
 const Option = require("./QuestionOptionModel");
-const Answer = require("./QuestionAnswerModel");
 
 class QuestionModel extends AbstractModel {
     constructor() {
@@ -12,38 +11,42 @@ class QuestionModel extends AbstractModel {
 
         this.currentId = 0;
         this.algorithmParent = null; //identifies the algorithm that it is a part of.
+        
         this.prompt = "";
         this.typeKey = null;
         this.options = []; //id points to index
-        this.answers = []; 
+        this.answer = null; //can be an option or a value
     }
 
     getOption(id) {
-        return this.options[id];
+        let option;
+        try {
+            option = this.optionss[parseInt(id)];
+        } catch (e) {
+            console.log(e.toString());
+            return null;
+        }
+        return option;
     }
 
-    getAnswer(id) {
-        return this.answers[id];
+    getAnswer() {
+        return this.answer;
     }
 
-    addQuestionAnswer() {
-        let answer = new Answer();
-        answer.id = this.currentId; //Set to current, but increase after
-        answer.algorithmParent = this.algorithmParent;
-        answer.question = this;
-
-        this.answer[this.currentId++] = answer; //Set to array with current id, but increase after
-        return answer.id;
+    setQuestionAnswer(data) {
+        this.answer = new Option();
+        this.answer.fromObj(data);
+        this.answersalgorithmParent = this.algorithmParent;
+        return this.answer;
     }
 
-    addQuestionOption() {
-        let option = new Option();
-        option.id = this.currentId; //Set to current, but increase after
-        option.algorithmParent = this.algorithmParent;
-        option.question = this;
-
-        this.answer[this.currentId++] = option; //Set to array with current id, but increase after
-        return option.id;
+    addQuestionOption(data) {
+        this.options[this.currentId] = new Option();
+        this.options[this.currentId].fromObj(data);
+        this.options[this.currentId].algorithmParent = this.algorithmParent;
+        this.options[this.currentId].questionParent = this.id;
+        this.options[this.currentId].id = this.currentId++; //overwrite id
+        return this.currentId - 1;
     }
 
     setTypeCheckbox() {
@@ -65,7 +68,8 @@ class QuestionModel extends AbstractModel {
     minify() {
         return {
             prompt: this.prompt,
-            typeKey: this.typeKey
+            typeKey: this.typeKey,
+            answer: this.answer
         }
     }
 }

@@ -10,8 +10,7 @@ class AbstractModel {
 
     fromObj(json) {
         for (let field in json) {
-            if (field in this 
-                && this[field] !== this["id"]) {
+            if (field in this) {
                 this[field] = json[field];
             }
         }

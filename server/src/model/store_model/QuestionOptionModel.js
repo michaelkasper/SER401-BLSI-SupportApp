@@ -7,7 +7,7 @@ class QuestionOptionModel extends AbstractModel {
         super();
         // Abstract Model values
         //this.id = null;
-        this.question = null;
+        this.questionParent = null;
         this.algorithmParent = null; //identifies the algorithm that it is a part of.
 
         this.label = "";
@@ -16,7 +16,14 @@ class QuestionOptionModel extends AbstractModel {
         this.isGood = null; //boolean 
     }
 
-
+    minify() {
+        return {
+            label : this.label,
+            minValue : this.minValue,
+            maxValue : this.maxValue,
+            isGood : this.isGood
+        }
+    }
 }
 
 module.exports = QuestionOptionModel;
