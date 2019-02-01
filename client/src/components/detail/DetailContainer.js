@@ -1,7 +1,6 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import {observer} from "mobx-react";
 import AppBar from "@material-ui/core/AppBar";
-import Divider from '@material-ui/core/Divider'
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -13,64 +12,55 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 @observer
 class DetailContainer extends React.Component {
     render() {
-        let {algorithm, classes} = this.props;
+        let {classes} = this.props;
         
         return (
             <div className={classes.root}>
-                <AppBar position='static' color='primary' style={{padding: 8 * 2}}>
+                <AppBar position='static' color='primary' className={classes.containerTitle}>
                     State Details
                 </AppBar>
 
-                <Typography align='left' style={{padding: 8 * 2}}>
+                <Typography align='left' className={classes.idContainer}>
                     State Id: 43
                 </Typography>
-                <Divider variant='middle'/>
-                
-                <Typography align='left' style={{padding: 8 * 2}}>
-                    Questions
-                </Typography>
-                
+
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Question</TableCell>
-                            <TableCell>Answer Type</TableCell>
-                            <TableCell></TableCell>
+                            <CustomTableCell>Question</CustomTableCell>
+                            <CustomTableCell>Answer Type</CustomTableCell>
+                            <CustomTableCell>{/* Empty header cell for delete button */}</CustomTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         <TableRow>
-                            <TableCell>Question 1</TableCell>
-                            <TableCell>boolean</TableCell>
-                            <TableCell>-</TableCell>
+                            <CustomTableCell>Question 1</CustomTableCell>
+                            <CustomTableCell>boolean</CustomTableCell>
+                            <CustomTableCell>-</CustomTableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell>Question 2</TableCell>
-                            <TableCell>boolean</TableCell>
-                            <TableCell>-</TableCell>
+                            <CustomTableCell>Question 2</CustomTableCell>
+                            <CustomTableCell>boolean</CustomTableCell>
+                            <CustomTableCell>-</CustomTableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
 
-                <Typography align='left' style={{padding: 8 * 2}}>
-                    Recommendations
-                </Typography>
-
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Recommendation</TableCell>
-                            <TableCell></TableCell>
+                            <CustomTableCell>Recommendation</CustomTableCell>
+                            <CustomTableCell>{/* Empty header cell for delete button */}</CustomTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         <TableRow>
-                            <TableCell>Recommendation 1</TableCell>
-                            <TableCell>-</TableCell>
+                            <CustomTableCell>Recommendation 1</CustomTableCell>
+                            <CustomTableCell>-</CustomTableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell>Recommendation 2</TableCell>
-                            <TableCell>-</TableCell>
+                            <CustomTableCell>Recommendation 2</CustomTableCell>
+                            <CustomTableCell>-</CustomTableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -82,8 +72,27 @@ class DetailContainer extends React.Component {
 const styles = theme => ({
     root: {
         backgroundColor: theme.palette.background.default,
-        width          : 400
+        width: 400
+    },
+    containerTitle: {
+        padding: 16
+    },
+    idContainer: {
+        padding: 16,
+        marginLeft: 6
     }
 });
+
+const CustomTableCell = withStyles(theme => ({
+    head: {
+        backgroundColor: '#f2f2f2',
+        color: '#404040',
+        fontSize: '14px',
+        fontWeight: 'bold'
+    },
+    body: {
+        color: '#4d4d4d'
+    }
+}))(TableCell);
 
 export default withStyles(styles, {withTheme: true})(DetailContainer);
