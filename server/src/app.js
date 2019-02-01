@@ -14,6 +14,7 @@ const bodyParser = require('body-parser');
 const AlgorithmController      = require('./controller/AlgorithmController');
 const QuestionController       = require('./controller/QuestionController');
 const RecommendationController = require('./controller/RecommendationController');
+const QuestionOptionController = require('./controller/QuestionOptionController');
 
 //Models
 const ApiErrorModel = require('./model/ApiErrorModel');
@@ -28,6 +29,7 @@ const routes = {
     "algorithm"     : AlgorithmController,
     "question"      : QuestionController,
     "recommendation": RecommendationController,
+    "questionOption": QuestionOptionController,
 };
 
 const serviceManager = {
@@ -45,9 +47,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 Object.keys(routes).forEach(route => {
-    if(route === "question"){
-        app.all(`/${route}(/:id)?(/:questionId)?(/:questionAnswerId)?`,
-            (req, res, next) => dispatcher(routes[route], req, res, next));
+    if(route.includes("question")){
         app.all(`/${route}(/:id)?(/:questionId)?(/:questionOptionId)?`,
             (req, res, next) => dispatcher(routes[route], req, res, next));
     } else if(route === "recommendation") {

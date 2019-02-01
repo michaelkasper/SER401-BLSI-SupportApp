@@ -17,8 +17,8 @@ class QuestionController extends AbstractController {
     getAllAction(params) {
         console.log("==== GET All ====");
         let id = parseInt(params.id); //Make sure id is an int
-        let questionId = parseInt(params.questionId);
-        let collect = this.storage.getAlgorithm(id).questions;
+        
+        let collect = this.vstorage.getAlgorithm(id).questions;
 
         return new JsonModel({
             collection: collect
@@ -33,7 +33,7 @@ class QuestionController extends AbstractController {
 
         if ((id === "" || id === undefined) ||
             (questionId === "" || questionId === undefined)) { //if any value is missing
-            return new ApiErrorModel(404, `not found`);
+            return new ApiErrorModel(405, "parameters missing");
         }
 
         let algo = this.storage.algorithms[id];
@@ -97,7 +97,7 @@ class QuestionController extends AbstractController {
             return new ApiErrorModel(404, `not found`);
         }
 
-        let question = this.serviceManager.storage.algorithms[id].getQuestion(id);
+        let question = this.serviceManager.storage.algorithms[id].getQuestion(questionId);
         if (question === undefined) {
             return new ApiErrorModel(404, `not found`);
         }

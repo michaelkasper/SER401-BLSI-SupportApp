@@ -21,7 +21,7 @@ class QuestionModel extends AbstractModel {
     getOption(id) {
         let option;
         try {
-            option = this.optionss[parseInt(id)];
+            option = this.options[parseInt(id)];
         } catch (e) {
             console.log(e.toString());
             return null;
@@ -36,7 +36,7 @@ class QuestionModel extends AbstractModel {
     setQuestionAnswer(data) {
         this.answer = new Option();
         this.answer.fromObj(data);
-        this.answersalgorithmParent = this.algorithmParent;
+        this.answer.algorithmParent = this.algorithmParent;
         return this.answer;
     }
 
