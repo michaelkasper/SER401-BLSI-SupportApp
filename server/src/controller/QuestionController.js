@@ -18,7 +18,7 @@ class QuestionController extends AbstractController {
         console.log("==== GET All ====");
         let id = parseInt(params.id); //Make sure id is an int
         
-        let collect = this.vstorage.getAlgorithm(id).questions;
+        let collect = this.storage.getAlgorithm(id).questions;
 
         return new JsonModel({
             collection: collect
