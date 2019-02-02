@@ -40,8 +40,10 @@ class AbstractTransporter{
     }
 
     async get(id) {
-        return this.table.findByPrimary(id)
-            .then(value => {
+		return this.sequelize.sync()
+			.then(() =>{
+				return this.table.findByPrimary(id);
+			}).then(value => {
                 console.log(value);
                 return value;
             }).catch(err => {
