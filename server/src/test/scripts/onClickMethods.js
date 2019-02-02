@@ -18,14 +18,12 @@ function send(pressed) {
     let id = document.getElementById("id").value;
     let questionId = document.getElementById("questionId").value;
     let questionOptionId = document.getElementById("questionOptionId").value;
-    let questionAnswerId = document.getElementById("questionAnswerId").value;
     let recommendationId = document.getElementById("recommendationId").value;
 
     query.push({key : key});
     query.push({id : id});
     query.push({questionId : questionId});
     query.push({questionOptionId : questionOptionId});
-    query.push({questionAnswerId : questionAnswerId});
     query.push({recommendationId : recommendationId});
     let firstQuery = true
     for(let x = 0; x < query.length; x++) {

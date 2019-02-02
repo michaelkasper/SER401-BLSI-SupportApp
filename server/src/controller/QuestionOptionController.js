@@ -8,14 +8,14 @@ var AbstractController = require('./AbstractController');
 var ApiErrorModel = require('../model/ApiErrorModel');
 var JsonModel = require('../model/JsonModel');
 
-const QuestionTransporter = require("../transporter/QuestionTransporter");
+const QuestionOptionTransporter = require("../transporter/QuestionOptionTransporter");
 
-class QuestionController extends AbstractController {
+class QuestionOptionController extends AbstractController{
     constructor(request, response, serviceManager) {
         super(request, response, serviceManager);
 
-        this.transporter = new QuestionTransporter();
-        this.dataType = "question"
+        this.transporter = new QuestionOptionTransporter();
+        this.dataType = "questionOption"
     }
 
     dispatch() {
@@ -23,4 +23,4 @@ class QuestionController extends AbstractController {
     }
 }
 
-module.exports = QuestionController;
+module.exports = QuestionOptionController;
