@@ -1,6 +1,6 @@
 'use strict';
 
-const Abstract = require("./AbstractTransport");
+const Abstract = require("./AbstractTransporter");
 const Sequelize = require("sequelize");
 
 class StateTransporter extends Abstract {
@@ -39,17 +39,6 @@ class StateTransporter extends Abstract {
         };
 
         super("states", fields);
-    }
-
-    getState(id) {
-        let state;
-        try {
-            state = this.states[parseInt(id)];
-        } catch (e) {
-            console.log(e.toString());
-            return null;
-        }
-        return state;
     }
 }
 

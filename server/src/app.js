@@ -15,15 +15,10 @@ const AlgorithmController      = require('./controller/AlgorithmController');
 const QuestionController       = require('./controller/QuestionController');
 const RecommendationController = require('./controller/RecommendationController');
 const QuestionOptionController = require('./controller/QuestionOptionController');
+const StateController = require('./controller/StateController');
 
-//Transport
+//Model
 const ApiErrorModel = require('./model/ApiErrorModel');
-
-const AlgorithmTransporter = require("./transporter/AlgorithmTransporter");
-const QuestionTransporter = require("./transporter/QuestionTransporter");
-const RecommendationTransporter = require("./transporter/RecommendationTransporter");
-const QuestionOptionTransporter = require("./transporter/QuestionOptionTransporter");
-const StateTransporter = require("./transporter/StateTransporter.js");
 
 const dispatcher = (controller, req, res, next) => {
     (new controller(req, res, serviceManager)).dispatch();
@@ -35,15 +30,11 @@ const routes = {
     "question"      : QuestionController,
     "recommendation": RecommendationController,
     "questionOption": QuestionOptionController,
+    "state"         : StateController
 };
 
 const serviceManager = {
-    routes : routes,
-    algorithms: new AlgorithmTransporter(),
-    questions: new QuestionTransporter(),
-    recommendations: new RecommendationTransporter(),
-    questionOptions: new QuestionOptionTransporter(),
-    states: new StateTransporter()
+    routes : routes
 };
 
 const app  = express();

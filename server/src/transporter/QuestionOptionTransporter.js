@@ -3,7 +3,7 @@
 const Abstract = require("./AbstractTransporter");
 const Sequelize = require("sequelize");
 
-class RecommendationTransporter extends Abstract {
+class QuestionOptionTransporter extends Abstract {
     constructor() {
         let fields = {
             id: {
@@ -11,18 +11,19 @@ class RecommendationTransporter extends Abstract {
                 primaryKey: true,
                 autoIncrement: true
             },
+            questionId: Sequelize.INTEGER.UNSIGNED,
             algorithmId: Sequelize.INTEGER.UNSIGNED,
-            title: {
+            label: {
                 type: Sequelize.STRING,
                 allowNull: false
             },
-            description: Sequelize.STRING,
-            shortDescription: Sequelize.STRING,
-            content: Sequelize.STRING
+            minValue: Sequelize.INTEGER,
+            maxValue: Sequelize.INTEGER,
+            isGood: Sequelize.BOOLEAN
         };
 
-        super("recommendations", fields);
+        super("questionOptions", fields);
     }
 }
 
-module.exports = RecommendationTransporter;
+module.exports = QuestionOptionTransporter;

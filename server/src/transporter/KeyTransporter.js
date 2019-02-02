@@ -1,6 +1,6 @@
 'use strict';
 
-const Abstract = require("../transporter/AbstractTransport");
+const Abstract = require("../transporter/AbstractTransporter");
 const Sequelize = require("sequelize");
 
 class KeyTransporter extends Abstract{

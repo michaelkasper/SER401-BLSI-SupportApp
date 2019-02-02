@@ -9,9 +9,10 @@
 class AbstractTransporter{
     constructor(name, fields) {
         this.sequelize = new Sequelize("blsi", "user", "password", {
-            dialect: "mysql",
+            
             host: "localhost",
             port: 3366,
+            dialect: "mysql",
             pool: {
                 max: 5,
                 min: 0,
@@ -22,42 +23,77 @@ class AbstractTransporter{
         });
 
         this.table = this.sequelize.define(name, fields);
-        this.table.sync(); //Create tables
+
+            this.table.drop();
+       
+            this.table.sync();
+
     }
 
-    getAll() {
+    async getAll() {
         return this.sequelize.sync()
             .then(() => this.table.findAll())
             .then(value => {
                 console.log(value);
                 return value;
+            }).catch(err => {
+                console.log(err.toString());
             });
     }
 
-    get(id) {
+    async get(id) {
         return this.sequelize.sync()
             .then(() => this.table.findByPrimary(id))
             .then(value => {
                 console.log(value);
                 return value;
+            }).catch(err => {
+                console.log(err.toString());
             });
     }
 
-    create(data) {
+    async create(data) {
         return this.sequelize.sync()
             .then(() => this.table.create(data))
             .then(value => {
                 console.log(value);
                 return value;
+            }).catch(err => {
+                console.log(err.toString());
             });
     }
 
-    update(id, data) {
+    async update(id, data) {
         return this.sequelize.sync()
-            .then(() => this.table.update(data))
-            .then(value => {
+            .then(() => {
+                return this.table.update(data, {where: {id: id}})
+            }).then(value => {
                 console.log(value)
                 return value;
+            }).catch(err => {
+                console.log(err.toString());
+            });
+    }
+
+    async delete(id) {
+        return this.sequelize.sync()
+            .then(() => this.table.destroy({where: {id: id}}))
+            .then(value => {
+                console.log(value);
+                return value;
+            }).catch(err => {
+                console.log(err.toString());
+            });
+    }
+
+    async deleteAll() {
+        return this.sequelize.sync()
+            .then(() => this.table.drop())
+            .then(value => {
+                console.log(value);
+                return value;
+            }).catch(err => {
+                console.log(err.toString());
             });
     }
 

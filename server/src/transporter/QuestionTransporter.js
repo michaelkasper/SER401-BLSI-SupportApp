@@ -1,6 +1,6 @@
 'use strict';
 
-const Abstract = require("./AbstractTransport");
+const Abstract = require("./AbstractTransporter");
 const Sequelize = require("sequelize");
 
 class QuestionTransporter extends Abstract {
@@ -11,10 +11,7 @@ class QuestionTransporter extends Abstract {
                 primaryKey: true,
                 autoIncrement: true
             },
-            algorithmId: {
-                type: Sequelize.INTEGER.UNSIGNED,
-                allowNull: false
-            },
+            algorithmId: Sequelize.INTEGER.UNSIGNED,
             prompt: {
                 type: Sequelize.STRING,
                 allowNull: false
@@ -23,42 +20,11 @@ class QuestionTransporter extends Abstract {
                 type: Sequelize.STRING({
                     length: 20
                 }),
-                allowNull: false
             },
             answer: Sequelize.STRING
         };
 
         super("questions", fields);
-    }
-
-    addQuestionFromData(data) {
-        this.questions[this.currentQuestionId] = new Question();
-        this.questions[this.currentQuestionId].fromObj(data);
-        this.questions[this.currentQuestionId].algorithmParent = this.id;
-        this.questions[this.currentQuestionId].id = this.currentQuestionId++; //overwrite id
-        return this.currentQuestionId - 1;
-    }
-
-    getQuestion(id) {
-        let question;
-        try {
-            question = this.questions[parseInt(id)];
-        } catch (e) {
-            console.log(e.toString());
-            return null;
-        }
-        return question;
-    }
-
-    getAnswer() {
-        return this.answer;
-    }
-
-    setQuestionAnswer(data) {
-        this.answer = new Option();
-        this.answer.fromObj(data);
-        this.answer.algorithmParent = this.algorithmParent;
-        return this.answer;
     }
 
     setTypeCheckbox() {
@@ -77,13 +43,6 @@ class QuestionTransporter extends Abstract {
         this.typeKey = 'dropdown';
     }
 
-    minify() {
-        return {
-            prompt: this.prompt,
-            typeKey: this.typeKey,
-            answer: this.answer
-        }
-    }
 }
 
 module.exports = QuestionTransporter;
