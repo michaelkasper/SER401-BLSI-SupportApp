@@ -41,14 +41,14 @@ class DetailContainer extends React.Component {
                     <TableHead>
                         <TableRow>
                             <CustomTableCell>Question</CustomTableCell>
-                            <CustomTableCell>Answer Type</CustomTableCell>
+                            <CustomTableCell className={classes.cellPadding}>Answer Type</CustomTableCell>
                             <CustomTableCell>{/* Empty header cell for delete button */}</CustomTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {questions.map(row => (
                             <TableRow key={row.id}>
-                                <CustomTableCell>{row.question}</CustomTableCell>
+                                <CustomTableCell className={classes.cellPadding}>{row.question}</CustomTableCell>
                                 <CustomTableCell>{row.type}</CustomTableCell>
                                 <CustomTableCell>{/* Placeholder for delete button */}{row.deleteBtn}</CustomTableCell>
                             </TableRow>
@@ -66,7 +66,7 @@ class DetailContainer extends React.Component {
                     <TableBody>
                         {recommendations.map(row => (
                             <TableRow key={row.id}>
-                                <CustomTableCell>{row.recommendation}</CustomTableCell>
+                                <CustomTableCell className={classes.cellPadding}>{row.recommendation}</CustomTableCell>
                                 <CustomTableCell>{/* Placeholder for delete button */}{row.deleteBtn}</CustomTableCell>
                             </TableRow>
                         ))}
@@ -88,7 +88,10 @@ const styles = theme => ({
     },
     idContainer: {
         padding: 16,
-        marginLeft: 6
+        marginLeft: 8
+    },
+    cellPadding: {
+        paddingRight: 6
     }
 });
 
