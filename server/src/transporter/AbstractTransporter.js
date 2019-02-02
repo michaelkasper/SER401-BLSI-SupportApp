@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Based off same Abstract model used in the app.
+ * Written by Taylor Greeff (tgreeff)
  */
 
  const Sequelize = require("sequelize");

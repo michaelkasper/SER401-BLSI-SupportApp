@@ -4,7 +4,6 @@
  * Written by Taylor Greeff (tgreeff)
  */
 
-//Add for later handling of Algorithm routing
 var AbstractController = require('./AbstractController');
 var ApiErrorModel = require('../model/ApiErrorModel');
 var JsonModel = require('../model/JsonModel');

@@ -2,6 +2,7 @@
 
 /**
  * Created by Michael Kasper - mkasper
+ * Modified by Taylor Greeff - tgreeff
  */
 const ApiErrorModel = require('./../model/ApiErrorModel');
 const JsonModel = require('./../model/JsonModel');

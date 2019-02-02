@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * Written by Taylor Greeff (tgreeff)
+ */
+
 const Abstract = require("./AbstractTransporter");
 const Sequelize = require("sequelize");
 

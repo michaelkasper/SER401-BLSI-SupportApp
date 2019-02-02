@@ -1,5 +1,9 @@
 "use strict";
 
+/**
+ * Written by Taylor Greeff (tgreeff)
+ */
+
 var fs = require("fs");
 
 class KeyController {
