@@ -1,20 +1,26 @@
 import uuidv1 from "uuid/v1";
 import {observable} from "mobx";
-import BluebirdPromise from "../common/BluebirdPromise";
+import Environment from "../common/Environment";
+import Mustache from "mustache";
 
 class AbstractStore {
+    apiUrl                 = Environment.API;
+    @observable collection = {};
     rootStore;
     transportLayer;
-    @observable collection = {};
     primaryKey;
     model;
+    endpoint;
 
     /**
      *
+     * @param endpoint
      * @param model
      * @param transportLayer
+     * @param rootStore
      */
-    constructor(model, transportLayer, rootStore) {
+    constructor(endpoint, model, transportLayer, rootStore) {
+        this.endpoint       = endpoint;
         this.rootStore      = rootStore;
         this.model          = model;
         this.primaryKey     = model.primaryKey;
@@ -22,12 +28,12 @@ class AbstractStore {
         this.transportLayer = transportLayer;
 
         if (!this.primaryKey) {
-            throw new Error('You must set the value of the `primaryKey`, e.g. primaryKey = "Id"');
+            throw new Error('You must set the value of the `primaryKey`, e.g. primaryKey = "id"');
         }
     }
 
     new = (json) => {
-        json.id = uuidv1();
+        json[this.primaryKey] = uuidv1();
         return this.register(json);
     };
 
@@ -35,89 +41,58 @@ class AbstractStore {
         return this.collection[id];
     }
 
-    fetch(query) {
-        return new BluebirdPromise((resolve, reject) => {
-            setTimeout(() => {
-                resolve([])
-            }, 1);
-        });
-    }
-
     getAll() {
         return Object.values(this.collection);
     }
 
     fetchAll() {
-        return new BluebirdPromise((resolve, reject) => {
-            setTimeout(() => {
-                resolve([])
-            }, 1);
-        });
+        return this.fetch()
     }
 
-    // fetch(data, query) {
-    //     let url = this.transportLayer.compileUrl(this.endpoints.resource, data);
-    //
-    //     return this.transportLayer
-    //         .get(url, query)
-    //         .then(this.processResult.bind(this));
-    // }
-    //
-    // post(data, options) {
-    //     let url = this.transportLayer.compileUrl(this.endpoints.resource, data);
-    //
-    //     return this.transportLayer
-    //         .post(url, data, options)
-    //         .then(this.processResult.bind(this));
-    // }
-    //
-    //
-    // patch(changeSet, object, options) {
-    //     let url = this.transportLayer.compileUrl(this.endpoints.resource, object);
-    //     // console.log('patching: ', this.transportLayer.baseUrl + url);
-    //
-    //     // let data = changeSet;
-    //     // if (object instanceof AbstractModel) {
-    //     //     data = {...object.toJson(true), ...changeSet};
-    //     // }
-    //
-    //     return this.transportLayer
-    //         .patch(url, changeSet, options)
-    //         .then(this.processResult.bind(this));
-    // }
-    //
-    // patchList(data) {
-    //     let url = this.transportLayer.compileUrl(this.endpoints.resource);
-    //     // console.log('patching list: ', url);
-    //
-    //     return this.transportLayer
-    //         .patch(url, data)
-    //         .then(this.processResult.bind(this));
-    // }
-    //
-    //
-    // delete(model) {
-    //     let url = this.transportLayer.compileUrl(this.endpoints.resource, model);
-    //
-    //     this.transportLayer
-    //         .delete(url)
-    //         .then(data => {
-    //             this.remove(model);
-    //         });
-    // }
+    fetch(data = {}, query = {}) {
+        let url = this.compileEndpointUrl(data);
+        return this.transportLayer
+            .get(url, query)
+            .then(this.processResult.bind(this));
+    }
+
+    post(data, options) {
+        let url = this.compileEndpointUrl(data);
+        return this.transportLayer
+            .post(url, data, options)
+            .then(this.processResult.bind(this));
+    }
+
+    patch(changeSet, object, options) {
+        let url = this.compileEndpointUrl(object);
+        return this.transportLayer
+            .patch(url, changeSet, options)
+            .then(this.processResult.bind(this));
+    }
+
+    delete(model) {
+        let url = this.compileEndpointUrl(model);
+
+        this.transportLayer
+            .delete(url)
+            .then(data => {
+                this.unregister(model.id);
+            });
+    }
 
     processResult(res) {
-        if (res && res.data) {
-            let data = res.data;
-            if ('_embedded' in data && this.collectionKey in data._embedded) {
+        if (res) {
+            if ('collection' in res) {
+                console.log(res);
+
                 return new Response(
-                    data._embedded[this.collectionKey].map(json => {
+                    res.collection.map(json => {
                         return this.register(json);
                     }, this),
-                    data
+                    res
                 );
             }
-            return new Response(this.register(data));
+            return new Response(this.register(res));
         }
         return new Response(res);
     }
@@ -143,6 +118,19 @@ class AbstractStore {
         }
         return false;
     }
+
+    compileEndpointUrl(data) {
+        if (!data) {
+            data = {};
+        }
+        // build url and strip out unused Mustache tags
+        return Mustache
+            .render(this.apiUrl + this.endpoint, data)
+            .replace(/\{\{(?:(?!}})[\S\s])*?\}\}/gm, '')
+            .replace(/\/\//gm, '\/')
+            .replace(/(\/|\/(\?.*))$/gm, '$2');
+    }
+
 }
 
 class Response {

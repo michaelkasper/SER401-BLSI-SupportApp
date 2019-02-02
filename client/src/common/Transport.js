@@ -30,7 +30,6 @@ export default class Transport {
         return this.buildRequest(this.http.patch(url, data));
     }
 
-
     buildRequest(request) {
         request.catch(err => {
             // valid if we forgot our token, or token expired. will set our

@@ -4,6 +4,6 @@ import AbstractStore from "./AbstractStore";
 export default class StateStore extends AbstractStore {
 
     constructor(transporter, rootStore) {
-        super(StateModel, transporter, rootStore);
+        super("/state/{{id}}", StateModel, transporter, rootStore);
     }
 }

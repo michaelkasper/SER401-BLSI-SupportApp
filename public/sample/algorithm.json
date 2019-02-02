@@ -1,0 +1,18 @@
+{
+  "collection": [
+    {
+      "id": 1,
+      "name": "BLSI",
+      "short_description": "shortDescription of BLSI",
+      "description": "description of BLSI",
+      "state_id_start": 1
+    },
+    {
+      "id": 2,
+      "name": "Other",
+      "short_description": "shortDescription of Other",
+      "description": "description of Other",
+      "state_id_start": 100
+    }
+  ]
+}

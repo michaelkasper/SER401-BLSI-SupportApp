@@ -118,10 +118,7 @@ class AbstractController {
         return new Promise((resolve, reject) => {
             resolve(this.transporter.create(data));
         }).then(data => {
-            return new JsonModel({
-                "success": true,
-                "data": data
-            });
+            return new JsonModel(data);
         });
     }
 
@@ -133,10 +130,8 @@ class AbstractController {
             }
             let id = parseInt(params.id); //Make sure id is an int
             resolve(this.transporter.update(id, data));
-        }).then(() => {
-            return new JsonModel({
-                "success": true
-            });
+        }).then((data) => {
+            return new JsonModel(data);
         });
     }
 

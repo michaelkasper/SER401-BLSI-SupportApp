@@ -23,10 +23,8 @@ class AbstractTransporter{
         });
 
         this.table = this.sequelize.define(name, fields);
-
-            this.table.drop();
-       
-            this.table.sync();
+        //this.table.drop(); //used to clear
+        this.table.sync();
 
     }
 
@@ -42,8 +40,7 @@ class AbstractTransporter{
     }
 
     async get(id) {
-        return this.sequelize.sync()
-            .then(() => this.table.findByPrimary(id))
+        return this.table.findByPrimary(id)
             .then(value => {
                 console.log(value);
                 return value;
