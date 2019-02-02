@@ -11,17 +11,30 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 
 @observer
 class DetailContainer extends React.Component {
+    state = {
+        stateId: 43,
+        questions: [
+            {id: 0, question: 'Phasellus eget diam rutrum, molestie orci ut, interdum augue.',  type: 'number', deleteBtn: '-'}, 
+            {id: 1, question: 'Duis maximus nibh ut volutpat volutpat.', type: 'boolean', deleteBtn: '-'},
+            {id: 2, question: 'Aliquam pulvinar orci ut magna ultricies rutrum.', type: 'string', deleteBtn: '-'}],
+        recommendations: [
+            {id: 0, recommendation: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', deleteBtn: '-'},
+            {id: 1, recommendation: 'Aenean ullamcorper augue ultrices mi dapibus, nec feugiat ipsum porttitor.', deleteBtn: '-'},
+            {id: 2, recommendation: 'Pellentesque euismod metus sed ex sagittis, in ultricies ligula tincidunt.', deleteBtn: '-'}]
+    };
+    
     render() {
         let {classes} = this.props;
+        let {questions, recommendations, stateId} = this.state;
         
         return (
             <div className={classes.root}>
-                <AppBar position='static' color='primary' className={classes.containerTitle}>
+                <AppBar position='static' color='primary' className={classes.containerHeader}>
                     State Details
                 </AppBar>
 
                 <Typography align='left' className={classes.idContainer}>
-                    State Id: 43
+                    State Id: {stateId}
                 </Typography>
 
                 <Table>
@@ -33,16 +46,13 @@ class DetailContainer extends React.Component {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        <TableRow>
-                            <CustomTableCell>Question 1</CustomTableCell>
-                            <CustomTableCell>boolean</CustomTableCell>
-                            <CustomTableCell>-</CustomTableCell>
-                        </TableRow>
-                        <TableRow>
-                            <CustomTableCell>Question 2</CustomTableCell>
-                            <CustomTableCell>boolean</CustomTableCell>
-                            <CustomTableCell>-</CustomTableCell>
-                        </TableRow>
+                        {questions.map(row => (
+                            <TableRow key={row.id}>
+                                <CustomTableCell>{row.question}</CustomTableCell>
+                                <CustomTableCell>{row.type}</CustomTableCell>
+                                <CustomTableCell>{/* Placeholder for delete button */}{row.deleteBtn}</CustomTableCell>
+                            </TableRow>
+                        ))}
                     </TableBody>
                 </Table>
 
@@ -54,14 +64,12 @@ class DetailContainer extends React.Component {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        <TableRow>
-                            <CustomTableCell>Recommendation 1</CustomTableCell>
-                            <CustomTableCell>-</CustomTableCell>
-                        </TableRow>
-                        <TableRow>
-                            <CustomTableCell>Recommendation 2</CustomTableCell>
-                            <CustomTableCell>-</CustomTableCell>
-                        </TableRow>
+                        {recommendations.map(row => (
+                            <TableRow key={row.id}>
+                                <CustomTableCell>{row.recommendation}</CustomTableCell>
+                                <CustomTableCell>{/* Placeholder for delete button */}{row.deleteBtn}</CustomTableCell>
+                            </TableRow>
+                        ))}
                     </TableBody>
                 </Table>
             </div>
@@ -69,12 +77,13 @@ class DetailContainer extends React.Component {
     }
 }
 
+
 const styles = theme => ({
     root: {
         backgroundColor: theme.palette.background.default,
         width: 400
     },
-    containerTitle: {
+    containerHeader: {
         padding: 16
     },
     idContainer: {
