@@ -1,10 +1,10 @@
 import React from 'react';
 import {observer} from "mobx-react";
 import AppBar from "@material-ui/core/AppBar";
+import Divider from '@material-ui/core/Divider';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow';
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/es/styles/withStyles";
@@ -37,14 +37,13 @@ class DetailContainer extends React.Component {
                     State Id: {stateId}
                 </Typography>
 
+                <Divider/>
+
+                <Typography align='left' className={classes.addContent}>
+                    Questions (Drop here to add)
+                </Typography>
+                
                 <Table>
-                    <TableHead>
-                        <TableRow>
-                            <CustomTableCell>Question</CustomTableCell>
-                            <CustomTableCell className={classes.cellPadding}>Answer Type</CustomTableCell>
-                            <CustomTableCell>{/* Empty header cell for delete button */}</CustomTableCell>
-                        </TableRow>
-                    </TableHead>
                     <TableBody>
                         {questions.map(row => (
                             <TableRow key={row.id}>
@@ -55,14 +54,12 @@ class DetailContainer extends React.Component {
                         ))}
                     </TableBody>
                 </Table>
-
+                
+                <Typography align='left' className={classes.addContent}>
+                    Recommendations (Drop here to add)
+                </Typography>
+                
                 <Table>
-                    <TableHead>
-                        <TableRow>
-                            <CustomTableCell>Recommendation</CustomTableCell>
-                            <CustomTableCell>{/* Empty header cell for delete button */}</CustomTableCell>
-                        </TableRow>
-                    </TableHead>
                     <TableBody>
                         {recommendations.map(row => (
                             <TableRow key={row.id}>
@@ -90,18 +87,19 @@ const styles = theme => ({
         padding: 16,
         marginLeft: 8
     },
+    addContent: {
+        padding: 16,
+        marginLeft: 8,
+        backgroundColor: '#f2f2f2',
+        color: '#404040',
+        fontWeight: 'bold'
+    },
     cellPadding: {
         paddingRight: 6
     }
 });
 
 const CustomTableCell = withStyles(theme => ({
-    head: {
-        backgroundColor: '#f2f2f2',
-        color: '#404040',
-        fontSize: '14px',
-        fontWeight: 'bold'
-    },
     body: {
         color: '#4d4d4d'
     }
