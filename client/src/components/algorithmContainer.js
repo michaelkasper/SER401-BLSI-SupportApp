@@ -49,6 +49,7 @@ class AlgorithmContainer extends React.Component {
 
                 <TabsContainer algorithm={algorithm}/>
                 <TreeContainer tree={algorithm} onStateChange={this.onStateChange}/>
+                <DetailContainer algorithm={algorithm}/>
 
                 {
                     selectedState &&
