@@ -1,9 +1,10 @@
 import React, {Fragment} from 'react';
-import TabsContainer from "./tabs/TabsContainer";
-import TreeContainer from "./tree/TreeContainer";
-import DetailContainer from "./detail/DetailContainer";
+import TabsContainer from "../tabs/TabsContainer";
+import TreeContainer from "../tree/TreeContainer";
+import DetailContainer from "../detail/DetailContainer";
 import {observer} from "mobx-react";
-import Loading from "../components/ui/Loading";
+import Loading from "../../ui/Loading";
+import withStyles from "@material-ui/core/es/styles/withStyles";
 
 @observer
 class AlgorithmContainer extends React.Component {
@@ -38,27 +39,33 @@ class AlgorithmContainer extends React.Component {
 
     render() {
         let {loading, selectedState} = this.state;
-        let {algorithm}              = this.props;
+        let {algorithm, classes}     = this.props;
 
         if (loading) {
             return <Loading/>
         }
 
         return (
-            <Fragment>
-
+            <div className={classes.root}>
                 <TabsContainer algorithm={algorithm}/>
                 <TreeContainer tree={algorithm} onStateChange={this.onStateChange}/>
                 <DetailContainer algorithm={algorithm}/>
 
-                {
-                    selectedState &&
-                    <DetailContainer state={selectedState}/>
-                }
+                {/*{*/}
+                    {/*selectedState &&*/}
+                    {/*<DetailContainer state={selectedState}/>*/}
+                {/*}*/}
 
-            </Fragment>
+            </div>
         );
     }
 }
 
-export default AlgorithmContainer;
+
+const styles = theme => ({
+    root: {
+        "position": "relative"
+    },
+});
+
+export default withStyles(styles)(AlgorithmContainer);

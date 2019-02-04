@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import './App.css';
-import AlgorithmContainer from "./components/algorithmContainer";
+import AlgorithmContainer from "./components/app/algorithm/AlgorithmContainer";
 import {inject, observer} from "mobx-react";
-import AlgorithmSelectorContainer from "./components/algorithmSelectorContainer";
+import AlgorithmSelectorContainer from "./components/app/algorithm/AlgorithmSelectorContainer";
 import Loading from "./components/ui/Loading";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 

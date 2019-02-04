@@ -65,9 +65,13 @@ class TabsContainer extends React.Component {
 
 const styles = theme => ({
     root       : {
+        "position"     : "absolute",
+        "top"          : "0px",
+        "left"         : "0px",
         backgroundColor: theme.palette.background.default,
         width          : 400,
-        height         : '100%',
+        height         : "calc(100vh - 68px)",
+        boxShadow      : "3px 0px 10px -5px #888888"
     },
     tabRoot    : {
         textTransform  : 'initial',
@@ -104,16 +108,16 @@ const styles = theme => ({
         backgroundColor: '#FFFFFF',
     },
     tabsContent: {
-        overflow: "hidden",
-        flexGrow: "1",
-        position: "relative"
+        overflow : "hidden",
+        height   : "calc(100% - 48px)",
+        overflowY: "scroll"
     },
     tabContent : {
-        position: "absolute",
-        top     : 0,
-        left    : 0,
-        right   : 0,
-        bottom  : 0,
+        // position: "absolute",
+        // top     : 0,
+        // left    : 0,
+        // right   : 0,
+        // bottom  : 0,
         overflow: "auto"
     },
     header     : {

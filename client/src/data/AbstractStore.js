@@ -83,7 +83,6 @@ class AbstractStore {
     processResult(res) {
         if (res) {
             if ('collection' in res) {
-                console.log(res);
 
                 return new Response(
                     res.collection.map(json => {
