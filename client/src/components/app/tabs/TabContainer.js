@@ -3,9 +3,10 @@ import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from '@material-ui/icons/Add';
+import Zoom from "@material-ui/core/Zoom";
+
 
 class TabContainer extends React.Component {
-
     onCreate = () => {
         this.props.onCreate();
     };
@@ -17,7 +18,12 @@ class TabContainer extends React.Component {
     };
 
     render() {
-        let {classes, content, row: RowContent} = this.props;
+        let {classes, content, row: RowContent, theme} = this.props;
+
+        const transitionDuration = {
+            enter: theme.transitions.duration.enteringScreen,
+            exit : theme.transitions.duration.leavingScreen,
+        };
 
         return (
             <Typography component="div" dir={this.props.dir}>
@@ -30,9 +36,17 @@ class TabContainer extends React.Component {
                     )
                 }
 
-                <Fab className={classes.fab} color="primary" onClick={this.onCreate}>
-                    <AddIcon/>
-                </Fab>
+
+                <Zoom
+                    in={true}
+                    timeout={transitionDuration}
+                    unmountOnExit
+                >
+                    <Fab className={classes.fab} color="primary" onClick={this.onCreate}>
+                        <AddIcon/>
+                    </Fab>
+                </Zoom>
+
             </Typography>
         );
     }
@@ -45,7 +59,7 @@ const styles = theme => ({
         padding     : "10px",
         textAlign   : 'right',
         cursor      : 'pointer',
-        '&:hover'  : {
+        '&:hover'   : {
             backgroundColor: "#cccccc"
         }
     },
@@ -57,4 +71,4 @@ const styles = theme => ({
 
 });
 
-export default withStyles(styles)(TabContainer);
+export default withStyles(styles, {withTheme: true})(TabContainer);
