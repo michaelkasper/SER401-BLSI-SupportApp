@@ -1,16 +1,30 @@
-import React from 'react';
-import {observer} from "mobx-react";
+import React, {Fragment} from 'react';
+import {inject, observer} from "mobx-react";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 import TabContainer from "./TabContainer";
+import Modal from "@material-ui/core/Modal";
+import QuestionForm from "../forms/QuestionForm";
+import RecommendationForm from "../forms/RecommendationForm";
+import StateRow from "./StateRow";
+import RecommendationRow from "./RecommendationRow";
+import QuestionRow from "./QuestionRow";
+import Dialog from "../../ui/Dialog";
 
+@inject("rootStore")
 @observer
 class TabsContainer extends React.Component {
 
     state = {
-        view: 0,
+        view                   : 0,
+        showSateModal          : false,
+        showQuestionModal      : false,
+        showRecommendationModal: false,
+        selectedState          : null,
+        selectedQuestion       : null,
+        selectedRecommendation : null
     };
 
 
@@ -22,43 +36,146 @@ class TabsContainer extends React.Component {
         this.setState({view: index});
     };
 
+    onCloseModal = () => {
+        this.setState({
+            showSateModal          : false,
+            showQuestionModal      : false,
+            showRecommendationModal: false,
+            selectedState          : null,
+            selectedQuestion       : null,
+            selectedRecommendation : null
+        })
+    };
+
+    selectState = (state = null) => {
+        let {algorithm} = this.props;
+
+        if (state === null) {
+            state = this.props.rootStore.stateStore.new({algorithm_id: algorithm.id});
+        }
+        this.props.onStateChange(state);
+    };
+
+    showQuestionForm = (question = true) => {
+        this.showModal(question, null);
+    };
+
+    showRecommendationForm = (recommendation = true) => {
+        this.showModal(null, recommendation);
+    };
+
+    showModal = (question = null, recommendation = null) => {
+        this.setState({
+            showQuestionModal      : !!question,
+            showRecommendationModal: !!recommendation,
+            selectedQuestion       : question === true ? null : question,
+            selectedRecommendation : recommendation === true ? null : recommendation,
+        })
+    };
+
 
     render() {
-        let {view}                      = this.state;
-        let {algorithm, classes, theme} = this.props;
+        let {view, showQuestionModal, showRecommendationModal, selectedQuestion, selectedRecommendation} = this.state;
+        let {algorithm, classes, theme}                                                                  = this.props;
 
         return (
-            <div className={classes.root}>
-                <div className={classes.header}>
-                    <AppBar position="static" color="primary">
-                        <Tabs
-                            value={this.state.view}
-                            onChange={this.handleChange}
-                            indicatorColor="secondary"
-                            textColor="secondary"
-                            variant="fullWidth"
-                            classes={{indicator: classes.indicator}}
-                        >
-                            <Tab label="States" classes={{root: classes.tabRoot, selected: classes.tabSelected}}/>
-                            <Tab label="Questions" classes={{root: classes.tabRoot, selected: classes.tabSelected}}/>
-                            <Tab label="Recommendations"
-                                 classes={{root: classes.tabRoot, selected: classes.tabSelected}}/>
-                        </Tabs>
-                    </AppBar>
-                </div>
+            <Fragment>
+                <div className={classes.root}>
+                    <div className={classes.header}>
+                        <AppBar position="static" color="primary">
+                            <Tabs
+                                value={this.state.view}
+                                onChange={this.handleChange}
+                                indicatorColor="secondary"
+                                textColor="secondary"
+                                variant="fullWidth"
+                                classes={{indicator: classes.indicator}}
+                            >
+                                <Tab
+                                    label="States"
+                                    classes={{root: classes.tabRoot, selected: classes.tabSelected}}
+                                />
+                                <Tab
 
-                <div className={classes.tabsContent}>
-                    <div className={classes.tabContent}>
-                        {view === 0 && <TabContainer dir={theme.direction} content={algorithm.states}/>}
-                        {view === 1 && <TabContainer dir={theme.direction} content={algorithm.questions}/>}
-                        {view === 2 && <TabContainer dir={theme.direction} content={algorithm.recommendations}/>}
+                                    label="Questions"
+                                    classes={{root: classes.tabRoot, selected: classes.tabSelected}}
+                                />
+                                <Tab
+                                    label="Recommendations"
+                                    classes={{root: classes.tabRoot, selected: classes.tabSelected}}
+                                />
+                            </Tabs>
+                        </AppBar>
+                    </div>
+
+                    <div className={classes.tabsContent}>
+                        <div className={classes.tabContent}>
+                            {
+                                view === 0 &&
+                                <TabContainer
+                                    dir={theme.direction}
+                                    content={algorithm.states}
+                                    onSelect={this.selectState}
+                                    onCreate={this.selectState}
+                                    row={StateRow}
+                                />
+                            }
+
+                            {
+                                view === 1 &&
+                                <TabContainer
+                                    dir={theme.direction}
+                                    content={algorithm.questions}
+                                    onSelect={this.showQuestionForm}
+                                    onCreate={this.showQuestionForm}
+                                    row={QuestionRow}
+                                />
+                            }
+
+                            {
+                                view === 2 &&
+                                <TabContainer
+                                    dir={theme.direction}
+                                    content={algorithm.recommendations}
+                                    onSelect={this.showRecommendationForm}
+                                    onCreate={this.showRecommendationForm}
+                                    row={RecommendationRow}
+                                />
+                            }
+                        </div>
                     </div>
                 </div>
 
-                <div>
+                {
+                    showQuestionModal &&
+                    <Dialog
+                        open={showQuestionModal}
+                        onClose={this.onCloseModal}
+                    >
+                        <QuestionForm
+                            onClose={this.onCloseModal}
+                            algorithm={algorithm}
+                            question={selectedQuestion}
+                        />
+                    </Dialog>
+                }
 
-                </div>
-            </div>
+                {
+                    showRecommendationModal &&
+                    <Dialog
+                        onClose={this.onCloseModal}
+                        open={showRecommendationModal}
+                    >
+                        <RecommendationForm
+                            onClose={this.onCloseModal}
+                            algorithm={algorithm}
+                            recommendation={selectedRecommendation}
+                        />
+                    </Dialog>
+                }
+
+
+            </Fragment>
         );
     }
 }
@@ -123,6 +240,9 @@ const styles = theme => ({
     header     : {
         flexGrow: 0
     },
+    modal      : {
+        width: "600px"
+    }
 
 });
 

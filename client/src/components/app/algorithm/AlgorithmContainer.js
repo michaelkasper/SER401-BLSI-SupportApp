@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import TabsContainer from "../tabs/TabsContainer";
 import TreeContainer from "../tree/TreeContainer";
 import DetailContainer from "../detail/DetailContainer";
@@ -47,14 +47,13 @@ class AlgorithmContainer extends React.Component {
 
         return (
             <div className={classes.root}>
-                <TabsContainer algorithm={algorithm}/>
+                <TabsContainer algorithm={algorithm} onStateChange={this.onStateChange}/>
                 <TreeContainer tree={algorithm} onStateChange={this.onStateChange}/>
-                <DetailContainer algorithm={algorithm}/>
 
-                {/*{*/}
-                    {/*selectedState &&*/}
-                    {/*<DetailContainer state={selectedState}/>*/}
-                {/*}*/}
+                {
+                    selectedState &&
+                    <DetailContainer algorithm={algorithm} state={selectedState}/>
+                }
 
             </div>
         );

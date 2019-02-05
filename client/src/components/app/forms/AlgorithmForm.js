@@ -62,10 +62,7 @@ class AlgorithmForm extends React.Component {
         let {selectedAlgorithm, classes} = this.props;
 
         return (
-            <Form
-                title={"Select or Create a new algorithm"}
-                onClose={this.handleClose}
-            >
+            <Form title={"Select or Create a new algorithm"}>
                 <FormControl className={classes.formControl}>
                     <InputLabel htmlFor="algorithm">Algorithm</InputLabel>
                     <Select

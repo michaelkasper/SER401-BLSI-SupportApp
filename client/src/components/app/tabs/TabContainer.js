@@ -1,56 +1,36 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import Typography from "@material-ui/core/Typography";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import withStyles from "@material-ui/core/es/styles/withStyles";
-import {Button} from "@material-ui/core";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from '@material-ui/icons/Add';
 
 class TabContainer extends React.Component {
 
+    onCreate = () => {
+        this.props.onCreate();
+    };
+
+    onSelect = (obj) => () => {
+        if (this.props.onSelect) {
+            this.props.onSelect(obj);
+        }
+    };
+
     render() {
-        let {classes} = this.props;
+        let {classes, content, row: RowContent} = this.props;
 
         return (
-            <Typography component="div" dir={this.props.dir} style={{padding: 8 * 3}}>
-                {/*<div className={classes.createBar}>*/}
-                {/*<Button variant="contained" color="primary" className={classes.button}>*/}
-                {/*New*/}
-                {/*</Button>*/}
-                {/*</div>*/}
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
-                <div>...</div>
+            <Typography component="div" dir={this.props.dir}>
+                {
+                    content.map((item, index) => (
+                            <div key={item.id} className={classes.row} onClick={this.onSelect(item)}>
+                                <RowContent item={item} index={index}/>
+                            </div>
+                        )
+                    )
+                }
 
-                <Fab className={classes.fab} color="primary">
+                <Fab className={classes.fab} color="primary" onClick={this.onCreate}>
                     <AddIcon/>
                 </Fab>
             </Typography>
@@ -60,18 +40,16 @@ class TabContainer extends React.Component {
 
 
 const styles = theme => ({
-    createBar: {
-        "borderBottom" : "1px solid #ffffff",
-        "position"     : "absolute",
-        "top"          : "0px",
-        "left"         : "0px",
-        "width"        : "100%",
-        "height"       : "30px",
-        "background"   : "#bfbfbf",
-        "verticalAlign": "middle",
-        textAlign      : 'right'
+    row: {
+        borderBottom: "1px solid #cccccc",
+        padding     : "10px",
+        textAlign   : 'right',
+        cursor      : 'pointer',
+        '&:hover'  : {
+            backgroundColor: "#cccccc"
+        }
     },
-    fab      : {
+    fab: {
         position: 'absolute',
         bottom  : theme.spacing.unit * 2,
         right   : theme.spacing.unit * 2,

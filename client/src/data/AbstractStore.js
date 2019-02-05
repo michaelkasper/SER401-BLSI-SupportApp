@@ -32,7 +32,7 @@ class AbstractStore {
         }
     }
 
-    new = (json) => {
+    new = (json = {}) => {
         json[this.primaryKey] = uuidv1();
         return this.register(json);
     };

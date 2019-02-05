@@ -19,7 +19,6 @@ const TableCell = withStyles(theme => ({
 @observer
 class DetailContainer extends React.Component {
     state = {
-        stateId        : 43,
         questions      : [
             {
                 id       : 0,
@@ -44,8 +43,8 @@ class DetailContainer extends React.Component {
     };
 
     render() {
-        let {classes}                             = this.props;
-        let {questions, recommendations, stateId} = this.state;
+        let {classes, algorithm, state}  = this.props;
+        let {questions, recommendations} = this.state;
 
         return (
             <div className={classes.root}>
@@ -56,7 +55,7 @@ class DetailContainer extends React.Component {
                 <div className={classes.content}>
 
                     <Typography align='left' className={classes.idContainer}>
-                        State Id: {stateId}
+                        State Id: {state.id}
                     </Typography>
 
                     <Divider/>

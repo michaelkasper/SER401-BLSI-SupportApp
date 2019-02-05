@@ -5,8 +5,8 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import {withStyles} from "@material-ui/core";
-import Modal from "@material-ui/core/Modal";
 import AlgorithmForm from "../forms/AlgorithmForm";
+import Modal from "@material-ui/core/Modal";
 
 
 @observer
@@ -57,13 +57,16 @@ class AlgorithmSelectorContainer extends React.Component {
                 </AppBar>
 
 
-                <Modal
-                    aria-labelledby="simple-modal-title"
-                    aria-describedby="simple-modal-description"
-                    open={showModal}
-                >
-                    <AlgorithmForm onSelect={this.onSelect} selectedAlgorithm={selectedAlgorithm}/>
-                </Modal>
+                {
+                    showModal &&
+                    <Modal
+                        aria-labelledby="simple-modal-title"
+                        aria-describedby="simple-modal-description"
+                        open={showModal}
+                    >
+                        <AlgorithmForm onSelect={this.onSelect} selectedAlgorithm={selectedAlgorithm}/>
+                    </Modal>
+                }
 
             </div>
 

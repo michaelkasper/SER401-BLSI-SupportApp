@@ -2,27 +2,17 @@ import React from 'react';
 import {withStyles} from '@material-ui/core';
 import {observer} from "mobx-react";
 import Typography from "@material-ui/core/Typography";
-import MuiModal from "@material-ui/core/Modal";
-import FormControl from "@material-ui/core/FormControl";
-import Button from "@material-ui/core/Button";
-import Modal from "../app/algorithm/AlgorithmSelectorContainer";
 
-
-const Form = ({open, isCreate = false, isEdit = false, onCreate, onClose, onEdit, title, children, classes}) => {
+const Form = ({open, onSave, title, children, classes}) => {
 
     let onSubmit = (e) => {
         e.preventDefault();
-        if (isCreate) {
-            onCreate();
-        } else if (isEdit) {
-            onEdit();
-        } else {
-            onClose();
+        if (onSave) {
+            onSave();
         }
     };
 
     return (
-
         <div
             style={{
                 top      : `20%`,
@@ -37,24 +27,7 @@ const Form = ({open, isCreate = false, isEdit = false, onCreate, onClose, onEdit
             </Typography>
             <Typography variant="subtitle1" id="simple-modal-description">
                 <form className={classes.root} autoComplete="off" onSubmit={onSubmit}>
-                    <FormControl className={classes.formControl}>
-                        {children}
-
-                        {
-                            isCreate &&
-                            <Button variant="contained" color="primary" className={classes.button}
-                                    onClick={onCreate}>Create
-                            </Button>
-                        }
-
-                        {
-                            isEdit &&
-                            <Button variant="contained" color="primary" className={classes.button}
-                                    onClick={onEdit}>Save
-                            </Button>
-                        }
-
-                    </FormControl>
+                    {children}
                 </form>
             </Typography>
         </div>
