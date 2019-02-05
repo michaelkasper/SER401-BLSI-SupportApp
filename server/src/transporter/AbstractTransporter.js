@@ -21,7 +21,8 @@ class AbstractTransporter{
             },
             operatorsAliases: false
         });
-
+        this.name = name;
+        this.fields = fields;
         this.table = this.sequelize.define(name, fields);
         //this.table.drop(); //used to clear
         this.table.sync();
@@ -88,11 +89,15 @@ class AbstractTransporter{
     async deleteAll() {
         return this.sequelize.sync()
             .then(() => this.table.drop())
-            .then(value => {
+            .then((value) => {
+                console.log(value);
+                this.table.sync();
+            }).then(value => {
                 console.log(value);
                 return value;
             }).catch(err => {
                 console.log(err.toString());
+                return err;
             });
     }
 

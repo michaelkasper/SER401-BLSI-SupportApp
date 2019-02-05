@@ -21,7 +21,15 @@ class AbstractController {
     }
 
     get requestMethod() {
-        return this.request.method + ((this.request.method.includes("GET") && !this.request.params.id) ? "_ALL" : "");
+        let modifier = "";
+        if (this.request.method.includes("GET")) {
+            modifier = !this.request.params.id ? "_ALL" : "";
+        }
+        else if(this.request.method.includes("DELETE")) {
+            modifier = !this.request.params.id ? "_ALL" : "";
+        }
+
+        return this.request.method + modifier;
     }
 
     get params() {
@@ -64,6 +72,9 @@ class AbstractController {
                 case "PUT":
                     this.response.response = this.putAction(this.body);
                     break;
+                case "DELETE_ALL":
+                    this.response.response = this.deleteAllAction();
+                    break;
                 case "DELETE":
                     this.response.response = this.deleteAction(this.params);
                     break;
@@ -88,7 +99,7 @@ class AbstractController {
         //execute returned promise
         Promise.resolve(this.response.response)
             .catch(err => {
-                return new ApiErrorModel(500, 'Invalid input');
+                return new ApiErrorModel(400, 'Invalid request');
         }); 
     }
 
@@ -139,8 +150,23 @@ class AbstractController {
         return new ApiErrorModel(405, `method not allowed`);
     }
      
-    deleteAction() {
-        return new ApiErrorModel(405, `method not allowed`);
+    deleteAllAction() {
+        console.log("==== DELETE ====");
+        return new Promise((resolve, reject) => {
+            resolve(this.transporter.deleteAll());
+        }).then(data => {
+            return new JsonModel(data);
+        });
+    }
+
+    deleteAction(params) {
+        console.log("==== DELETE ====");
+        return new Promise((resolve, reject) => {
+            let id = parseInt(params.id);
+            resolve(this.transporter.delete(id));
+        }).then(data => {
+            return new JsonModel(data);
+        });
     }
 
     connectAction() {
