@@ -55,52 +55,67 @@ class AbstractController {
 
             console.log(this.params);
             console.log(this.body);
-
+            let response = () => {};
             switch (this.requestMethod) {
                 case "GET_ALL":
-                    this.response.response = this.getAllAction();
+                    response = () => this.getAllAction();
                     break;
                 case "GET":
-                    this.response.response = this.getAction(this.params);
+                    response = () => this.getAction(this.params);
                     break;
                 case "POST":
-                    this.response.response = this.postAction(this.params, this.body);
+                    response = () => this.postAction(this.params, this.body);
                     break;
                 case "HEAD":
-                    this.response.response = this.headAction();
+                    response = () => this.headAction();
                     break;
                 case "PUT":
-                    this.response.response = this.putAction(this.body);
+                    response = () => this.putAction(this.body);
                     break;
                 case "DELETE_ALL":
-                    this.response.response = this.deleteAllAction();
+                    response = () => this.deleteAllAction();
                     break;
                 case "DELETE":
-                    this.response.response = this.deleteAction(this.params);
-                    break;
-                case "CONNECT":
-                    this.response.response = this.connectAction();
+                    response = () => this.deleteAction(this.params);
                     break;
                 case "TRACE":
-                    this.response.response = this.traceAction();
+                    response = () => this.traceAction();
                     break;
                 case "PATCH":
-                    this.response.response = this.patchAction();
+                    response = () => this.patchAction();
                     break;
                 default:
-                    this.response.response = new ApiErrorModel(405, 'method not allowed');
+                    response = () => new ApiErrorModel(405, 'method not allowed');
                     break;
             }
+            
+            if (this.dataType !== "key") {
+                this.response.response = new Promise((resolve, reject) => {
+                    resolve(this.keys.exists(this.clientKey));
+                }).then(exists => {
+                    console.log("EXISTS", exists);
+                    if (exists === null || exists === "null") {
+                        console.log("Throwing");
+                        throw new Error("Invalid Key");
+                    }
+                }).then(() => {
+                    console.log("Resolving");
+                    return response();
+
+                }).catch(err => {
+                    console.log("Throwing2");
+                    return new ApiErrorModel(400, 'Invalid key');
+                });
+            } else {
+                this.response.response = new Promise((resolve, reject) => {
+                    resolve(response());
+                });
+            }
+
         } catch (e) {
             console.log(e.toString());
-            this.response.response = new ApiErrorModel(500, 'Invalid input');
+            return new ApiErrorModel(500, 'Invalid input');
         }
-
-        //execute returned promise
-        Promise.resolve(this.response.response)
-            .catch(err => {
-                return new ApiErrorModel(400, 'Invalid request');
-        }); 
     }
 
     getAllAction() {
@@ -167,10 +182,6 @@ class AbstractController {
         }).then(data => {
             return new JsonModel(data);
         });
-    }
-
-    connectAction() {
-        return new ApiErrorModel(405, `method not allowed`);
     }
 
     traceAction() {

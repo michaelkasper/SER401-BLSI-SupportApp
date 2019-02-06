@@ -23,6 +23,22 @@ class KeyTransporter extends Abstract{
 
         super("keys", fields);
     }
+
+    exists(data) {
+        return this.sequelize.sync()
+            .then(() => {
+                return this.table.findOne({
+                    where: {
+                        key: data
+                    }
+                });
+            }).then(value => {
+                console.log(value);
+                return value;
+            }).catch(err => {
+                console.log(err.toString());
+            });
+    }
 }
 
 module.exports = KeyTransporter;

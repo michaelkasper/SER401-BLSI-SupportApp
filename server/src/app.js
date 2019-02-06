@@ -11,6 +11,7 @@ const ejs        = require('ejs');
 const bodyParser = require('body-parser');
 
 //Controllers
+const KeyController = require('./controller/KeyController');
 const AlgorithmController      = require('./controller/AlgorithmController');
 const QuestionController       = require('./controller/QuestionController');
 const RecommendationController = require('./controller/RecommendationController');
@@ -26,6 +27,7 @@ const dispatcher = (controller, req, res, next) => {
 };
 
 const routes = {
+    "key"           : KeyController,
     "algorithm"     : AlgorithmController,
     "question"      : QuestionController,
     "recommendation": RecommendationController,
@@ -55,6 +57,10 @@ Object.keys(routes).forEach(route => {
             (req, res, next) => dispatcher(routes[route], req, res, next));
     } else if(route === "state") {
         app.all(`/${route}(/:id)?(/:stateId)?`,
+            (req, res, next) => dispatcher(routes[route], req, res, next));
+    } 
+    else if (route === "key") {
+        app.all(`/${route}`,
             (req, res, next) => dispatcher(routes[route], req, res, next));
     } else {
         app.all(`/${route}(/:id)?`,
