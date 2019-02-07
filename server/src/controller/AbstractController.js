@@ -89,6 +89,7 @@ class AbstractController {
                     break;
             }
             
+            /*
             if (this.dataType !== "key") {
                 this.response.response = new Promise((resolve, reject) => {
                     resolve(this.keys.exists(this.clientKey));
@@ -106,11 +107,9 @@ class AbstractController {
                     console.log("Throwing2");
                     return new ApiErrorModel(400, 'Invalid key');
                 });
-            } else {
-                this.response.response = new Promise((resolve, reject) => {
-                    resolve(response());
-                });
-            }
+            } else {*/
+                this.response.response = Promise.resolve(response());
+            //}
 
         } catch (e) {
             console.log(e.toString());
@@ -134,7 +133,7 @@ class AbstractController {
         return new Promise((resolve, reject) => {
             let id = parseInt(params.id);
             resolve(this.transporter.get(id));
-        }).then(data => {
+        }).then(data => { //TODO: Build data
             return new JsonModel(data);
         });
     }
@@ -156,7 +155,7 @@ class AbstractController {
             }
             let id = parseInt(params.id); //Make sure id is an int
             resolve(this.transporter.update(id, data));
-        }).then((data) => {
+        }).then((data) => { //TODO: spread data 
             return new JsonModel(data);
         });
     }
