@@ -6,7 +6,6 @@
  */
 const ApiErrorModel = require('./../model/ApiErrorModel');
 const JsonModel = require('./../model/JsonModel');
-const KeyTransporter = require('../transporter/KeyTransporter');
 
 class AbstractController {
 
@@ -14,10 +13,9 @@ class AbstractController {
         this.request        = request;
         this.response       = response;
         this.serviceManager = serviceManager;
-        this.transporter = null;
         this.response.set('Cache-Control', 'no-cache, private, no-store, must-revalidate');
-        this.dataType = "";
-        this.keys = new KeyTransporter();
+
+        this.secure = true;
     }
 
     get requestMethod() {
@@ -46,9 +44,9 @@ class AbstractController {
         return this.request.query.key;
     }
 
-    dispatch(secure = true) {
+    dispatch() {
         try {
-            if (secure && !this.clientKey) {
+            if (this.secure && !this.clientKey) {
                 this.response.response = new ApiErrorModel(400, 'missing client key');
                 return;
             }
@@ -58,31 +56,31 @@ class AbstractController {
             let response = () => {};
             switch (this.requestMethod) {
                 case "GET_ALL":
-                    response = () => this.getAllAction();
+                    response = () => this.getAllAction(this.params, this.body);
                     break;
                 case "GET":
-                    response = () => this.getAction(this.params);
+                    response = () => this.getAction(this.params, this.body);
                     break;
                 case "POST":
                     response = () => this.postAction(this.params, this.body);
                     break;
                 case "HEAD":
-                    response = () => this.headAction();
+                    response = () => this.headAction(this.params, this.body);
                     break;
                 case "PUT":
-                    response = () => this.putAction(this.body);
+                    response = () => this.putAction(this.params, this.body);
                     break;
                 case "DELETE_ALL":
-                    response = () => this.deleteAllAction();
+                    response = () => this.deleteAllAction(this.params, this.body);
                     break;
                 case "DELETE":
-                    response = () => this.deleteAction(this.params);
+                    response = () => this.deleteAction(this.params, this.body);
                     break;
                 case "TRACE":
-                    response = () => this.traceAction();
+                    response = () => this.traceAction(this.params, this.body);
                     break;
                 case "PATCH":
-                    response = () => this.patchAction();
+                    response = () => this.patchAction(this.params, this.body);
                     break;
                 default:
                     response = () => new ApiErrorModel(405, 'method not allowed');
@@ -117,77 +115,39 @@ class AbstractController {
         }
     }
 
-    getAllAction() {
-        console.log("==== GET All ====");
-        return new Promise((resolve, reject) => {
-            resolve(this.transporter.getAll());
-        }).then(collection => {
-            return new JsonModel({
-                collection: collection
-            });
-        });
+    getAllAction(params, data) {
+        return new ApiErrorModel(405, `method not allowed`);
     }
 
-    getAction(params) {
-        console.log("==== GET ====");
-        return new Promise((resolve, reject) => {
-            let id = parseInt(params.id);
-            resolve(this.transporter.get(id));
-        }).then(data => { //TODO: Build data
-            return new JsonModel(data);
-        });
+    getAction(params, data) {
+        return new ApiErrorModel(405, `method not allowed`);
     }
 
-    putAction(data) {
-        console.log("==== PUT ====");
-        return new Promise((resolve, reject) => {
-            resolve(this.transporter.create(data));
-        }).then(data => {
-            return new JsonModel(data);
-        });
+    putAction(params, data) {
+        return new ApiErrorModel(405, `method not allowed`);
     }
 
     postAction(params, data) {
-        console.log("==== POST ====");
-        return new Promise((resolve, reject) => {
-            if (data[this.dataType]) {
-                data = data[this.dataType];
-            }
-            let id = parseInt(params.id); //Make sure id is an int
-            resolve(this.transporter.update(id, data));
-        }).then((data) => { //TODO: spread data 
-            return new JsonModel(data);
-        });
+        return new ApiErrorModel(405, `method not allowed`);
     }
 
-    headAction() {
+    headAction(params, data) {
         return new ApiErrorModel(405, `method not allowed`);
     }
      
-    deleteAllAction() {
-        console.log("==== DELETE ====");
-        return new Promise((resolve, reject) => {
-            resolve(this.transporter.deleteAll());
-        }).then(data => {
-            return new JsonModel(data);
-        });
-    }
-
-    deleteAction(params) {
-        console.log("==== DELETE ====");
-        return new Promise((resolve, reject) => {
-            let id = parseInt(params.id);
-            resolve(this.transporter.delete(id));
-        }).then(data => {
-            return new JsonModel(data);
-        });
-    }
-
-    traceAction() {
+    deleteAllAction(params, data) {
         return new ApiErrorModel(405, `method not allowed`);
     }
 
-    patchAction() {
+    deleteAction(params, data) {
+        return new ApiErrorModel(405, `method not allowed`);
+    }
+
+    traceAction(params, data) {
+        return new ApiErrorModel(405, `method not allowed`);
+    }
+
+    patchAction(params, data) {
         return new ApiErrorModel(405, `method not allowed`);
     }
 

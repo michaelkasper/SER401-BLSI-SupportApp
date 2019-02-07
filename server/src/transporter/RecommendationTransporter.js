@@ -7,7 +7,7 @@
 const Abstract = require("./AbstractTransporter");
 const Sequelize = require("sequelize");
 
-class RecommendationTransporter extends Abstract {
+class RecommendationTransporter extends Abstract{
     constructor() {
         let fields = {
             id: {
@@ -15,17 +15,16 @@ class RecommendationTransporter extends Abstract {
                 primaryKey: true,
                 autoIncrement: true
             },
-            algorithmId: Sequelize.INTEGER.UNSIGNED,
+            algorithm_id: Sequelize.INTEGER.UNSIGNED,
             title: {
                 type: Sequelize.STRING,
                 allowNull: false
             },
             description: Sequelize.STRING,
-            shortDescription: Sequelize.STRING,
-            content: Sequelize.STRING
+            short_description: Sequelize.STRING,
         };
 
-        super("recommendations", fields);
+        super("recommendation", fields);
     }
 }
 

@@ -8,32 +8,19 @@ var AbstractController = require('./AbstractController');
 var ApiErrorModel = require('./../model/ApiErrorModel');
 var JsonModel = require('./../model/JsonModel');
 
-const KeyTransporter = require("../transporter/KeyTransporter");
 const uuid = require("uuid/v4");
 
-class AlgorithmController extends AbstractController {
-    constructor(request, response, serviceManager) {
-        super(request, response, serviceManager);
-
-        this.transporter = new KeyTransporter();
-        this.dataType = "key"
+class KeyController extends AbstractController {
+    dispatch() {  
+        //this.secure is modified in methods
+        return super.dispatch();
     }
 
-    dispatch() {
-        return super.dispatch(false);
-    }
+    postAction(params, data) {
+        this.secure = false; //Allow keyless pulls
 
-     getAllAction() {
-         return new ApiErrorModel(405, `method not allowed`);
-     }
-
-     getAction(params) {
-         return new ApiErrorModel(405, `method not allowed`);
-     }
-
-     putAction(data) {
-         console.log("==== Connect ====");
-         return new Promise((resolve, reject) => {
+        console.log("==== Connect ====");
+        return new Promise((resolve, reject) => {
              if (data.password !== "blsi402MobileApp401") {
                  throw new Error("bad password");
              }
@@ -42,38 +29,66 @@ class AlgorithmController extends AbstractController {
              resolve(this.transporter.create({
                  key: id
              }));
-         }).then(data => {
+        }).then(data => {
              return new JsonModel(data);
-         });
-     }
+        });
+    }
 
-     postAction(params, data) {
-         return new ApiErrorModel(405, `method not allowed`);
-     }
+    getAllAction(params, data) {
+        this.secure = false; //Allow keyless pulls
 
-     headAction() {
-         return new ApiErrorModel(405, `method not allowed`);
-     }
+        console.log("==== GET All ====");
+        return new Promise((resolve, reject) => {
+            if (data.password !== "blsi402MobileApp401") {
+                throw new Error("bad password");
+            }
+            resolve(this.transporter.getAll());
+        }).then(collection => {
+            return new JsonModel({
+                collection: collection
+            });
+        });
+    }
 
-     deleteAllAction() {
-         return new ApiErrorModel(405, `method not allowed`);
-     }
+    getAction(params, data) {
+        this.secure = true; //Make sure secure
 
-     deleteAction(params) {
-         return new ApiErrorModel(405, `method not allowed`);
-     }
+        console.log("==== GET ====");
+        return new Promise((resolve, reject) => {
+            if (data.password !== "blsi402MobileApp401") {
+                throw new Error("bad password");
+            }
 
-     connectAction(data) {
-         return new ApiErrorModel(405, `method not allowed`);
-     }
+            let id = parseInt(params.id);
+            resolve(this.transporter.get(id));
+        }).then(data => { //TODO: Build data
+            return new JsonModel(data);
+        });
+    }
 
-     traceAction() {
-         return new ApiErrorModel(405, `method not allowed`);
-     }
+    deleteAllAction(params, data) {
+        this.secure = true; //Make sure secure
 
-     patchAction() {
-         return new ApiErrorModel(405, `method not allowed`);
-     }
+        console.log("==== DELETE ====");
+        return new Promise((resolve, reject) => {
+            resolve(this.transporter.deleteAll());
+        }).then(data => {
+            return new JsonModel(data);
+        });
+    }
+
+    deleteAction(params, data) {
+        this.secure = true; //Make sure secure
+        
+        console.log("==== DELETE ====");
+        return new Promise((resolve, reject) => {
+            let id = parseInt(params.id);
+            resolve(this.transporter.delete(id));
+        }).then(data => {
+            return new JsonModel(data);
+        });
+    }
+
 }
 
-module.exports = AlgorithmController;
+module.exports = KeyController;

@@ -15,18 +15,17 @@ class QuestionOptionTransporter extends Abstract {
                 primaryKey: true,
                 autoIncrement: true
             },
-            questionId: Sequelize.INTEGER.UNSIGNED,
-            algorithmId: Sequelize.INTEGER.UNSIGNED,
+            question_id: Sequelize.INTEGER.UNSIGNED,
             label: {
                 type: Sequelize.STRING,
                 allowNull: false
             },
-            minValue: Sequelize.INTEGER,
-            maxValue: Sequelize.INTEGER,
-            isGood: Sequelize.BOOLEAN
+            min_value: Sequelize.INTEGER,
+            max_value: Sequelize.INTEGER,
+            is_good: Sequelize.BOOLEAN
         };
 
-        super("questionOptions", fields);
+        super("question_option", fields);
     }
 }
 

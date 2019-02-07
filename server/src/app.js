@@ -21,6 +21,9 @@ const StateController = require('./controller/StateController');
 //Model
 const ApiErrorModel = require('./model/ApiErrorModel');
 
+//Transporter
+const Database = require("./transporter/DatabaseTransporter");
+
 const dispatcher = (controller, req, res, next) => {
     (new controller(req, res, serviceManager)).dispatch();
     next();
@@ -36,6 +39,7 @@ const routes = {
 };
 
 const serviceManager = {
+    database : new Database(),
     routes : routes
 };
 

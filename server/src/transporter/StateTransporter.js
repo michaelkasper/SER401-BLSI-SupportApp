@@ -15,34 +15,21 @@ class StateTransporter extends Abstract {
                 primaryKey: true,
                 autoIncrement: true
             },
-            algorithmId: {
+            algorithm_id: {
                 type: Sequelize.INTEGER.UNSIGNED,
                 allowNull: false
             },
-            questionID: Sequelize.INTEGER.UNSIGNED,
-            recommendationID: Sequelize.INTEGER.UNSIGNED,
-            nextGoodId: {
+            
+            next_good_id: {
                 type: Sequelize.INTEGER.UNSIGNED,
-                allowNull: false
             },
-            nextGoodType: {
-                type: Sequelize.CHAR,
-                allowNull: false
-            },
-            nextBadId: {
+            
+            next_bad_id: {
                 type: Sequelize.INTEGER.UNSIGNED,
-                allowNull: false
-            },
-            nextBadType: {
-                type: Sequelize.CHAR,
-                allowNull: false
-            },
-            startType: Sequelize.CHAR,
-            description: Sequelize.STRING,
-            shortDescription: Sequelize.STRING
+            }
         };
 
-        super("states", fields);
+        super("state", fields);
     }
 }
 

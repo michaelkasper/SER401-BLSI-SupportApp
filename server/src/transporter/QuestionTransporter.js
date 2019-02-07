@@ -15,20 +15,16 @@ class QuestionTransporter extends Abstract {
                 primaryKey: true,
                 autoIncrement: true
             },
-            algorithmId: Sequelize.INTEGER.UNSIGNED,
+            algorithm_id: Sequelize.INTEGER.UNSIGNED,
             prompt: {
                 type: Sequelize.STRING,
                 allowNull: false
             },
-            typeKey: {
-                type: Sequelize.STRING({
-                    length: 20
-                }),
-            },
+            type_key: Sequelize.INTEGER(2),
             answer: Sequelize.STRING
         };
 
-        super("questions", fields);
+        super("question", fields);
     }
 
     setTypeCheckbox() {

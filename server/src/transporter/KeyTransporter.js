@@ -21,7 +21,7 @@ class KeyTransporter extends Abstract{
             }
         };
 
-        super("keys", fields);
+        super("key", fields);
     }
 
     exists(data) {

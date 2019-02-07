@@ -16,18 +16,16 @@ class AlgorithmTransporter extends Abstract {
                 autoIncrement: true
             },
             name: {
-                type: Sequelize.STRING({
-                    length: 20
-                }),
+                type: Sequelize.STRING,
                 allowNull: false
             },
-            startId: Sequelize.INTEGER.UNSIGNED,
-            startType: Sequelize.CHAR,
+            version_number: Sequelize.INTEGER(11),
+            state_id_start: Sequelize.INTEGER.UNSIGNED,
             description: Sequelize.STRING,
             shortDescription: Sequelize.STRING
         };
 
-        super("algorithms", fields);
+        super("algorithm", fields);
 
     }
 }
