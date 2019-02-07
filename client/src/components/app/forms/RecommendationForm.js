@@ -15,7 +15,8 @@ class RecommendationForm extends React.Component {
         localModel: {
             title      : "",
             description: ""
-        }
+        },
+        invalidTitle: false
     };
 
     componentDidMount() {
@@ -42,12 +43,17 @@ class RecommendationForm extends React.Component {
 
     onSave = () => {
         let {recommendation, algorithm, rootStore} = this.props;
-        if (!recommendation) {
-            recommendation = rootStore.recommendationStore.new({algorithm_id: algorithm.id});
+        if (this.state.localModel.title.length === 0) {
+            this.setState({invalidTitle: true});
         }
-        recommendation.fromJson(this.state.localModel);
-        // recommendation.save(); //TODO:: Comment out when connected to backend **/
-        this.props.onClose();
+        else {
+            if (!recommendation) {
+                recommendation = rootStore.recommendationStore.new({algorithm_id: algorithm.id});
+            }
+            recommendation.fromJson(this.state.localModel);
+            // recommendation.save(); //TODO:: Comment out when connected to backend **/
+            this.props.onClose();
+        }
     };
 
     render() {
@@ -70,6 +76,8 @@ class RecommendationForm extends React.Component {
                         margin="normal"
                         variant="outlined"
                         required
+                        error={this.state.invalidTitle}
+                        helperText={this.state.invalidTitle === true ? "Please enter a title" : ""}
                     />
 
 
