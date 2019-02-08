@@ -8,7 +8,7 @@ const Abstract = require("./AbstractTransporter");
 const Sequelize = require("sequelize");
 
 class QuestionTransporter extends Abstract {
-    constructor() {
+    constructor(sequelize) {
         let fields = {
             id: {
                 type: Sequelize.INTEGER.UNSIGNED,
@@ -20,11 +20,11 @@ class QuestionTransporter extends Abstract {
                 type: Sequelize.STRING,
                 allowNull: false
             },
-            type_key: Sequelize.INTEGER(2),
+            type_key: Sequelize.INTEGER(2), //Uses ints instead of enums
             answer: Sequelize.STRING
         };
 
-        super("question", fields);
+        super(sequelize, "question", fields);
     }
 
     setTypeCheckbox() {

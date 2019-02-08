@@ -19,7 +19,7 @@ class AlgorithmController extends AbstractController {
 
         console.log("==== GET All ====");
         return new Promise((resolve, reject) => {
-            resolve(this.transporter.getAll());
+            resolve(this.database.algorithm.getAll());
         }).then(collection => {
             return new JsonModel({
                 collection: collection
@@ -33,7 +33,7 @@ class AlgorithmController extends AbstractController {
         console.log("==== GET ====");
         return new Promise((resolve, reject) => {
             let id = parseInt(params.id);
-            resolve(this.transporter.get(id));
+            resolve(this.database.algorithm.get(id));
         }).then(data => { //TODO: Build data
             return new JsonModel(data);
         });
@@ -44,7 +44,8 @@ class AlgorithmController extends AbstractController {
 
         console.log("==== PUT ====");
         return new Promise((resolve, reject) => {
-            resolve(this.transporter.create(data));
+            let id = parseInt(params.id); //Make sure id is an int
+            resolve(this.database.algorithm.update(id, data));
         }).then(data => {
             return new JsonModel(data);
         });
@@ -55,11 +56,8 @@ class AlgorithmController extends AbstractController {
 
         console.log("==== POST ====");
         return new Promise((resolve, reject) => {
-            if (data[this.dataType]) {
-                data = data[this.dataType];
-            }
-            let id = parseInt(params.id); //Make sure id is an int
-            resolve(this.transporter.update(id, data));
+            
+            resolve(this.database.algorithm.create(data));
         }).then((data) => { //TODO: spread data 
             return new JsonModel(data);
         });
@@ -74,7 +72,7 @@ class AlgorithmController extends AbstractController {
 
         console.log("==== DELETE ====");
         return new Promise((resolve, reject) => {
-            resolve(this.transporter.deleteAll());
+            resolve(this.database.algorithm.deleteAll());
         }).then(data => {
             return new JsonModel(data);
         });
@@ -86,7 +84,7 @@ class AlgorithmController extends AbstractController {
         console.log("==== DELETE ====");
         return new Promise((resolve, reject) => {
             let id = parseInt(params.id);
-            resolve(this.transporter.delete(id));
+            resolve(this.database.algorithm.delete(id));
         }).then(data => {
             return new JsonModel(data);
         });

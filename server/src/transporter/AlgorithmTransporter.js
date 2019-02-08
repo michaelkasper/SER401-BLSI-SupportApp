@@ -8,7 +8,7 @@ const Abstract = require("./AbstractTransporter");
 const Sequelize = require("sequelize");
 
 class AlgorithmTransporter extends Abstract {
-    constructor() {
+    constructor(sequelize) {
         let fields = {
             id: {
                 type: Sequelize.INTEGER.UNSIGNED,
@@ -20,13 +20,12 @@ class AlgorithmTransporter extends Abstract {
                 allowNull: false
             },
             version_number: Sequelize.INTEGER(11),
-            state_id_start: Sequelize.INTEGER.UNSIGNED,
+            //state_id_start: Sequelize.INTEGER.UNSIGNED,
             description: Sequelize.STRING,
             shortDescription: Sequelize.STRING
         };
 
-        super("algorithm", fields);
-
+        super(sequelize, "algorithm", fields);
     }
 }
 

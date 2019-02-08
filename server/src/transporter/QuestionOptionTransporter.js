@@ -8,7 +8,7 @@ const Abstract = require("./AbstractTransporter");
 const Sequelize = require("sequelize");
 
 class QuestionOptionTransporter extends Abstract {
-    constructor() {
+    constructor(sequelize) {
         let fields = {
             id: {
                 type: Sequelize.INTEGER.UNSIGNED,
@@ -25,7 +25,7 @@ class QuestionOptionTransporter extends Abstract {
             is_good: Sequelize.BOOLEAN
         };
 
-        super("question_option", fields);
+        super(sequelize, "question_option", fields);
     }
 }
 

@@ -26,7 +26,7 @@ class KeyController extends AbstractController {
              }
 
              let id = uuid();
-             resolve(this.transporter.create({
+             resolve(this.database.key.create({
                  key: id
              }));
         }).then(data => {
@@ -42,7 +42,7 @@ class KeyController extends AbstractController {
             if (data.password !== "blsi402MobileApp401") {
                 throw new Error("bad password");
             }
-            resolve(this.transporter.getAll());
+            resolve(this.database.key.getAll());
         }).then(collection => {
             return new JsonModel({
                 collection: collection
@@ -60,7 +60,7 @@ class KeyController extends AbstractController {
             }
 
             let id = parseInt(params.id);
-            resolve(this.transporter.get(id));
+            resolve(this.database.key.get(id));
         }).then(data => { //TODO: Build data
             return new JsonModel(data);
         });
@@ -71,7 +71,7 @@ class KeyController extends AbstractController {
 
         console.log("==== DELETE ====");
         return new Promise((resolve, reject) => {
-            resolve(this.transporter.deleteAll());
+            resolve(this.database.key.deleteAll());
         }).then(data => {
             return new JsonModel(data);
         });
@@ -83,7 +83,7 @@ class KeyController extends AbstractController {
         console.log("==== DELETE ====");
         return new Promise((resolve, reject) => {
             let id = parseInt(params.id);
-            resolve(this.transporter.delete(id));
+            resolve(this.database.key.delete(id));
         }).then(data => {
             return new JsonModel(data);
         });

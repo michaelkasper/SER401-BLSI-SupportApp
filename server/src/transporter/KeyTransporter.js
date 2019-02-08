@@ -8,7 +8,7 @@ const Abstract = require("../transporter/AbstractTransporter");
 const Sequelize = require("sequelize");
 
 class KeyTransporter extends Abstract{
-    constructor() {
+    constructor(sequelize) {
         let fields = {
             id: {
                 type: Sequelize.SMALLINT,
@@ -21,7 +21,7 @@ class KeyTransporter extends Abstract{
             }
         };
 
-        super("key", fields);
+        super(sequelize, "key", fields);
     }
 
     exists(data) {

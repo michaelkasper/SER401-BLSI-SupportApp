@@ -18,6 +18,10 @@ class AbstractController {
         this.secure = true;
     }
 
+    get database() {
+        return this.serviceManager.database;
+    }
+
     get requestMethod() {
         let modifier = "";
         if (this.request.method.includes("GET")) {
@@ -106,7 +110,10 @@ class AbstractController {
                     return new ApiErrorModel(400, 'Invalid key');
                 });
             } else {*/
-                this.response.response = Promise.resolve(response());
+                this.response.response = Promise.resolve(response()).catch(err => {
+                    console.log(err);
+                    return new ApiErrorModel(400, 'Invalid key');
+                });
             //}
 
         } catch (e) {
