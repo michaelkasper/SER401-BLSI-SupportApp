@@ -63,22 +63,56 @@ class DatabaseTransporter {
         return this.key.table;
     }
 
+    //Reference to figure out FK and TK https://github.com/sequelize/sequelize/issues/9021
     addAssociations() {
-        //Algorithm & object association
-        this.algorithmTable.hasMany(this.stateTable);
-        this.algorithmTable.hasMany(this.recommendationTable);
-        this.algorithmTable.hasMany(this.questionTable);
-        this.stateTable.belongsTo(this.algorithmTable);
-        this.recommendationTable.belongsTo(this.algorithmTable);
-        this.questionTable.belongsTo(this.algorithmTable);
-
-        this.algorithmTable.hasOne(this.stateTable, {
-            foreignKey: "state_id_start"
+        //Algorithm & state association
+        this.algorithmTable.hasMany(this.stateTable, {
+            as: "states",
+            foreignKey: "id",
+            targetKey: "id"
+        });
+        this.stateTable.belongsTo(this.algorithmTable, {
+            foreignKey: "id",
+            targetKey: "id"
+        });
+        
+        //algo & question assoc
+        this.algorithmTable.hasMany(this.questionTable, {
+            as: "questions",
+            foreignKey: "id",
+            targetKey: "id"
+        });
+        this.questionTable.belongsTo(this.algorithmTable, {
+            foreignKey: "id"
         });
 
+        //algo & recommendation assoc
+        this.algorithmTable.hasMany(this.recommendationTable, {
+            as: "recommendations",
+            foreignKey: "id",
+            targetKey: "id"
+        });
+        this.recommendationTable.belongsTo(this.algorithmTable, {
+            foreignKey: "id"
+        });
+        
+        /* No need for association on start_id
+        //algo & start_id assoc
+        this.algorithmTable.hasOne(this.stateTable, {
+            as: "start_state",
+            foreignKey: "state_id_start",
+            targetKey: "state_id_start"
+        });*/
+
         //Question & question_option association
-        this.questionTable.hasMany(this.questionOptionTable);
-        this.questionOptionTable.belongsTo(this.questionTable);
+        this.questionTable.hasMany(this.questionOptionTable, {
+            as: "options",
+            foreignKey: "id",
+            targetKey: "id"
+        });
+        this.questionOptionTable.belongsTo(this.questionTable, {
+            foreignKey: "id",
+        });
 
         this.sequelize.sync();
     }

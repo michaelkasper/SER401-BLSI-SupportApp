@@ -15,7 +15,7 @@ class RecommendationTransporter extends Abstract{
                 primaryKey: true,
                 autoIncrement: true
             },
-            algorithm_id: Sequelize.INTEGER.UNSIGNED,
+            //algorithm_id: Sequelize.INTEGER.UNSIGNED,
             title: {
                 type: Sequelize.STRING,
                 allowNull: false

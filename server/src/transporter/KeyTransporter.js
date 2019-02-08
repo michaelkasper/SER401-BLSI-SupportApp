@@ -7,7 +7,7 @@
 const Abstract = require("../transporter/AbstractTransporter");
 const Sequelize = require("sequelize");
 
-class KeyTransporter extends Abstract{
+class KeyTransporter extends Abstract {
     constructor(sequelize) {
         let fields = {
             id: {
@@ -25,19 +25,19 @@ class KeyTransporter extends Abstract{
     }
 
     exists(data) {
-        return this.sequelize.sync()
-            .then(() => {
-                return this.table.findOne({
-                    where: {
-                        key: data
-                    }
-                });
-            }).then(value => {
-                console.log(value);
-                return value;
-            }).catch(err => {
-                console.log(err.toString());
+        return this.sequelize.transaction((transaction) => {
+            return this.table.findOne({
+                where: {
+                    key: data
+                },
+                transaction: transaction
             });
+        }).then(value => {
+            console.log(value);
+            return value;
+        }).catch(err => {
+            console.log(err.toString());
+        });
     }
 }
 

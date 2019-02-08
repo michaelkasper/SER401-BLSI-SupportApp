@@ -15,7 +15,10 @@ class QuestionTransporter extends Abstract {
                 primaryKey: true,
                 autoIncrement: true
             },
-            algorithm_id: Sequelize.INTEGER.UNSIGNED,
+            //algorithm_id: { 
+            //type: Sequelize.INTEGER.UNSIGNED,
+            //allowNull: false
+            //},
             prompt: {
                 type: Sequelize.STRING,
                 allowNull: false
@@ -25,6 +28,23 @@ class QuestionTransporter extends Abstract {
         };
 
         super(sequelize, "question", fields);
+    }
+
+    async get(id) {
+        return this.sequelize.transaction((transaction) => {
+            return this.table.findOne({
+                where: {
+                    id: id
+                },
+                include: ["options"],
+                transaction: transaction
+            });
+        }).then(value => {
+            console.log(value);
+            return value;
+        }).catch(err => {
+            console.log(err);
+        });
     }
 
     setTypeCheckbox() {

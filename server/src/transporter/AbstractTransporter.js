@@ -9,49 +9,68 @@ class AbstractTransporter {
 
         this.table = sequelize.define(name, fields);
         //this.table.drop(); //used to clear
+        this.sequelize = sequelize;
         this.table.sync(); //TODO: check authenticate()
     }
 
     async getAll() {
-        return this.sequelize.sync()
-            .then(() => this.table.findAll())
-            .then(value => {
-                console.log(value);
-                return value;
-            }).catch(err => {
-                console.log(err.toString());
+        return this.sequelize.transaction((transaction) => {
+            return this.table.findAll({
+                transaction: transaction
             });
+        }).then(value => {
+            //transaction committed
+            console.log(value);
+            return value;
+        }).catch(err => {
+            //transaction rolledback
+            console.log(err);
+        });
     }
 
+    //Retrieving associations https://stackoverflow.com/questions/13002873/sequelize-fetching-associations-on-find-1-6
     async get(id) {
-        return this.sequelize.sync()
-            .then(() => {
-                return this.table.findByPrimary(id);
-            }).then(value => {
-                console.log(value);
-                return value;
-            }).catch(err => {
-                console.log(err.toString());
+        return this.sequelize.transaction((transaction) => {
+            return this.table.findOne({
+                where: {
+                    id: id
+                },
+                transaction: transaction
             });
+        }).then(value => {
+            //transaction committed
+            console.log(value);
+            return value;
+        }).catch(err => {
+            //transaction rolledback
+            console.log(err);
+        });
     }
 
     async create(data) {
-        return this.table.create(data)
-            .then(value => {
-                console.log(value);
-                return value;
-            }).catch(err => {
-                console.log(err.toString());
+        return this.sequelize.transaction((transaction) => {
+            return this.table.create(data, {
+                transaction: transaction
             });
+        }).then(value => {
+            //transaction committed
+            console.log(value);
+            return value;
+        }).catch(err => {
+            //transaction rolledback
+            console.log(err);
+        });
     }
 
     async update(id, data) {
-
-        return this.table.findOrCreate({
-            where: {
-                id: id
-            },
-            defaults: data
+        return this.sequelize.transaction((transaction) => {
+            return this.table.findOrCreate({
+                where: {
+                    id: id
+                },
+                defaults: data,
+                transaction: transaction
+            });
         }).spread((result, created) => {
             console.log(created);
             if (!created) { //if exists, update
@@ -67,35 +86,39 @@ class AbstractTransporter {
             console.log(result);
             return result.dataValues;
         }).catch(err => {
-            console.log(err.toString());
+            console.log(err);
         });
     }
 
     async delete(id) {
-        return this.sequelize.sync()
-            .then(() => this.table.destroy({
+        return this.sequelize.transaction((transaction) => {
+            return this.table.destroy({
                 where: {
                     id: id
-                }
-            }))
-            .then(value => {
-                console.log(value);
-                return value;
-            }).catch(err => {
-                console.log(err.toString());
+                },
+                transaction: transaction
             });
+        }).then(value => {
+            console.log(value);
+            return value;
+        }).catch(err => {
+            console.log(err);
+        });
     }
 
     async deleteAll() {
-        return this.sequelize.sync()
-            .then(() => this.table.drop())
-            .then(value => {
-                console.log(value);
-                return value;
-            }).catch(err => {
-                console.log(err.toString());
+        return this.sequelize.transaction((transaction) => {
+            return this.table.drop({
+                transaction: transaction
             });
+        }).then(value => {
+            console.log(value);
+            return value;
+        }).catch(err => {
+            console.log(err);
+        });
     }
+
     fromObj(json) {
         for (let field in json) {
             if (field in this) {
