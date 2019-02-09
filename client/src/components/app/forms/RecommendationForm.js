@@ -33,6 +33,9 @@ class RecommendationForm extends React.Component {
 
     onChange = (field) => (e) => {
         let localModel    = {...this.state.localModel};
+        if (field === 'title') {
+            this.setState({invalidTitle: e.target.value.length < 1});
+        }
         localModel[field] = e.target.value;
         this.setState({localModel: localModel});
     };
@@ -43,16 +46,16 @@ class RecommendationForm extends React.Component {
 
     onSave = () => {
         let {recommendation, algorithm, rootStore} = this.props;
-        if (this.state.localModel.title.length === 0) {
-            this.setState({invalidTitle: true});
-        }
-        else {
+        if (this.state.localModel.title.length > 0) {
             if (!recommendation) {
                 recommendation = rootStore.recommendationStore.new({algorithm_id: algorithm.id});
             }
             recommendation.fromJson(this.state.localModel);
             // recommendation.save(); //TODO:: Comment out when connected to backend **/
             this.props.onClose();
+        }
+        else {
+            this.setState({invalidTitle: true});
         }
     };
 
