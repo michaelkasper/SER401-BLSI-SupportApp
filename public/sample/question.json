@@ -1,4 +1,62 @@
 {
   "collection": [
+    {
+      "id": 1,
+      "algorithm_id": 1,
+      "question": "question here",
+      "type_key": "number",
+      "prompt": "question prompt here",
+      "question_options": [
+        {
+          "id": 1,
+          "question_id": 1,
+          "label": null,
+          "min_value": 0,
+          "max_value": 10,
+          "is_good": true
+        },
+        {
+          "id": 2,
+          "question_id": 1,
+          "label": null,
+          "min_value": 11,
+          "max_value": 20,
+          "is_good": false
+        },
+        {
+          "id": 3,
+          "question_id": 1,
+          "label": null,
+          "min_value": 21,
+          "max_value": null,
+          "is_good": true
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "algorithm_id": 1,
+      "question": "question here",
+      "type_key": "picklist",
+      "prompt": "question prompt here",
+      "question_options": [
+        {
+          "id": 4,
+          "question_id": 2,
+          "label": "option label",
+          "min_value": null,
+          "max_value": null,
+          "is_good": true
+        },
+        {
+          "id": 5,
+          "question_id": 2,
+          "label": "option label",
+          "min_value": null,
+          "max_value": null,
+          "is_good": false
+        }
+      ]
+    }
   ]
 }
