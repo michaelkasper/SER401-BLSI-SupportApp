@@ -5,6 +5,7 @@ import DetailContainer from "../detail/DetailContainer";
 import {observer} from "mobx-react";
 import Loading from "../../ui/Loading";
 import withStyles from "@material-ui/core/es/styles/withStyles";
+import withDragAndDrop from "../../hoc/DragAndDrop";
 
 @observer
 class AlgorithmContainer extends React.Component {
@@ -67,4 +68,4 @@ const styles = theme => ({
     },
 });
 
-export default withStyles(styles)(AlgorithmContainer);
+export default withDragAndDrop(withStyles(styles)(AlgorithmContainer));

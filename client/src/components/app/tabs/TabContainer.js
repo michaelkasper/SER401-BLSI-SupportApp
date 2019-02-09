@@ -56,7 +56,6 @@ class TabContainer extends React.Component {
 const styles = theme => ({
     row: {
         borderBottom: "1px solid #cccccc",
-        padding     : "10px",
         textAlign   : 'right',
         cursor      : 'pointer',
         '&:hover'   : {

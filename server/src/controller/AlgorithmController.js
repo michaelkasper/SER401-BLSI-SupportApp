@@ -15,13 +15,48 @@ class AlgorithmController extends AbstractController {
         super(request, response, serviceManager);
 
         this.transporter = new AlgorithmTransporter();
-        this.dataType = "algorithm"
+        this.dataType    = "algorithm"
     }
 
     dispatch() {
         return super.dispatch();
     }
 
+
+    getAllAction() {
+        this.database.algorithm.getAll()
+            .then(collection => {
+                return Prmoise.all(collection.map(item => {
+                    retunr
+                    this.database.questionOptions.findByQuesitonId(item.id)
+                        .then(options => {
+                            item.options = options;
+                            retunr
+                            item;
+                        })
+                }))
+
+            }).then(
+            resutls => {
+                return new JsonModel({
+                    collection: resutls
+                });
+            }
+        )
+    }
+
+    postAction(params, data) {
+        this.transporter.create(data)
+            .then(collection => {
+                return new JsonModel({
+                    collection: collection
+                });
+            });
+    }
+
+    patchAction() {
+        return super.patchAction();
+    }
 }
 
 module.exports = AlgorithmController;

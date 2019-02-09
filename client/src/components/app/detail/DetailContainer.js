@@ -8,6 +8,9 @@ import MuiTableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/es/styles/withStyles";
+import {withDrop} from "../../hoc/DragAndDrop";
+import QuestionDropZone from "./QuestionDropZone";
+import RecommendationDropZone from "./RecommendationDropZone";
 
 
 const TableCell = withStyles(theme => ({
@@ -48,6 +51,12 @@ class DetailContainer extends React.Component {
 
         return (
             <div className={classes.root}>
+
+
+                <QuestionDropZone state={state}/>
+                <RecommendationDropZone state={state}/>
+
+
                 <AppBar position='static' color='primary' className={classes.containerHeader}>
                     State Details
                 </AppBar>
@@ -132,4 +141,4 @@ const styles = theme => ({
 });
 
 
-export default withStyles(styles, {withTheme: true})(DetailContainer);
+export default withDrop('row')(withStyles(styles, {withTheme: true})(DetailContainer));

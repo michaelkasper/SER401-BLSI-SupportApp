@@ -17,11 +17,12 @@ export const withDrop = (key, dropTargetOverride = null, collectOverride = null)
         ? dropTargetOverride
         : {
             drop(props, monitor) {
-               //What to do on drop
+                //What to do on drop
             },
             canDrop(props, monitor) {
-                let beingDroped = monitor.getItem()//item being dropped
-                let droppingOn = props;
+                let beingDroped = monitor.getItem();//item being dropped
+                let droppingOn  = props;
+                return true;
                 //Can the item be dropped
             },
         };
