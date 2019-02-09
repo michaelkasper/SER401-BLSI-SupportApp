@@ -8,14 +8,18 @@ const Abstract = require("./AbstractTransporter");
 const Sequelize = require("sequelize");
 
 class QuestionOptionTransporter extends Abstract {
-    constructor(sequelize) {
+    constructor(database, sequelize) {
         let fields = {
             id: {
                 type: Sequelize.INTEGER.UNSIGNED,
                 primaryKey: true,
-                autoIncrement: true
+                autoIncrement: true,
+                unique: true
             },
-            question_id: Sequelize.INTEGER.UNSIGNED,
+            question_id: {
+                type: Sequelize.INTEGER.UNSIGNED,
+                allowNull: false
+            },
             label: {
                 type: Sequelize.STRING,
                 allowNull: false
@@ -25,7 +29,23 @@ class QuestionOptionTransporter extends Abstract {
             is_good: Sequelize.BOOLEAN
         };
 
-        super(sequelize, "question_option", fields);
+        super(database, sequelize, "question_option", fields);
+    }
+
+    async getAllByQuestionId(id) {
+        return this.sequelize.transaction((transaction) => {
+            return this.table.findAll({
+                where: {
+                    question_id: id
+                },
+                transaction: transaction
+            });
+        }).then(value => {
+            console.log(value);
+            return value;
+        }).catch(err => {
+            console.log(err);
+        });
     }
 }
 

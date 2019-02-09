@@ -9,20 +9,31 @@ var ApiErrorModel = require('../model/ApiErrorModel');
 var JsonModel = require('../model/JsonModel');
 
 class QuestionController extends AbstractController {
+    constructor(request, response, serviceManager) {
+        super(request, response, serviceManager);
+        this.dataType = "question";
+    }
+
     dispatch() {
         this.secure = true; //Make sure secure
         return super.dispatch();
     }
 
-    getAllAction(params, data) {
+    getAllAction(query, params, data) {
         console.log("==== GET All ====");
-        return new Promise((resolve, reject) => {
-            resolve(this.database.question.getAll());
-        }).then(collection => {
-            return new JsonModel({
-                collection: collection
+
+        if (query.algorithm_id) {
+            let id = query.algorithm_id;
+            return new Promise((resolve, reject) => {
+                resolve(this.database.question.getAllByAlgorithmId(id));
+            }).then(collection => {
+                return new JsonModel({
+                    collection: collection
+                });
             });
-        });
+        } else {
+            Promise.resolve(new ApiErrorModel(400, "Needs Id"));
+        }
     }
 
     getAction(params, data) {
@@ -38,7 +49,11 @@ class QuestionController extends AbstractController {
     putAction(params, data) {
         console.log("==== PUT ====");
         return new Promise((resolve, reject) => {
-            resolve(this.database.question.create(data));
+            if (data[this.dataType]) {
+                data = data[this.dataType];
+            }
+            let id = parseInt(params.id); //Make sure id is an int
+            resolve(this.database.question.update(id, data));
         }).then(data => {
             return new JsonModel(data);
         });
@@ -47,11 +62,7 @@ class QuestionController extends AbstractController {
     postAction(params, data) {
         console.log("==== POST ====");
         return new Promise((resolve, reject) => {
-            if (data[this.dataType]) {
-                data = data[this.dataType];
-            }
-            let id = parseInt(params.id); //Make sure id is an int
-            resolve(this.database.question.update(id, data));
+            resolve(this.database.question.create(data));
         }).then((data) => { //TODO: spread data 
             return new JsonModel(data);
         });

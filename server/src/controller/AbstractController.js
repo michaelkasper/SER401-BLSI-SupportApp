@@ -16,6 +16,7 @@ class AbstractController {
         this.response.set('Cache-Control', 'no-cache, private, no-store, must-revalidate');
 
         this.secure = true;
+        this.dataType = "";
     }
 
     get database() {
@@ -48,6 +49,10 @@ class AbstractController {
         return this.request.query.key;
     }
 
+    get query() {
+        return this.request.query;
+    }
+
     dispatch() {
         try {
             if (this.secure && !this.clientKey) {
@@ -60,7 +65,7 @@ class AbstractController {
             let response = () => {};
             switch (this.requestMethod) {
                 case "GET_ALL":
-                    response = () => this.getAllAction(this.params, this.body);
+                    response = () => this.getAllAction(this.query, this.params, this.body);
                     break;
                 case "GET":
                     response = () => this.getAction(this.params, this.body);
@@ -122,7 +127,7 @@ class AbstractController {
         }
     }
 
-    getAllAction(params, data) {
+    getAllAction(query, params, data) {
         return new ApiErrorModel(405, `method not allowed`);
     }
 

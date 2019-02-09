@@ -9,27 +9,39 @@ var ApiErrorModel = require('../model/ApiErrorModel');
 var JsonModel = require('../model/JsonModel');
 
 class StateController extends AbstractController {
+    constructor(request, response, serviceManager) {
+        super(request, response, serviceManager);
+        this.dataType = "state";
+    }
+
     dispatch() {
         this.secure = true; //Make sure secure
         return super.dispatch();
     }
 
-    getAllAction(params, data) {
+    getAllAction(query, params, data) {
         console.log("==== GET All ====");
-        return new Promise((resolve, reject) => {
-            resolve(this.transporter.getAll());
-        }).then(collection => {
-            return new JsonModel({
-                collection: collection
+        
+        if(query.algorithm_id) {
+            let id = query.algorithm_id;
+            return new Promise((resolve, reject) => {
+                resolve(this.database.state.getAllByAlgorithmId(id));
+            }).then(collection => {
+                return new JsonModel({
+                    collection: collection
+                });
             });
-        });
+        }
+        else {
+            Promise.resolve(new ApiErrorModel(400, "Needs Id"));
+        }
     }
 
     getAction(params, data) {
         console.log("==== GET ====");
         return new Promise((resolve, reject) => {
             let id = parseInt(params.id);
-            resolve(this.transporter.get(id));
+            resolve(this.database.state.get(id));
         }).then(data => { //TODO: Build data
             return new JsonModel(data);
         });
@@ -38,7 +50,7 @@ class StateController extends AbstractController {
     putAction(params, data) {
         console.log("==== PUT ====");
         return new Promise((resolve, reject) => {
-            resolve(this.transporter.create(data));
+            resolve(this.database.state.create(data));
         }).then(data => {
             return new JsonModel(data);
         });
@@ -51,7 +63,7 @@ class StateController extends AbstractController {
                 data = data[this.dataType];
             }
             let id = parseInt(params.id); //Make sure id is an int
-            resolve(this.transporter.update(id, data));
+            resolve(this.database.state.update(id, data));
         }).then((data) => { //TODO: spread data 
             return new JsonModel(data);
         });
@@ -64,7 +76,7 @@ class StateController extends AbstractController {
     deleteAllAction(params, data) {
         console.log("==== DELETE ====");
         return new Promise((resolve, reject) => {
-            resolve(this.transporter.deleteAll());
+            resolve(this.database.state.deleteAll());
         }).then(data => {
             return new JsonModel(data);
         });
@@ -74,7 +86,7 @@ class StateController extends AbstractController {
         console.log("==== DELETE ====");
         return new Promise((resolve, reject) => {
             let id = parseInt(params.id);
-            resolve(this.transporter.delete(id));
+            resolve(this.database.state.delete(id));
         }).then(data => {
             return new JsonModel(data);
         });

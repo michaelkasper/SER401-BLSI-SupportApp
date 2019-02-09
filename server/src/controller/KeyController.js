@@ -11,30 +11,17 @@ var JsonModel = require('./../model/JsonModel');
 const uuid = require("uuid/v4");
 
 class KeyController extends AbstractController {
+    constructor(request, response, serviceManager) {
+        super(request, response, serviceManager);
+        this.dataType = "key";
+    }
+
     dispatch() {  
         //this.secure is modified in methods
         return super.dispatch();
     }
 
-    postAction(params, data) {
-        this.secure = false; //Allow keyless pulls
-
-        console.log("==== Connect ====");
-        return new Promise((resolve, reject) => {
-             if (data.password !== "blsi402MobileApp401") {
-                 throw new Error("bad password");
-             }
-
-             let id = uuid();
-             resolve(this.database.key.create({
-                 key: id
-             }));
-        }).then(data => {
-             return new JsonModel(data);
-        });
-    }
-
-    getAllAction(params, data) {
+    getAllAction(query, params, data) {
         this.secure = false; //Allow keyless pulls
 
         console.log("==== GET All ====");
@@ -77,6 +64,23 @@ class KeyController extends AbstractController {
         });
     }
 
+    postAction(params, data) {
+        this.secure = false; //Allow keyless pulls
+
+        console.log("==== Connect ====");
+        return new Promise((resolve, reject) => {
+            if (data.password !== "blsi402MobileApp401") {
+                throw new Error("bad password");
+            }
+
+            let id = uuid();
+            resolve(this.database.key.create({
+                key: id
+            }));
+        }).then(data => {
+            return new JsonModel(data);
+        });
+    }
     deleteAction(params, data) {
         this.secure = true; //Make sure secure
         

@@ -8,14 +8,18 @@ const Abstract = require("./AbstractTransporter");
 const Sequelize = require("sequelize");
 
 class RecommendationTransporter extends Abstract{
-    constructor(sequelize) {
+    constructor(database, sequelize) {
         let fields = {
             id: {
                 type: Sequelize.INTEGER.UNSIGNED,
                 primaryKey: true,
-                autoIncrement: true
+                autoIncrement: true,
+                unique: true
             },
-            //algorithm_id: Sequelize.INTEGER.UNSIGNED,
+            algorithm_id: {
+                type: Sequelize.INTEGER.UNSIGNED,
+                allowNull: false,
+            },
             title: {
                 type: Sequelize.STRING,
                 allowNull: false
@@ -24,7 +28,23 @@ class RecommendationTransporter extends Abstract{
             short_description: Sequelize.STRING,
         };
 
-        super(sequelize, "recommendation", fields);
+        super(database, sequelize, "recommendation", fields);
+    }
+
+    async getAllByAlgorithmId(id) {
+        return this.sequelize.transaction((transaction) => {
+            return this.table.findAll({
+                where: {
+                    algorithm_id: id
+                },
+                transaction: transaction
+            });
+        }).then(value => {
+            console.log(value);
+            return value;
+        }).catch(err => {
+            console.log(err);
+        });
     }
 }
 

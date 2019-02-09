@@ -8,12 +8,13 @@ const Abstract = require("./AbstractTransporter");
 const Sequelize = require("sequelize");
 
 class AlgorithmTransporter extends Abstract {
-    constructor(sequelize) {
+    constructor(database, sequelize) {
         let fields = {
             id: {
                 type: Sequelize.INTEGER.UNSIGNED,
                 primaryKey: true,
-                autoIncrement: true
+                autoIncrement: true,
+                unique: true
             },
             name: {
                 type: Sequelize.STRING,
@@ -25,11 +26,11 @@ class AlgorithmTransporter extends Abstract {
             shortDescription: Sequelize.STRING
         };
 
-        super(sequelize, "algorithm", fields);
+        super(database, sequelize, "algorithm", fields);
     }
 
     //Retrieving associations https://stackoverflow.com/questions/13002873/sequelize-fetching-associations-on-find-1-6
-    async get(id) {
+    async getWithAssociations(id) {
         return this.sequelize.transaction((transaction) => {
             return this.table.findOne({
                 where: {
@@ -45,6 +46,8 @@ class AlgorithmTransporter extends Abstract {
             console.log(err);
         });
     }
+
+    
     async update(id, data) {
         return this.sequelize.transaction((transaction) => {
             return this.table.findOrCreate({

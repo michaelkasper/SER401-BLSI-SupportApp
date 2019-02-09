@@ -29,12 +29,12 @@ class DatabaseTransporter {
             operatorsAliases: false
         });
 
-        this.algorithm = new AlgorithmTransporter(this.sequelize);
-        this.question = new QuestionTransporter(this.sequelize);
-        this.recommendation = new RecommendationTransporter(this.sequelize);
-        this.questionOption = new QuestionOptionTransporter(this.sequelize);
-        this.state = new StateTransporter(this.sequelize);
-        this.key = new KeyTransporter(this.sequelize);
+        this.algorithm = new AlgorithmTransporter(this, this.sequelize);
+        this.question = new QuestionTransporter(this, this.sequelize);
+        this.recommendation = new RecommendationTransporter(this, this.sequelize);
+        this.question_option = new QuestionOptionTransporter(this, this.sequelize);
+        this.state = new StateTransporter(this, this.sequelize);
+        this.key = new KeyTransporter(this, this.sequelize);
 
         this.addAssociations();
     }
@@ -52,7 +52,7 @@ class DatabaseTransporter {
     }
 
     get questionOptionTable() {
-        return this.questionOption.table;
+        return this.question_option.table;
     }
 
     get stateTable() {
@@ -67,51 +67,54 @@ class DatabaseTransporter {
     addAssociations() {
         //Algorithm & state association
         this.algorithmTable.hasMany(this.stateTable, {
-            as: "states",
-            foreignKey: "id",
-            targetKey: "id"
+            //as: "states",
+            foreignKey: "algorithm_id",
+            targetKey: "id",
+            foreignKeyConstraint: false
         });
         this.stateTable.belongsTo(this.algorithmTable, {
-            foreignKey: "id",
-            targetKey: "id"
+            foreignKey: "algorithm_id",
+            targetKey: "id",
+            foreignKeyConstraint: false
         });
         
         //algo & question assoc
         this.algorithmTable.hasMany(this.questionTable, {
-            as: "questions",
-            foreignKey: "id",
-            targetKey: "id"
+            //as: "questions",
+            foreignKey: "algorithm_id",
+            sourceKey: "id",
+            foreignKeyConstraint: false
         });
         this.questionTable.belongsTo(this.algorithmTable, {
-            foreignKey: "id"
+            foreignKey: "algorithm_id",
+            targetKey: "id",
+            foreignKeyConstraint: false
         });
 
         //algo & recommendation assoc
         this.algorithmTable.hasMany(this.recommendationTable, {
-            as: "recommendations",
-            foreignKey: "id",
-            targetKey: "id"
+            //as: "recommendations",
+            foreignKey: "algorithm_id",
+            sourceKey: "id",
+            foreignKeyConstraint: false
         });
         this.recommendationTable.belongsTo(this.algorithmTable, {
-            foreignKey: "id"
+            foreignKey: "algorithm_id",
+            targetKey: "id",
+            foreignKeyConstraint: false
         });
         
-        /* No need for association on start_id
-        //algo & start_id assoc
-        this.algorithmTable.hasOne(this.stateTable, {
-            as: "start_state",
-            foreignKey: "state_id_start",
-            targetKey: "state_id_start"
-        });*/
-
         //Question & question_option association
         this.questionTable.hasMany(this.questionOptionTable, {
-            as: "options",
-            foreignKey: "id",
-            targetKey: "id"
+            //as: "question_options",
+            foreignKey: "question_id",
+            sourceKey: "id",
+            foreignKeyConstraint: false
         });
         this.questionOptionTable.belongsTo(this.questionTable, {
-            foreignKey: "id",
+            foreignKey: "question_id",
+            targetKey: "id",
+            foreignKeyConstraint: false
         });
 
         this.sequelize.sync();

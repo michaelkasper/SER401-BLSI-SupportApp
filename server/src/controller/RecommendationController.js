@@ -9,20 +9,31 @@ var ApiErrorModel = require('../model/ApiErrorModel');
 var JsonModel = require('../model/JsonModel');
 
 class RecommendationController extends AbstractController {
+    constructor(request, response, serviceManager) {
+        super(request, response, serviceManager);
+        this.dataType = "recommendation";
+    }
+
     dispatch() {
         this.secure = true; //Make sure secure
         return super.dispatch();
     }
 
-    getAllAction(params, data) {
+    getAllAction(query, params, data) {
         console.log("==== GET All ====");
-        return new Promise((resolve, reject) => {
-            resolve(this.database.recommendation.getAll());
-        }).then(collection => {
-            return new JsonModel({
-                collection: collection
+
+        if (query.algorithm_id) {
+            let id = query.algorithm_id;
+            return new Promise((resolve, reject) => {
+                resolve(this.database.recommendation.getAllByAlgorithmId(id));
+            }).then(collection => {
+                return new JsonModel({
+                    collection: collection
+                });
             });
-        });
+        } else {
+            Promise.resolve(new ApiErrorModel(400, "Needs Id"));
+        }
     }
 
     getAction(params, data) {

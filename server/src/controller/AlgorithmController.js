@@ -9,12 +9,17 @@ var ApiErrorModel      = require('./../model/ApiErrorModel');
 var JsonModel          = require('./../model/JsonModel');
 
 class AlgorithmController extends AbstractController {
+    constructor(request, response, serviceManager) {
+        super(request, response, serviceManager);
+        this.dataType = "algorithm";
+    }
+
     dispatch() {
         //this.secure is modified in methods
         return super.dispatch();
     }
 
-    getAllAction(params, data) {
+    getAllAction(query, params, data) {
         this.secure = false; //Allow unsecure pulls
 
         console.log("==== GET All ====");
@@ -44,6 +49,10 @@ class AlgorithmController extends AbstractController {
 
         console.log("==== PUT ====");
         return new Promise((resolve, reject) => {
+            if (data[this.dataType]) {
+                data = data[this.dataType];
+            }
+            
             let id = parseInt(params.id); //Make sure id is an int
             resolve(this.database.algorithm.update(id, data));
         }).then(data => {

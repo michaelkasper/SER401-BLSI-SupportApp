@@ -5,12 +5,16 @@
  */
 
 class AbstractTransporter {
-    constructor(sequelize, name, fields) {
-
-        this.table = sequelize.define(name, fields);
-        //this.table.drop(); //used to clear
+    constructor(database, sequelize, name, fields) {
+        this.table = sequelize.define(name, fields, {
+            underscored: true,
+            timestamps: false
+        });
+        this.table.drop(); //used to clear
         this.sequelize = sequelize;
         this.table.sync(); //TODO: check authenticate()
+
+        this.database = database;
     }
 
     async getAll() {

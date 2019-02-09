@@ -34,7 +34,7 @@ const routes = {
     "algorithm"     : AlgorithmController,
     "question"      : QuestionController,
     "recommendation": RecommendationController,
-    "questionOption": QuestionOptionController,
+    "question_option": QuestionOptionController,
     "state"         : StateController
 };
 
