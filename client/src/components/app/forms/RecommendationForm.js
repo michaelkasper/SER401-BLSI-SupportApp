@@ -16,7 +16,7 @@ class RecommendationForm extends React.Component {
             title      : "",
             description: ""
         },
-        invalidTitle: false
+        invalidTitle   : false
     };
 
     componentDidMount() {
@@ -33,8 +33,8 @@ class RecommendationForm extends React.Component {
 
     onChange = (field) => (e) => {
         let localModel    = {...this.state.localModel};
-        if (field === 'title') {
-            this.setState({invalidTitle: e.target.value.length < 1});
+        if (field === 'title' && field.length > 0) {
+            this.setState({invalidTitle: false});
         }
         localModel[field] = e.target.value;
         this.setState({localModel: localModel});
@@ -80,7 +80,7 @@ class RecommendationForm extends React.Component {
                         variant="outlined"
                         required
                         error={this.state.invalidTitle}
-                        helperText={this.state.invalidTitle === true ? "Please enter a title" : ""}
+                        helperText={this.state.invalidTitle === true ? "A title is required" : ""}
                     />
 
 
