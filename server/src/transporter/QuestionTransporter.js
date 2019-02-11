@@ -85,6 +85,17 @@ class QuestionTransporter extends Abstract {
         return this.sequelize.transaction((transaction) => {
             return this.table.create(data, {
                 transaction: transaction
+            }).then((result) => {
+                if(data.question_options) {
+                    Promise.all(data.question_options.forEach((option) => {
+                        return this.database.question_option.create(option, {
+                            transaction: transaction
+                        }).then((resultData) => {
+                            result.push(resultData);
+                        });
+                    }));
+                }
+                return result;
             });
         }).then(value => {
             //transaction committed
@@ -98,27 +109,23 @@ class QuestionTransporter extends Abstract {
 
     async update(id, data) {
         return this.sequelize.transaction((transaction) => {
-            return this.table.findOrCreate({
+            return this.table.upsert(data, {
                 where: {
-                    id: id
+                    id : id
                 },
-                defaults: data,
                 transaction: transaction
-            });
-        }).spread((result, created) => {
-            console.log(created);
-            if (!created) { //if exists, update
-                Promise.resolve(
-                    this.table.update(data, {
-                        where: {
-                            id: id
-                        }
+            }).then((result) => {
+                if (data.question_options) {
+                    Promise.all(data.question_options.forEach((option, index) => {
+                        return this.database.question_option.update(option.id, option);
                     }));
-            }
-            return result;
+                }
+                return result;
+            });
+            
         }).then((result) => {
             console.log(result);
-            return result.dataValues;
+            return result;
         }).catch(err => {
             console.log(err);
         });

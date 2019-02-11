@@ -47,31 +47,74 @@ class AlgorithmTransporter extends Abstract {
         });
     }
 
-    
+    async create(data) {
+        return this.sequelize.transaction((transaction) => {
+            return this.table.create(data, {
+                transaction: transaction
+            }).then((result) => {
+                if (data.questions) {
+                    Promise.all(data.questions.forEach((question, index) => {
+                        return this.database.question.create(question);
+                    }));
+                }
+                return result;
+            }).then((result) => {
+                if (data.recommendations) {
+                    Promise.all(data.recommendations.forEach((recommendation, index) => {
+                        return this.database.recommendations.create(recommendation);
+                    }));
+                }
+                return result;
+            }).then((result) => {
+                if (data.states) {
+                    Promise.all(data.states.forEach((state, index) => {
+                        return this.database.states.create(state);
+                    }));
+                }
+                return result;
+            });
+        }).then(value => {
+            //transaction committed
+            console.log(value);
+            return value;
+        }).catch(err => {
+            //transaction rolledback
+            console.log(err);
+        });
+    }
+
     async update(id, data) {
         return this.sequelize.transaction((transaction) => {
-            return this.table.findOrCreate({
-                where: {
-                    id: id
-                },
-                defaults: data,
+            data["version_number"] += 0.1;
+            return this.table.upsert(data, {
+                
                 transaction: transaction
-            });
-        }).spread((result, created) => {
-            console.log(created);
-            if (!created) { //if exists, update
-                data["version_number"] = result.get("version_number") + 0.1;
-                Promise.resolve(
-                    this.table.update(data, {
-                        where: {
-                            id: id
-                        },
+            }).then((result) => {
+                if (data.questions) {
+                    Promise.all(data.questions.forEach((question, index) => {
+                        return this.database.question.update(question.id, question);
                     }));
-            }
-            return result;
+                }
+                return result;
+            }).then((result) => {
+                if (data.recommendations) {
+                    Promise.all(data.recommendations.forEach((recommendation, index) => {
+                        return this.database.recommendations.update(recommendation.id, recommendation);
+                    }));
+                }
+                return result;
+            }).then((result) => {
+                if (data.states) {
+                    Promise.all(data.states.forEach((state, index) => {
+                        return this.database.states.update(state.id, state);
+                    }));
+                }
+                return result;
+            });
+
         }).then((result) => {
             console.log(result);
-            return result.dataValues;
+            return result;
         }).catch(err => {
             console.log(err);
         });

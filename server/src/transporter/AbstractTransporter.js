@@ -10,7 +10,7 @@ class AbstractTransporter {
             underscored: true,
             timestamps: false
         });
-        this.table.drop(); //used to clear
+        //this.table.drop(); //used to clear
         this.sequelize = sequelize;
         this.table.sync(); //TODO: check authenticate()
 
@@ -68,24 +68,12 @@ class AbstractTransporter {
 
     async update(id, data) {
         return this.sequelize.transaction((transaction) => {
-            return this.table.findOrCreate({
+            return this.table.upsert(data, {
                 where: {
                     id: id
                 },
-                defaults: data,
                 transaction: transaction
             });
-        }).spread((result, created) => {
-            console.log(created);
-            if (!created) { //if exists, update
-                Promise.resolve(
-                    this.table.update(data, {
-                        where: {
-                            id: id
-                        }
-                    }));
-            }
-            return result;
         }).then((result) => {
             console.log(result);
             return result.dataValues;
