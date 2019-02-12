@@ -5,8 +5,8 @@
  */
 
 var AbstractController = require('./AbstractController');
-var ApiErrorModel      = require('./../model/ApiErrorModel');
-var JsonModel          = require('./../model/JsonModel');
+var ApiErrorModel = require('./../model/ApiErrorModel');
+var JsonModel = require('./../model/JsonModel');
 
 class AlgorithmController extends AbstractController {
     constructor(request, response, serviceManager) {
@@ -34,12 +34,12 @@ class AlgorithmController extends AbstractController {
 
     getAction(params, data) {
         this.secure = true; //Make sure secure
-        
+
         console.log("==== GET ====");
         return new Promise((resolve, reject) => {
             let id = parseInt(params.id);
             resolve(this.database.algorithm.get(id));
-        }).then(data => { //TODO: Build data
+        }).then(data => {
             return new JsonModel(data);
         });
     }
@@ -47,12 +47,23 @@ class AlgorithmController extends AbstractController {
     putAction(params, data) {
         this.secure = true; //Make sure secure
 
+        if (data.collection) {
+            return Promise.all(data.collection.forEach(element => {
+                return this.putAction(params, element);
+            })).then((data) => {
+                return new JsonModel(data);
+            }).catch(err => {
+                console.log("finished");
+                return new JsonModel(data);
+            });
+        }
+
         console.log("==== PUT ====");
         return new Promise((resolve, reject) => {
             if (data[this.dataType]) {
                 data = data[this.dataType];
             }
-            
+
             let id = parseInt(params.id); //Make sure id is an int
             resolve(this.database.algorithm.update(id, data));
         }).then(data => {
@@ -63,11 +74,22 @@ class AlgorithmController extends AbstractController {
     postAction(params, data) {
         this.secure = true; //Make sure secure
 
+        if (data.collection) {
+            return Promise.all(data.collection.forEach(element => {
+                return this.postAction(params, element);
+            })).then((data) => {  
+                return new JsonModel(data);
+            }).catch(err => {
+                console.log("finished");
+                return new JsonModel(data);
+            });
+        }
+
         console.log("==== POST ====");
         return new Promise((resolve, reject) => {
-            
+
             resolve(this.database.algorithm.create(data));
-        }).then((data) => { //TODO: spread data 
+        }).then((data) => {
             return new JsonModel(data);
         });
     }

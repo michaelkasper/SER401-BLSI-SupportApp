@@ -41,13 +41,24 @@ class RecommendationController extends AbstractController {
         return new Promise((resolve, reject) => {
             let id = parseInt(params.id);
             resolve(this.database.recommendation.get(id));
-        }).then(data => { //TODO: Build data
+        }).then(data => {
             return new JsonModel(data);
         });
     }
 
     postAction(params, data) {
-        console.log("==== PUT ====");
+        if (data.collection) {
+            return Promise.all(data.collection.forEach(element => {
+                return this.postAction(params, element);
+            })).then((data) => {
+                return new JsonModel(data);
+            }).catch(err => {
+                console.log("finished");
+                return new JsonModel(data);
+            });
+        }
+
+        console.log("==== POST ====");
         return new Promise((resolve, reject) => {
             resolve(this.database.recommendation.create(data));
         }).then(data => {
@@ -56,14 +67,25 @@ class RecommendationController extends AbstractController {
     }
 
     putAction(params, data) {
-        console.log("==== POST ====");
+        if (data.collection) {
+            return Promise.all(data.collection.forEach(element => {
+                return this.putAction(params, element);
+            })).then((data) => {
+                return new JsonModel(data);
+            }).catch(err => {
+                console.log("finished");
+                return new JsonModel(data);
+            });
+        }
+
+        console.log("==== PUT ====");
         return new Promise((resolve, reject) => {
             if (data[this.dataType]) {
                 data = data[this.dataType];
             }
             let id = parseInt(params.id); //Make sure id is an int
             resolve(this.database.recommendation.update(id, data));
-        }).then((data) => { //TODO: spread data 
+        }).then((data) => {
             return new JsonModel(data);
         });
     }

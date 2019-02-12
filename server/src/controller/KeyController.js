@@ -48,7 +48,7 @@ class KeyController extends AbstractController {
 
             let id = parseInt(params.id);
             resolve(this.database.key.get(id));
-        }).then(data => { //TODO: Build data
+        }).then(data => {
             return new JsonModel(data);
         });
     }
@@ -67,7 +67,18 @@ class KeyController extends AbstractController {
     postAction(params, data) {
         this.secure = false; //Allow keyless pulls
 
-        console.log("==== Connect ====");
+        if (data.collection) {
+            return Promise.all(data.collection.forEach(element => {
+                return this.postAction(params, element);
+            })).then((data) => { 
+                return new JsonModel(data);
+            }).catch(err => {
+                console.log("finished");
+                return new JsonModel(data);
+            });
+        }
+
+        console.log("==== POST ====");
         return new Promise((resolve, reject) => {
             if (data.password !== "blsi402MobileApp401") {
                 throw new Error("bad password");

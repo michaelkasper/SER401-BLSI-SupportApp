@@ -54,7 +54,7 @@ class StateController extends AbstractController {
         return new Promise((resolve, reject) => {
             let id = parseInt(params.id);
             resolve(this.database.state.get(id));
-        }).then(data => { //TODO: Build data
+        }).then(data => {
             if (data.question_ids) {
                 data.question_ids = JSON.parse(data.question_ids);
             }
@@ -66,7 +66,18 @@ class StateController extends AbstractController {
     }
 
     postAction(params, data) {
-        console.log("==== PUT ====");
+        if (data.collection) {
+            return Promise.all(data.collection.forEach(element => {
+                return this.postAction(params, element);
+            })).then((data) => {
+                return new JsonModel(data);
+            }).catch(err => {
+                console.log("finished");
+                return new JsonModel(data);
+            });
+        }
+
+        console.log("==== POST ====");
         return new Promise((resolve, reject) => {
             if (data[this.dataType]) {
                 data = data[this.dataType];
@@ -84,7 +95,18 @@ class StateController extends AbstractController {
     }
 
     putAction(params, data) {
-        console.log("==== POST ====");
+        if (data.collection) {
+            return Promise.all(data.collection.forEach(element => {
+                return this.putAction(params, element);
+            })).then((data) => {
+                return new JsonModel(data);
+            }).catch(err => {
+                console.log("finished");
+                return new JsonModel(data);
+            });
+        }
+
+        console.log("==== PUT ====");
         return new Promise((resolve, reject) => {
             if (data[this.dataType]) {
                 data = data[this.dataType];
@@ -97,7 +119,7 @@ class StateController extends AbstractController {
             }
             let id = parseInt(params.id); //Make sure id is an int
             resolve(this.database.state.update(id, data));
-        }).then((data) => { //TODO: spread data 
+        }).then((data) => {
             return new JsonModel(data);
         });
     }

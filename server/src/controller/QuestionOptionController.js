@@ -41,12 +41,23 @@ class QuestionOptionController extends AbstractController{
         return new Promise((resolve, reject) => {
             let id = parseInt(params.id);
             resolve(this.database.question_option.get(id));
-        }).then(data => { //TODO: Build data
+        }).then(data => {
             return new JsonModel(data);
         });
     }
 
     putAction(params, data) {
+        if (data.collection) {
+            return Promise.all(data.collection.forEach(element => {
+                return this.putAction(params, element);
+            })).then((data) => {
+                return new JsonModel(data);
+            }).catch(err => {
+                console.log("finished");
+                return new JsonModel(data);
+            });
+        }
+
         console.log("==== PUT ====");
         return new Promise((resolve, reject) => {
             if (data[this.dataType]) {
@@ -61,10 +72,21 @@ class QuestionOptionController extends AbstractController{
     }
 
     postAction(params, data) {
+        if (data.collection) {
+            return Promise.all(data.collection.forEach(element => {
+                return this.postAction(params, element);
+            })).then((data) => {
+                return new JsonModel(data);
+            }).catch(err => {
+                console.log("finished");
+                return new JsonModel(data);
+            });
+        }
+
         console.log("==== POST ====");
         return new Promise((resolve, reject) => {
             resolve(this.database.question_option.create(data));
-        }).then((data) => { //TODO: spread data 
+        }).then((data) => {
             return new JsonModel(data);
         });
     }
