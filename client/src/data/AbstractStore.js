@@ -32,7 +32,7 @@ class AbstractStore {
         }
     }
 
-    new = (json) => {
+    new = (json = {}) => {
         json[this.primaryKey] = uuidv1();
         return this.register(json);
     };
@@ -83,7 +83,6 @@ class AbstractStore {
     processResult(res) {
         if (res) {
             if ('collection' in res) {
-                console.log(res);
 
                 return new Response(
                     res.collection.map(json => {

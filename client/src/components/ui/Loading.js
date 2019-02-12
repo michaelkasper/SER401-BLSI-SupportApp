@@ -2,7 +2,7 @@ import React from 'react';
 import {CircularProgress} from '@material-ui/core';
 import {observer} from "mobx-react";
 
-const Loading = observer(() => {
+const Loading = () => {
     const boxStyle = {
         position       : 'absolute',
         top            : 0,
@@ -28,6 +28,6 @@ const Loading = observer(() => {
             </div>
         </div>
     );
-})
+};
 
-export default Loading;
+export default observer(Loading);

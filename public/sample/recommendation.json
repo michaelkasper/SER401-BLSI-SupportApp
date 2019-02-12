@@ -1,4 +1,22 @@
 {
   "collection": [
+    {
+      "id": 1,
+      "algorithm_id": 1,
+      "title": "title here",
+      "description": "description here"
+    },
+    {
+      "id": 2,
+      "algorithm_id": 1,
+      "title": "title here",
+      "description": "description here"
+    },
+    {
+      "id": 3,
+      "algorithm_id": 1,
+      "title": "title here",
+      "description": "description here"
+    }
   ]
 }

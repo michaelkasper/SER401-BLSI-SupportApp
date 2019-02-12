@@ -1,4 +1,28 @@
 {
   "collection": [
+    {
+      "id": 1,
+      "algorithm_id": 1,
+      "state_id_next_good": 2,
+      "state_id_next_bad": 3,
+      "question_ids": [1,2,3],
+      "recommendation_ids": [1,2]
+    },
+    {
+      "id": 2,
+      "algorithm_id": 1,
+      "state_id_next_good": null,
+      "state_id_next_bad": null,
+      "question_ids": [],
+      "recommendation_ids": [1,2]
+    },
+    {
+      "id": 3,
+      "algorithm_id": 1,
+      "state_id_next_good": null,
+      "state_id_next_bad": null,
+      "question_ids": [1,2,3],
+      "recommendation_ids": []
+    }
   ]
 }
