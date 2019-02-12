@@ -52,6 +52,9 @@ class AbstractTransporter {
     }
 
     async create(data) {
+        if (data.id) {
+            delete data.id;
+        }
         return this.sequelize.transaction((transaction) => {
             return this.table.create(data, {
                 transaction: transaction
@@ -67,6 +70,7 @@ class AbstractTransporter {
     }
 
     async update(id, data) {
+        
         return this.sequelize.transaction((transaction) => {
             return this.table.findOrCreate({
                 where: {
@@ -106,7 +110,7 @@ class AbstractTransporter {
         });
     }
 
-    async deleteAll() {
+    async deleteAll(id) {
         return this.sequelize.transaction((transaction) => {
             return this.table.drop({
                 transaction: transaction

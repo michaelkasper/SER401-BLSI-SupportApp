@@ -48,6 +48,9 @@ class AlgorithmTransporter extends Abstract {
     }
 
     async create(data) {
+        if (data.id) {
+            delete data.id;
+        }
         return this.sequelize.transaction((transaction) => {
             return this.table.create(data, {
                 transaction: transaction

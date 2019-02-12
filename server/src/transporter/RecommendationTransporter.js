@@ -46,6 +46,22 @@ class RecommendationTransporter extends Abstract{
             console.log(err);
         });
     }
+
+    async deleteAll(id) {
+        return this.sequelize.transaction((transaction) => {
+            return this.table.destroy({
+                where: {
+                    algorithm_id: id
+                },
+                transaction: transaction
+            });
+        }).then(value => {
+            console.log(value);
+            return value;
+        }).catch(err => {
+            console.log(err);
+        });
+    }
 }
 
 module.exports = RecommendationTransporter;

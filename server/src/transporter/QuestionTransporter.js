@@ -82,6 +82,9 @@ class QuestionTransporter extends Abstract {
     }
 
     async create(data) {
+        if (data.id) {
+            delete data.id;
+        }
         return this.sequelize.transaction((transaction) => {
             return this.table.create(data, {
                 transaction: transaction
@@ -136,6 +139,22 @@ class QuestionTransporter extends Abstract {
         }).then((result) => {
             console.log(result);
             return result;
+        }).catch(err => {
+            console.log(err);
+        });
+    }
+
+    async deleteAll(id) {
+        return this.sequelize.transaction((transaction) => {
+            return this.table.destroy({
+                where: {
+                    algorithm_id: id
+                },
+                transaction: transaction
+            });
+        }).then(value => {
+            console.log(value);
+            return value;
         }).catch(err => {
             console.log(err);
         });

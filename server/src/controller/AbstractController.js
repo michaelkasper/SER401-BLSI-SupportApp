@@ -80,7 +80,7 @@ class AbstractController {
                     response = () => this.putAction(this.params, this.body);
                     break;
                 case "DELETE_ALL":
-                    response = () => this.deleteAllAction(this.params, this.body);
+                    response = () => this.deleteAllAction(this.query, this.params, this.body);
                     break;
                 case "DELETE":
                     response = () => this.deleteAction(this.params, this.body);
@@ -147,7 +147,7 @@ class AbstractController {
         return new ApiErrorModel(405, `method not allowed`);
     }
      
-    deleteAllAction(params, data) {
+    deleteAllAction(query, params, data) {
         return new ApiErrorModel(405, `method not allowed`);
     }
 

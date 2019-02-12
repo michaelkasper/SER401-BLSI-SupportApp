@@ -72,10 +72,11 @@ class RecommendationController extends AbstractController {
         return new ApiErrorModel(405, `method not allowed`);
     }
 
-    deleteAllAction(params, data) {
+    deleteAllAction(query, params, data) {
         console.log("==== DELETE ====");
+        let id = parseInt(query.algorithm_id); //Make sure id is an int
         return new Promise((resolve, reject) => {
-            resolve(this.database.recommendation.deleteAll());
+            resolve(this.database.recommendation.deleteAll(id));
         }).then(data => {
             return new JsonModel(data);
         });

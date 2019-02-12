@@ -76,7 +76,7 @@ class AlgorithmController extends AbstractController {
         return new ApiErrorModel(405, `method not allowed`);
     }
 
-    deleteAllAction(params, data) {
+    deleteAllAction(query, params, data) {
         this.secure = true; //Make sure secure
 
         console.log("==== DELETE ====");

@@ -73,10 +73,11 @@ class QuestionOptionController extends AbstractController{
         return new ApiErrorModel(405, `method not allowed`);
     }
 
-    deleteAllAction(params, data) {
+    deleteAllAction(query, params, data) {
         console.log("==== DELETE ====");
+        let id = parseInt(query.question_id); //Make sure id is an int
         return new Promise((resolve, reject) => {
-            resolve(this.database.question_option.deleteAll());
+            resolve(this.database.question_option.deleteAll(id));
         }).then(data => {
             return new JsonModel(data);
         });
