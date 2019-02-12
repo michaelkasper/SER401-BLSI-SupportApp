@@ -46,7 +46,7 @@ class RecommendationController extends AbstractController {
         });
     }
 
-    putAction(params, data) {
+    postAction(params, data) {
         console.log("==== PUT ====");
         return new Promise((resolve, reject) => {
             resolve(this.database.recommendation.create(data));
@@ -55,7 +55,7 @@ class RecommendationController extends AbstractController {
         });
     }
 
-    postAction(params, data) {
+    putAction(params, data) {
         console.log("==== POST ====");
         return new Promise((resolve, reject) => {
             if (data[this.dataType]) {

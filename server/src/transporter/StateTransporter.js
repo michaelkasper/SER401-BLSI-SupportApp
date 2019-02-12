@@ -20,10 +20,10 @@ class StateTransporter extends Abstract {
                 type: Sequelize.INTEGER.UNSIGNED,
                 allowNull: false,
             },       
-            next_good_id: {
+            state_id_next_good: {
                 type: Sequelize.INTEGER.UNSIGNED,
             },
-            next_bad_id: {
+            state_id_next_bad: {
                 type: Sequelize.INTEGER.UNSIGNED,
             },
             question_ids: {

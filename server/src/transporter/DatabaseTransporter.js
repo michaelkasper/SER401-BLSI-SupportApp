@@ -63,6 +63,11 @@ class DatabaseTransporter {
         return this.key.table;
     }
 
+    syncAndSave() {
+        //this.algorithmTable.save();
+        //this.stateTable.save();
+    }
+
     //Reference to figure out FK and TK https://github.com/sequelize/sequelize/issues/9021
     addAssociations() {
         //Algorithm & state association
@@ -116,6 +121,30 @@ class DatabaseTransporter {
             targetKey: "id",
             foreignKeyConstraint: false
         });
+/*
+        //State & question association
+        this.stateTable.hasMany(this.questionTable, {
+            foreignKey: "question_ids",
+            sourceKey: "id",
+            foreignKeyConstraint: false,
+        });
+        this.questionTable.belongsTo(this.stateTable, {
+            foreignKey: "question_ids",
+            targetKey: "id",
+            foreignKeyConstraint: false,
+        });
+
+        //state & recommendation association
+        this.stateTable.hasMany(this.recommendationTable, {
+            foreignKey: "recommendation_ids",
+            sourceKey: "id",
+            foreignKeyConstraint: false,
+        });
+        this.recommendationTable.belongsTo(this.stateTable, {
+            foreignKey: "recommendation_ids",
+            targetKey: "id",
+            foreignKeyConstraint: false,
+        });*/
 
         this.sequelize.sync();
     }

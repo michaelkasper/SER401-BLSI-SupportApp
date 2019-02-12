@@ -68,15 +68,23 @@ class AbstractTransporter {
 
     async update(id, data) {
         return this.sequelize.transaction((transaction) => {
-            return this.table.upsert(data, {
+            return this.table.findOrCreate({
                 where: {
                     id: id
                 },
+                defaults: data,
                 transaction: transaction
+            }).spread((result, created) => {
+                if(!created) { //not created
+                    Promise.resolve(this.table.update(data, {
+                        where: {id: id}
+                    }));
+                }
+                return result;
             });
         }).then((result) => {
             console.log(result);
-            return result.dataValues;
+            return result;
         }).catch(err => {
             console.log(err);
         });

@@ -27,6 +27,18 @@ class StateController extends AbstractController {
             return new Promise((resolve, reject) => {
                 resolve(this.database.state.getAllByAlgorithmId(id));
             }).then(collection => {
+                Promise.all(collection.map((element) => {
+                    if (element.question_ids) {
+                        element.question_ids = JSON.parse(element.question_ids);
+                    }
+                    if (element.recommendation_ids) {
+                        element.recommendation_ids = JSON.parse(element.recommendation_ids);
+                    }
+                    return element;
+                    
+                })).then((data) => {
+                    console.log(data);
+                });
                 return new JsonModel({
                     collection: collection
                 });
@@ -43,24 +55,45 @@ class StateController extends AbstractController {
             let id = parseInt(params.id);
             resolve(this.database.state.get(id));
         }).then(data => { //TODO: Build data
+            if (data.question_ids) {
+                data.question_ids = JSON.parse(data.question_ids);
+            }
+            if (data.recommendation_ids) {
+                data.recommendation_ids = JSON.parse(data.recommendation_ids);
+            }
             return new JsonModel(data);
         });
     }
 
-    putAction(params, data) {
+    postAction(params, data) {
         console.log("==== PUT ====");
         return new Promise((resolve, reject) => {
+            if (data[this.dataType]) {
+                data = data[this.dataType];
+            }
+            if (data.question_ids) {
+                data.question_ids = JSON.stringify(data.question_ids);
+            }
+            if (data.recommendation_ids) {
+                data.recommendation_ids = JSON.stringify(data.recommendation_ids);
+            }
             resolve(this.database.state.create(data));
         }).then(data => {
             return new JsonModel(data);
         });
     }
 
-    postAction(params, data) {
+    putAction(params, data) {
         console.log("==== POST ====");
         return new Promise((resolve, reject) => {
             if (data[this.dataType]) {
                 data = data[this.dataType];
+            }
+            if(data.question_ids) {
+                data.question_ids = JSON.stringify(data.question_ids);
+            }
+            if (data.recommendation_ids) {
+                data.recommendation_ids = JSON.stringify(data.recommendation_ids);
             }
             let id = parseInt(params.id); //Make sure id is an int
             resolve(this.database.state.update(id, data));

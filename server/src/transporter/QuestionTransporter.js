@@ -109,11 +109,21 @@ class QuestionTransporter extends Abstract {
 
     async update(id, data) {
         return this.sequelize.transaction((transaction) => {
-            return this.table.upsert(data, {
+            return this.table.findOrCreate({
                 where: {
-                    id : id
+                    id: id
                 },
+                defaults: data,
                 transaction: transaction
+            }).spread((result, created) => {
+                if (!created) { //not created
+                    Promise.resolve(this.table.update(data, {
+                        where: {
+                            id: id
+                        }
+                    }));
+                }
+                return result;
             }).then((result) => {
                 if (data.question_options) {
                     Promise.all(data.question_options.forEach((option, index) => {
