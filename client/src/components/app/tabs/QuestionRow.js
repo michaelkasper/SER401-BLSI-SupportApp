@@ -6,26 +6,24 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 
 const QuestionRow = ({item: question, connectDragSource, classes}) => {
 
-    return (
-        connectDragSource(
-            <div className={classes.root}>
-                <Grid container
-                      direction="row"
-                      alignItems="center"
-                >
-                    <Grid item xs={8} style={{
-                        textAlign: 'left',
-                    }}>
-                        {question.question}
-                    </Grid>
-                    <Grid item xs={4} style={{
-                        textAlign: 'left',
-                    }}>
-                        {question.type}
-                    </Grid>
+    return connectDragSource(
+        <div className={classes.root}>
+            <Grid container
+                  direction="row"
+                  alignItems="center"
+            >
+                <Grid item xs={8} style={{
+                    textAlign: 'left',
+                }}>
+                    {question.question}
                 </Grid>
-            </div>
-        )
+                <Grid item xs={4} style={{
+                    textAlign: 'left',
+                }}>
+                    {question.type}
+                </Grid>
+            </Grid>
+        </div>
     );
 };
 

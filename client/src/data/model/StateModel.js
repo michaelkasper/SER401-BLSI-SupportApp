@@ -6,4 +6,13 @@ export default class StateModel extends AbstractModel {
     @observable algorithm_id       = null;
     @observable state_id_next_good = null;
     @observable state_id_next_bad  = null;
+
+
+    get goodState() {
+        return this.rootStore.stateStore.get(this.state_id_next_good);
+    }
+
+    get badState() {
+        return this.rootStore.stateStore.get(this.state_id_next_bad);
+    }
 }

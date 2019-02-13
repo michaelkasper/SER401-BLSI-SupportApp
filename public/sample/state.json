@@ -11,13 +11,29 @@
     {
       "id": 2,
       "algorithm_id": 1,
-      "state_id_next_good": null,
-      "state_id_next_bad": null,
+      "state_id_next_good": 4,
+      "state_id_next_bad": 5,
       "question_ids": [],
       "recommendation_ids": [1,2]
     },
     {
       "id": 3,
+      "algorithm_id": 1,
+      "state_id_next_good": 4,
+      "state_id_next_bad": 5,
+      "question_ids": [1,2,3],
+      "recommendation_ids": []
+    },
+    {
+      "id": 4,
+      "algorithm_id": 1,
+      "state_id_next_good": null,
+      "state_id_next_bad": 1,
+      "question_ids": [1,2,3],
+      "recommendation_ids": []
+    },
+    {
+      "id": 5,
       "algorithm_id": 1,
       "state_id_next_good": null,
       "state_id_next_bad": null,

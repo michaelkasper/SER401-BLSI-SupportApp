@@ -2,10 +2,11 @@ import React from 'react';
 import Grid from "@material-ui/core/Grid";
 import {observer} from "mobx-react";
 import withStyles from "@material-ui/core/es/styles/withStyles";
+import {withDrag} from "../../hoc/DragAndDrop";
 
-const StateRow = ({item: state, classes}) => {
+const StateRow = ({item: state, connectDragSource,classes}) => {
 
-    return (
+    return connectDragSource(
         <div className={classes.root}>
             <Grid container
                   direction="row"
@@ -30,4 +31,4 @@ const styles = theme => ({
 });
 
 
-export default withStyles(styles)(observer(StateRow));
+export default withDrag('state')(withStyles(styles)(observer(StateRow)));

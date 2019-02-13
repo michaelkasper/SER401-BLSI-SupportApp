@@ -9,7 +9,7 @@ class DropZone extends React.Component {
     state = {};
 
     render() {
-        let {classes, connectDropTarget, isOver, canDrop, title} = this.props;
+        let {classes, connectDropTarget, isOver, canDrop, title, className = ""} = this.props;
 
         if (!canDrop) {
             return "";
@@ -18,7 +18,8 @@ class DropZone extends React.Component {
         return (
             connectDropTarget(
                 <div className={classes.root}>
-                    <div className={isOver ? [classes.dropZone, classes.dropZoneHover].join(' ') : classes.dropZone}>
+                    <div
+                        className={isOver ? [classes.dropZone, classes.dropZoneHover, className].join(' ') : [classes.dropZone, className].join(' ')}>
                         <div>{title}</div>
                     </div>
                 </div>
@@ -34,7 +35,7 @@ const styles = theme => ({
         width    : 400,
         right    : "0px",
         top      : "0px",
-        height   : "calc(100vh - 68px)",
+        height   : "calc(100%)",
         boxShadow: "-3px 0px 10px -5px #888888"
     },
     dropZone     : {

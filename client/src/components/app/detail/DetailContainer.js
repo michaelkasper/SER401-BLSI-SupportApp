@@ -11,6 +11,8 @@ import withStyles from "@material-ui/core/es/styles/withStyles";
 import {withDrop} from "../../hoc/DragAndDrop";
 import QuestionDropZone from "./QuestionDropZone";
 import RecommendationDropZone from "./RecommendationDropZone";
+import NextBadStateDropZone from "./NextBadStateDropZone";
+import NextGoodStateDropZone from "./NextGoodStateDropZone";
 
 
 const TableCell = withStyles(theme => ({
@@ -55,6 +57,15 @@ class DetailContainer extends React.Component {
 
                 <QuestionDropZone state={state}/>
                 <RecommendationDropZone state={state}/>
+
+                <div className={classes.stateDropZone}>
+                    <div className={classes.stateDropZoneGood}>
+                        <NextGoodStateDropZone state={state}/>
+                    </div>
+                    <div className={classes.stateDropZoneBad}>
+                        <NextBadStateDropZone state={state} className={classes.stateDropZoneBadStyle}/>
+                    </div>
+                </div>
 
 
                 <AppBar position='static' color='primary' className={classes.containerHeader}>
@@ -107,7 +118,7 @@ class DetailContainer extends React.Component {
 
 
 const styles = theme => ({
-    root           : {
+    root             : {
         position       : "absolute",
         backgroundColor: theme.palette.background.default,
         width          : 400,
@@ -116,28 +127,55 @@ const styles = theme => ({
         height         : "calc(100vh - 68px)",
         boxShadow      : "-3px 0px 10px -5px #888888"
     },
-    containerHeader: {
+    containerHeader  : {
         padding: 16
     },
-    idContainer    : {
+    idContainer      : {
         padding   : 16,
         marginLeft: 8
     },
-    addContent     : {
+    addContent       : {
         padding        : 16,
         marginLeft     : 8,
         backgroundColor: '#f2f2f2',
         color          : '#404040',
         fontWeight     : 'bold'
     },
-    cellPadding    : {
+    cellPadding      : {
         paddingRight: 6
     },
-    content        : {
+    content          : {
         overflow : "hidden",
         height   : "calc(100% - 48px)",
         overflowY: "scroll"
-    }
+    },
+    stateDropZone    : {
+        position : "absolute",
+        width    : 400,
+        right    : "0px",
+        top      : "0px",
+        height   : "calc(100vh - 68px)",
+        boxShadow: "-3px 0px 10px -5px #888888"
+    },
+    stateDropZoneGood: {
+        position : "absolute",
+        width    : 400,
+        right    : "0px",
+        top      : "0px",
+        height   : "calc((100vh - 68px)/2)",
+        boxShadow: "-3px 0px 10px -5px #888888"
+    },
+    stateDropZoneBad : {
+        position : "absolute",
+        width    : 400,
+        right    : "0px",
+        top      : "calc((100vh - 68px)/2)",
+        height   : "calc((100vh - 68px)/2)",
+        boxShadow: "-3px 0px 10px -5px #888888"
+    },
+    stateDropZoneBadStyle: {
+        backgroundColor : 'red'
+    },
 });
 
 
