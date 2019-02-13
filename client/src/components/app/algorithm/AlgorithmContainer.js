@@ -1,11 +1,11 @@
 import React from 'react';
 import TabsContainer from "../tabs/TabsContainer";
-import TreeContainer from "../tree/TreeContainer";
 import DetailContainer from "../detail/DetailContainer";
 import {observer} from "mobx-react";
 import Loading from "../../ui/Loading";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 import withDragAndDrop from "../../hoc/DragAndDrop";
+import TreeContainer from "../tree/TreeContainer";
 
 @observer
 class AlgorithmContainer extends React.Component {
@@ -49,7 +49,7 @@ class AlgorithmContainer extends React.Component {
         return (
             <div className={classes.root}>
                 <TabsContainer algorithm={algorithm} onStateChange={this.onStateChange}/>
-                <TreeContainer tree={algorithm} onStateChange={this.onStateChange}/>
+                <TreeContainer algorithm={algorithm} onStateChange={this.onStateChange}/>
 
                 {
                     selectedState &&

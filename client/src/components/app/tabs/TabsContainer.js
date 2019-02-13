@@ -182,6 +182,7 @@ class TabsContainer extends React.Component {
 
 const styles = theme => ({
     root       : {
+
         "position"     : "absolute",
         "top"          : "0px",
         "left"         : "0px",
