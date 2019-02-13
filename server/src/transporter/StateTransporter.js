@@ -8,41 +8,65 @@ const Abstract = require("./AbstractTransporter");
 const Sequelize = require("sequelize");
 
 class StateTransporter extends Abstract {
-    constructor() {
+    constructor(database, sequelize) {
         let fields = {
             id: {
                 type: Sequelize.INTEGER.UNSIGNED,
                 primaryKey: true,
-                autoIncrement: true
+                autoIncrement: true,
+                unique: true
             },
-            algorithmId: {
+            algorithm_id: {
                 type: Sequelize.INTEGER.UNSIGNED,
-                allowNull: false
-            },
-            questionID: Sequelize.INTEGER.UNSIGNED,
-            recommendationID: Sequelize.INTEGER.UNSIGNED,
-            nextGoodId: {
+                allowNull: false,
+            },       
+            state_id_next_good: {
                 type: Sequelize.INTEGER.UNSIGNED,
-                allowNull: false
             },
-            nextGoodType: {
-                type: Sequelize.CHAR,
-                allowNull: false
-            },
-            nextBadId: {
+            state_id_next_bad: {
                 type: Sequelize.INTEGER.UNSIGNED,
-                allowNull: false
             },
-            nextBadType: {
-                type: Sequelize.CHAR,
-                allowNull: false
+            question_ids: {
+                type: Sequelize.JSON,
             },
-            startType: Sequelize.CHAR,
-            description: Sequelize.STRING,
-            shortDescription: Sequelize.STRING
+            recommendation_ids: {
+                type: Sequelize.JSON,
+            }
         };
 
-        super("states", fields);
+        super(database, sequelize, "state", fields);
+    }
+
+    async getAllByAlgorithmId(id) {
+        return this.sequelize.transaction((transaction) => {
+            return this.table.findAll({
+                where: {
+                    algorithm_id: id
+                },
+                transaction: transaction
+            });
+        }).then(value => {
+            console.log(value);
+            return value;
+        }).catch(err => {
+            console.log(err);
+        });
+    }
+
+    async deleteAll(id) {
+        return this.sequelize.transaction((transaction) => {
+            return this.table.destroy({
+                where: {
+                    algorithm_id: id
+                },
+                transaction: transaction
+            });
+        }).then(value => {
+            console.log(value);
+            return value;
+        }).catch(err => {
+            console.log(err);
+        });
     }
 }
 
