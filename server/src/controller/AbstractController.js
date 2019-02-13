@@ -6,7 +6,6 @@
  */
 const ApiErrorModel = require('./../model/ApiErrorModel');
 const JsonModel = require('./../model/JsonModel');
-const KeyTransporter = require('../transporter/KeyTransporter');
 
 class AbstractController {
 
@@ -14,14 +13,26 @@ class AbstractController {
         this.request        = request;
         this.response       = response;
         this.serviceManager = serviceManager;
-        this.transporter = null;
         this.response.set('Cache-Control', 'no-cache, private, no-store, must-revalidate');
+
+        this.secure = true;
         this.dataType = "";
-        this.keys = new KeyTransporter();
+    }
+
+    get database() {
+        return this.serviceManager.database;
     }
 
     get requestMethod() {
-        return this.request.method + ((this.request.method.includes("GET") && !this.request.params.id) ? "_ALL" : "");
+        let modifier = "";
+        if (this.request.method.includes("GET")) {
+            modifier = !this.request.params.id ? "_ALL" : "";
+        }
+        else if(this.request.method.includes("DELETE")) {
+            modifier = !this.request.params.id ? "_ALL" : "";
+        }
+
+        return this.request.method + modifier;
     }
 
     get params() {
@@ -38,120 +49,117 @@ class AbstractController {
         return this.request.query.key;
     }
 
-    dispatch(secure = true) {
+    get query() {
+        return this.request.query;
+    }
+
+    dispatch() {
         try {
-            if (secure && !this.clientKey) {
+            if (this.secure && !this.clientKey) {
                 this.response.response = new ApiErrorModel(400, 'missing client key');
                 return;
             }
 
             console.log(this.params);
             console.log(this.body);
-
+            let response = () => {};
             switch (this.requestMethod) {
                 case "GET_ALL":
-                    this.response.response = this.getAllAction();
+                    response = () => this.getAllAction(this.query, this.params, this.body);
                     break;
                 case "GET":
-                    this.response.response = this.getAction(this.params);
+                    response = () => this.getAction(this.params, this.body);
                     break;
                 case "POST":
-                    this.response.response = this.postAction(this.params, this.body);
+                    response = () => this.postAction(this.params, this.body);
                     break;
                 case "HEAD":
-                    this.response.response = this.headAction();
+                    response = () => this.headAction(this.params, this.body);
                     break;
                 case "PUT":
-                    this.response.response = this.putAction(this.body);
+                    response = () => this.putAction(this.params, this.body);
+                    break;
+                case "DELETE_ALL":
+                    response = () => this.deleteAllAction(this.query, this.params, this.body);
                     break;
                 case "DELETE":
-                    this.response.response = this.deleteAction(this.params);
-                    break;
-                case "CONNECT":
-                    this.response.response = this.connectAction();
+                    response = () => this.deleteAction(this.params, this.body);
                     break;
                 case "TRACE":
-                    this.response.response = this.traceAction();
+                    response = () => this.traceAction(this.params, this.body);
                     break;
                 case "PATCH":
-                    this.response.response = this.patchAction();
+                    response = () => this.patchAction(this.params, this.body);
                     break;
                 default:
-                    this.response.response = new ApiErrorModel(405, 'method not allowed');
+                    response = () => new ApiErrorModel(405, 'method not allowed');
                     break;
             }
+            
+            /*
+            if (this.dataType !== "key") {
+                this.response.response = new Promise((resolve, reject) => {
+                    resolve(this.keys.exists(this.clientKey));
+                }).then(exists => {
+                    console.log("EXISTS", exists);
+                    if (exists === null || exists === "null") {
+                        console.log("Throwing");
+                        throw new Error("Invalid Key");
+                    }
+                }).then(() => {
+                    console.log("Resolving");
+                    return response();
+
+                }).catch(err => {
+                    console.log("Throwing2");
+                    return new ApiErrorModel(400, 'Invalid key');
+                });
+            } else {*/
+                this.response.response = Promise.resolve(response()).catch(err => {
+                    console.log(err);
+                    return new ApiErrorModel(400, 'Invalid key');
+                });
+            //}
+
         } catch (e) {
             console.log(e.toString());
-            this.response.response = new ApiErrorModel(500, 'Invalid input');
+            return new ApiErrorModel(500, 'Invalid input');
         }
-
-        //execute returned promise
-        Promise.resolve(this.response.response)
-            .catch(err => {
-                return new ApiErrorModel(500, 'Invalid input');
-        }); 
     }
 
-    getAllAction() {
-        console.log("==== GET All ====");
-        return new Promise((resolve, reject) => {
-            resolve(this.transporter.getAll());
-        }).then(collection => {
-            return new JsonModel({
-                collection: collection
-            });
-        });
+    getAllAction(query, params, data) {
+        return new ApiErrorModel(405, `method not allowed`);
     }
 
-    getAction(params) {
-        console.log("==== GET ====");
-        return new Promise((resolve, reject) => {
-            let id = parseInt(params.id);
-            resolve(this.transporter.get(id));
-        }).then(data => {
-            return new JsonModel(data);
-        });
+    getAction(params, data) {
+        return new ApiErrorModel(405, `method not allowed`);
     }
 
-    putAction(data) {
-        console.log("==== PUT ====");
-        return new Promise((resolve, reject) => {
-            resolve(this.transporter.create(data));
-        }).then(data => {
-            return new JsonModel(data);
-        });
+    putAction(params, data) {
+        return new ApiErrorModel(405, `method not allowed`);
     }
 
     postAction(params, data) {
-        console.log("==== POST ====");
-        return new Promise((resolve, reject) => {
-            if (data[this.dataType]) {
-                data = data[this.dataType];
-            }
-            let id = parseInt(params.id); //Make sure id is an int
-            resolve(this.transporter.update(id, data));
-        }).then((data) => {
-            return new JsonModel(data);
-        });
+        return new ApiErrorModel(405, `method not allowed`);
     }
 
-    headAction() {
+    headAction(params, data) {
         return new ApiErrorModel(405, `method not allowed`);
     }
      
-    deleteAction() {
+    deleteAllAction(query, params, data) {
         return new ApiErrorModel(405, `method not allowed`);
     }
 
-    connectAction() {
+    deleteAction(params, data) {
         return new ApiErrorModel(405, `method not allowed`);
     }
 
-    traceAction() {
+    traceAction(params, data) {
         return new ApiErrorModel(405, `method not allowed`);
     }
 
-    patchAction() {
+    patchAction(params, data) {
         return new ApiErrorModel(405, `method not allowed`);
     }
 

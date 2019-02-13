@@ -11,6 +11,7 @@ const ejs        = require('ejs');
 const bodyParser = require('body-parser');
 
 //Controllers
+const KeyController = require('./controller/KeyController');
 const AlgorithmController      = require('./controller/AlgorithmController');
 const QuestionController       = require('./controller/QuestionController');
 const RecommendationController = require('./controller/RecommendationController');
@@ -20,20 +21,25 @@ const StateController = require('./controller/StateController');
 //Model
 const ApiErrorModel = require('./model/ApiErrorModel');
 
+//Transporter
+const Database = require("./transporter/DatabaseTransporter");
+
 const dispatcher = (controller, req, res, next) => {
     (new controller(req, res, serviceManager)).dispatch();
     next();
 };
 
 const routes = {
+    "key"           : KeyController,
     "algorithm"     : AlgorithmController,
     "question"      : QuestionController,
     "recommendation": RecommendationController,
-    "questionOption": QuestionOptionController,
+    "question_option": QuestionOptionController,
     "state"         : StateController
 };
 
 const serviceManager = {
+    database : new Database(),
     routes : routes
 };
 
@@ -55,6 +61,10 @@ Object.keys(routes).forEach(route => {
             (req, res, next) => dispatcher(routes[route], req, res, next));
     } else if(route === "state") {
         app.all(`/${route}(/:id)?(/:stateId)?`,
+            (req, res, next) => dispatcher(routes[route], req, res, next));
+    } 
+    else if (route === "key") {
+        app.all(`/${route}`,
             (req, res, next) => dispatcher(routes[route], req, res, next));
     } else {
         app.all(`/${route}(/:id)?`,
