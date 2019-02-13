@@ -4,28 +4,28 @@
  * Written by Taylor Greeff (tgreeff)
  */
 
-const Abstract = require("./AbstractTransporter");
+const Abstract  = require("./AbstractTransporter");
 const Sequelize = require("sequelize");
 
 class QuestionOptionTransporter extends Abstract {
     constructor(database, sequelize) {
         let fields = {
-            id: {
-                type: Sequelize.INTEGER.UNSIGNED,
-                primaryKey: true,
+            id         : {
+                type         : Sequelize.INTEGER.UNSIGNED,
+                primaryKey   : true,
                 autoIncrement: true,
-                unique: true
+                unique       : true
             },
             question_id: {
-                type: Sequelize.INTEGER.UNSIGNED,
+                type     : Sequelize.INTEGER.UNSIGNED,
                 allowNull: false
             },
-            label: {
+            label      : {
                 type: Sequelize.STRING
             },
-            min_value: Sequelize.INTEGER,
-            max_value: Sequelize.INTEGER,
-            is_good: Sequelize.BOOLEAN
+            min_value  : Sequelize.INTEGER,
+            max_value  : Sequelize.INTEGER,
+            is_good    : Sequelize.BOOLEAN
         };
 
         super(database, sequelize, "question_option", fields);
@@ -34,7 +34,7 @@ class QuestionOptionTransporter extends Abstract {
     async getAllByQuestionId(id) {
         return this.sequelize.transaction((transaction) => {
             return this.table.findAll({
-                where: {
+                where      : {
                     question_id: id
                 },
                 transaction: transaction
@@ -50,8 +50,8 @@ class QuestionOptionTransporter extends Abstract {
     async deleteAll(id) {
         return this.sequelize.transaction((transaction) => {
             return this.table.destroy({
-                where: {
-                    question_id : id
+                where      : {
+                    question_id: id
                 },
                 transaction: transaction
             });

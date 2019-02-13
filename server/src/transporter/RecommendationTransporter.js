@@ -4,27 +4,27 @@
  * Written by Taylor Greeff (tgreeff)
  */
 
-const Abstract = require("./AbstractTransporter");
+const Abstract  = require("./AbstractTransporter");
 const Sequelize = require("sequelize");
 
-class RecommendationTransporter extends Abstract{
+class RecommendationTransporter extends Abstract {
     constructor(database, sequelize) {
         let fields = {
-            id: {
-                type: Sequelize.INTEGER.UNSIGNED,
-                primaryKey: true,
+            id               : {
+                type         : Sequelize.INTEGER.UNSIGNED,
+                primaryKey   : true,
                 autoIncrement: true,
-                unique: true
+                unique       : true
             },
-            algorithm_id: {
-                type: Sequelize.INTEGER.UNSIGNED,
+            algorithm_id     : {
+                type     : Sequelize.INTEGER.UNSIGNED,
                 allowNull: false,
             },
-            title: {
-                type: Sequelize.STRING,
+            title            : {
+                type     : Sequelize.STRING,
                 allowNull: false
             },
-            description: Sequelize.STRING,
+            description      : Sequelize.STRING,
             short_description: Sequelize.STRING,
         };
 
@@ -34,7 +34,7 @@ class RecommendationTransporter extends Abstract{
     async getAllByAlgorithmId(id) {
         return this.sequelize.transaction((transaction) => {
             return this.table.findAll({
-                where: {
+                where      : {
                     algorithm_id: id
                 },
                 transaction: transaction
@@ -50,7 +50,7 @@ class RecommendationTransporter extends Abstract{
     async deleteAll(id) {
         return this.sequelize.transaction((transaction) => {
             return this.table.destroy({
-                where: {
+                where      : {
                     algorithm_id: id
                 },
                 transaction: transaction

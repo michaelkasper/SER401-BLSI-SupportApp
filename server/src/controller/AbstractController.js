@@ -5,7 +5,7 @@
  * Modified by Taylor Greeff - tgreeff
  */
 const ApiErrorModel = require('./../model/ApiErrorModel');
-const JsonModel = require('./../model/JsonModel');
+const JsonModel     = require('./../model/JsonModel');
 
 class AbstractController {
 
@@ -15,7 +15,7 @@ class AbstractController {
         this.serviceManager = serviceManager;
         this.response.set('Cache-Control', 'no-cache, private, no-store, must-revalidate');
 
-        this.secure = true;
+        this.secure   = true;
         this.dataType = "";
     }
 
@@ -27,8 +27,7 @@ class AbstractController {
         let modifier = "";
         if (this.request.method.includes("GET")) {
             modifier = !this.request.params.id ? "_ALL" : "";
-        }
-        else if(this.request.method.includes("DELETE")) {
+        } else if (this.request.method.includes("DELETE")) {
             modifier = !this.request.params.id ? "_ALL" : "";
         }
 
@@ -38,9 +37,10 @@ class AbstractController {
     get params() {
         return this.request.params;
     }
+
     get body() {
         if (this.request.body.data) {
-             return this.request.body.data;
+            return this.request.body.data;
         }
         return this.request.body;
     }
@@ -55,14 +55,15 @@ class AbstractController {
 
     dispatch() {
         try {
-            if (this.secure && !this.clientKey) {
-                this.response.response = new ApiErrorModel(400, 'missing client key');
-                return;
-            }
+            // if (this.secure && !this.clientKey) {
+            //     this.response.response = new ApiErrorModel(400, 'missing client key');
+            //     return;
+            // }
 
             console.log(this.params);
             console.log(this.body);
-            let response = () => {};
+            let response = () => {
+            };
             switch (this.requestMethod) {
                 case "GET_ALL":
                     response = () => this.getAllAction(this.query, this.params, this.body);
@@ -95,7 +96,7 @@ class AbstractController {
                     response = () => new ApiErrorModel(405, 'method not allowed');
                     break;
             }
-            
+
             /*
             if (this.dataType !== "key") {
                 this.response.response = new Promise((resolve, reject) => {
@@ -115,10 +116,10 @@ class AbstractController {
                     return new ApiErrorModel(400, 'Invalid key');
                 });
             } else {*/
-                this.response.response = Promise.resolve(response()).catch(err => {
-                    console.log(err);
-                    return new ApiErrorModel(400, 'Invalid key');
-                });
+            this.response.response = Promise.resolve(response()).catch(err => {
+                console.log(err);
+                return new ApiErrorModel(400, 'Invalid key');
+            });
             //}
 
         } catch (e) {
@@ -146,7 +147,7 @@ class AbstractController {
     headAction(params, data) {
         return new ApiErrorModel(405, `method not allowed`);
     }
-     
+
     deleteAllAction(query, params, data) {
         return new ApiErrorModel(405, `method not allowed`);
     }

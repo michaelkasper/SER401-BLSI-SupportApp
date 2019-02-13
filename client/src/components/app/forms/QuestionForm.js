@@ -24,6 +24,7 @@ class QuestionForm extends React.Component {
         localModel: {
             type_key        : 'picklist',
             question        : "",
+            prompt          : "",
             question_options: []
         }
     };
@@ -62,13 +63,17 @@ class QuestionForm extends React.Component {
 
     onSave = () => {
         let {question, algorithm, rootStore} = this.props;
+        let promise;
         if (!question) {
-            question = rootStore.questionStore.new({algorithm_id: algorithm.id});
+            promise = rootStore.questionStore.post({algorithm_id: algorithm.id, ...this.state.localModel})
+                .then(res => res.result);
+        } else {
+            promise = question.fromJson(this.state.localModel).save();
         }
-        question.fromJson(this.state.localModel);
-        console.log(question);
-        // question.save(); //TODO:: Comment out when connected to backend **/
-        this.props.onClose();
+
+        promise.then(q => {
+            this.props.onClose();
+        });
     };
 
     onAddOption = () => {
@@ -144,6 +149,29 @@ class QuestionForm extends React.Component {
                         </Grid>
                     </Grid>
 
+                    <Grid container
+                          direction="row"
+                          alignItems={"flex-start"}
+                          alignContent={"flex-start"}
+                          justify={"flex-start"}
+                          wrap={'nowrap'}
+                    >
+                        <Grid item xs={10}>
+                            <TextField
+                                id="outlined-full-width"
+                                label="Prompt"
+                                value={localModel.prompt}
+                                onChange={this.onChange('prompt')}
+                                multiline
+                                rowsMax="6"
+                                placeholder="Prompt"
+                                fullWidth
+                                margin="normal"
+                                variant="outlined"
+                                required
+                            />
+                        </Grid>
+                    </Grid>
 
                     <Button variant="contained" onClick={this.onAddOption} style={{width: '100%'}}>Add Option</Button>
                     {

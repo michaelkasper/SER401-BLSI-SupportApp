@@ -48,13 +48,11 @@ class AlgorithmForm extends React.Component {
     };
 
     onCreateNew = () => {
-        // this.algorithmStore.post(this.state.localModel)
-        //     .then((algorithm) => {
-        //         this.onSelect(algorithm);
-        //     });
-
-        /** TODO: Remove after testing **/
-        this.onSelect(this.algorithmStore.new(this.state.localModel));
+        this.algorithmStore.post(this.state.localModel)
+            .then(res => res.result)
+            .then((algorithm) => {
+                this.onSelect(algorithm);
+            });
     };
 
     render() {

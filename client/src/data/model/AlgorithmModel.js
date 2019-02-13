@@ -27,9 +27,9 @@ export default class AlgorithmModel extends AbstractModel {
 
     load = () => {
         return BluebirdPromise.all([
-            this.rootStore.questionStore.fetch({algorithm_id: this.id}),
-            this.rootStore.recommendationStore.fetch({algorithm_id: this.id}),
-            this.rootStore.stateStore.fetch({algorithm_id: this.id})
+            this.rootStore.questionStore.fetch({}, {algorithm_id: this.id}),
+            this.rootStore.recommendationStore.fetch({}, {algorithm_id: this.id}),
+            this.rootStore.stateStore.fetch({}, {algorithm_id: this.id})
         ]);
     }
 }

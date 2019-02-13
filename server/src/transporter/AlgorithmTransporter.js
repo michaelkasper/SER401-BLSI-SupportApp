@@ -4,26 +4,26 @@
  * Written by Taylor Greeff (tgreeff)
  */
 
-const Abstract = require("./AbstractTransporter");
+const Abstract  = require("./AbstractTransporter");
 const Sequelize = require("sequelize");
 
 class AlgorithmTransporter extends Abstract {
     constructor(database, sequelize) {
         let fields = {
-            id: {
-                type: Sequelize.INTEGER.UNSIGNED,
-                primaryKey: true,
+            id               : {
+                type         : Sequelize.INTEGER.UNSIGNED,
+                primaryKey   : true,
                 autoIncrement: true,
-                unique: true
+                unique       : true
             },
-            name: {
-                type: Sequelize.STRING,
+            name             : {
+                type     : Sequelize.STRING,
                 allowNull: false
             },
-            version_number: Sequelize.FLOAT(8, 2),
-            state_id_start: Sequelize.INTEGER.UNSIGNED,
-            description: Sequelize.STRING,
-            shortDescription: Sequelize.STRING
+            version_number   : Sequelize.FLOAT(8, 2),
+            state_id_start   : Sequelize.INTEGER.UNSIGNED,
+            description      : Sequelize.STRING,
+            short_description: Sequelize.STRING
         };
 
         super(database, sequelize, "algorithm", fields);
@@ -33,10 +33,10 @@ class AlgorithmTransporter extends Abstract {
     async getWithAssociations(id) {
         return this.sequelize.transaction((transaction) => {
             return this.table.findOne({
-                where: {
+                where      : {
                     id: id
                 },
-                include: ["questions", "recommendations", "states"],
+                include    : ["questions", "recommendations", "states"],
                 transaction: transaction
             });
         }).then(value => {
@@ -90,10 +90,10 @@ class AlgorithmTransporter extends Abstract {
         return this.sequelize.transaction((transaction) => {
             data["version_number"] += 0.1;
             return this.table.findOrCreate({
-                where: {
-                        id: id
-                    },
-                defaults: data,
+                where      : {
+                    id: id
+                },
+                defaults   : data,
                 transaction: transaction
             }).spread((result, created) => {
                 if (!created) { //not created

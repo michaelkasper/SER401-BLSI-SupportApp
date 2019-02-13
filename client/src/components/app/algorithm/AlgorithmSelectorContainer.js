@@ -67,7 +67,6 @@ class AlgorithmSelectorContainer extends React.Component {
                         <AlgorithmForm onSelect={this.onSelect} selectedAlgorithm={selectedAlgorithm}/>
                     </Modal>
                 }
-
             </div>
 
         );

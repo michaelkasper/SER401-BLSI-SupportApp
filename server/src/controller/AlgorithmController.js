@@ -5,8 +5,8 @@
  */
 
 var AbstractController = require('./AbstractController');
-var ApiErrorModel = require('./../model/ApiErrorModel');
-var JsonModel = require('./../model/JsonModel');
+var ApiErrorModel      = require('./../model/ApiErrorModel');
+var JsonModel          = require('./../model/JsonModel');
 
 class AlgorithmController extends AbstractController {
     constructor(request, response, serviceManager) {
@@ -23,23 +23,20 @@ class AlgorithmController extends AbstractController {
         this.secure = false; //Allow unsecure pulls
 
         console.log("==== GET All ====");
-        return new Promise((resolve, reject) => {
-            resolve(this.database.algorithm.getAll());
-        }).then(collection => {
-            return new JsonModel({
-                collection: collection
+        return this.database.algorithm.getAll()
+            .then(collection => {
+                return new JsonModel({
+                    collection: collection
+                });
             });
-        });
     }
 
     getAction(params, data) {
         this.secure = true; //Make sure secure
 
         console.log("==== GET ====");
-        return new Promise((resolve, reject) => {
-            let id = parseInt(params.id);
-            resolve(this.database.algorithm.get(id));
-        }).then(data => {
+        let id = parseInt(params.id);
+        return this.database.algorithm.get(id).then(data => {
             return new JsonModel(data);
         });
     }
@@ -77,7 +74,7 @@ class AlgorithmController extends AbstractController {
         if (data.collection) {
             return Promise.all(data.collection.forEach(element => {
                 return this.postAction(params, element);
-            })).then((data) => {  
+            })).then((data) => {
                 return new JsonModel(data);
             }).catch(err => {
                 console.log("finished");

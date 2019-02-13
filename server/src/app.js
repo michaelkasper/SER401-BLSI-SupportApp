@@ -6,17 +6,18 @@
  */
 
 const express    = require('express');
+const cors       = require('cors');
 const fs         = require('fs');
 const ejs        = require('ejs');
 const bodyParser = require('body-parser');
 
 //Controllers
-const KeyController = require('./controller/KeyController');
+const KeyController            = require('./controller/KeyController');
 const AlgorithmController      = require('./controller/AlgorithmController');
 const QuestionController       = require('./controller/QuestionController');
 const RecommendationController = require('./controller/RecommendationController');
 const QuestionOptionController = require('./controller/QuestionOptionController');
-const StateController = require('./controller/StateController');
+const StateController          = require('./controller/StateController');
 
 //Model
 const ApiErrorModel = require('./model/ApiErrorModel');
@@ -30,22 +31,28 @@ const dispatcher = (controller, req, res, next) => {
 };
 
 const routes = {
-    "key"           : KeyController,
-    "algorithm"     : AlgorithmController,
-    "question"      : QuestionController,
-    "recommendation": RecommendationController,
+    "key"            : KeyController,
+    "algorithm"      : AlgorithmController,
+    "question"       : QuestionController,
+    "recommendation" : RecommendationController,
     "question_option": QuestionOptionController,
-    "state"         : StateController
+    "state"          : StateController
 };
 
 const serviceManager = {
-    database : new Database(),
-    routes : routes
+    database: new Database(),
+    routes  : routes
 };
 
 const app  = express();
 const port = process.env.PORT || 3001;
 
+app.use(cors({
+    origin              : function (origin, callback) {
+        callback(null, true)
+    },
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}));
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/view');
 
@@ -53,17 +60,16 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 Object.keys(routes).forEach(route => {
-    if(route.includes("question")){
+    if (route.includes("question")) {
         app.all(`/${route}(/:id)?(/:questionId)?(/:questionOptionId)?`,
             (req, res, next) => dispatcher(routes[route], req, res, next));
-    } else if(route === "recommendation") {
+    } else if (route === "recommendation") {
         app.all(`/${route}(/:id)?(/:recommendationId)?`,
             (req, res, next) => dispatcher(routes[route], req, res, next));
-    } else if(route === "state") {
+    } else if (route === "state") {
         app.all(`/${route}(/:id)?(/:stateId)?`,
             (req, res, next) => dispatcher(routes[route], req, res, next));
-    } 
-    else if (route === "key") {
+    } else if (route === "key") {
         app.all(`/${route}`,
             (req, res, next) => dispatcher(routes[route], req, res, next));
     } else {
@@ -100,10 +106,10 @@ app.use(function (req, res, next) {
     if ('response' in res) {
         if (res.response instanceof Promise) {
             res.response.then(r => r.render(res))
-            .catch(e => {
-                console.log(e.toString());
-            });
-            
+                .catch(e => {
+                    console.log(e.toString());
+                });
+
         } else {
             res.response.render(res);
         }

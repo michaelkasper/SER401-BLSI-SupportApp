@@ -29,7 +29,7 @@ class TabContainer extends React.Component {
             <Typography component="div" dir={this.props.dir}>
                 {
                     content.map((item, index) => (
-                            <div key={item.id} className={classes.row} onClick={this.onSelect(item)}>
+                            <div key={index} className={classes.row} onClick={this.onSelect(item)}>
                                 <RowContent item={item} index={index}/>
                             </div>
                         )

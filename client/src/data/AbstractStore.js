@@ -135,7 +135,7 @@ class AbstractStore {
         return Mustache
             .render(this.apiUrl + this.endpoint, data)
             .replace(/\{\{(?:(?!}})[\S\s])*?\}\}/gm, '')
-            .replace(/\/\//gm, '\/')
+            .replace(/(?<!:)\/\//gm, '\/')
             .replace(/(\/|\/(\?.*))$/gm, '$2');
     }
 

@@ -6,9 +6,10 @@
 
 class AbstractTransporter {
     constructor(database, sequelize, name, fields) {
-        this.table = sequelize.define(name, fields, {
-            underscored: true,
-            timestamps: false
+        this.table     = sequelize.define(name, fields, {
+            freezeTableName: true,
+            underscored    : true,
+            timestamps     : false
         });
         //this.table.drop(); //used to clear
         this.sequelize = sequelize;
@@ -23,8 +24,6 @@ class AbstractTransporter {
                 transaction: transaction
             });
         }).then(value => {
-            //transaction committed
-            console.log(value);
             return value;
         }).catch(err => {
             //transaction rolledback
@@ -36,7 +35,7 @@ class AbstractTransporter {
     async get(id) {
         return this.sequelize.transaction((transaction) => {
             return this.table.findOne({
-                where: {
+                where      : {
                     id: id
                 },
                 transaction: transaction
@@ -70,16 +69,16 @@ class AbstractTransporter {
     }
 
     async update(id, data) {
-        
+
         return this.sequelize.transaction((transaction) => {
             return this.table.findOrCreate({
-                where: {
+                where      : {
                     id: id
                 },
-                defaults: data,
+                defaults   : data,
                 transaction: transaction
             }).spread((result, created) => {
-                if(!created) { //not created
+                if (!created) { //not created
                     Promise.resolve(this.table.update(data, {
                         where: {id: id}
                     }));
@@ -97,7 +96,7 @@ class AbstractTransporter {
     async delete(id) {
         return this.sequelize.transaction((transaction) => {
             return this.table.destroy({
-                where: {
+                where      : {
                     id: id
                 },
                 transaction: transaction

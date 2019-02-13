@@ -4,28 +4,28 @@
  * Written by Taylor Greeff (tgreeff)
  */
 
-const Abstract = require("./AbstractTransporter");
+const Abstract  = require("./AbstractTransporter");
 const Sequelize = require("sequelize");
 
 class QuestionTransporter extends Abstract {
     constructor(database, sequelize) {
         let fields = {
-            id: {
-                type: Sequelize.INTEGER.UNSIGNED,
-                primaryKey: true,
+            id          : {
+                type         : Sequelize.INTEGER.UNSIGNED,
+                primaryKey   : true,
                 autoIncrement: true,
-                unique: true
+                unique       : true
             },
-            algorithm_id: { 
-                type: Sequelize.INTEGER.UNSIGNED,
+            algorithm_id: {
+                type     : Sequelize.INTEGER.UNSIGNED,
                 allowNull: false,
             },
-            prompt: {
-                type: Sequelize.STRING,
+            prompt      : {
+                type     : Sequelize.STRING,
                 allowNull: false
             },
-            type_key: Sequelize.INTEGER(2), //Uses ints instead of enums
-            answer: Sequelize.STRING
+            type_key    : Sequelize.STRING,
+            answer      : Sequelize.STRING
         };
 
         super(database, sequelize, "question", fields);
@@ -34,7 +34,7 @@ class QuestionTransporter extends Abstract {
     async getAll() {
         return this.sequelize.transaction((transaction) => {
             return this.table.findAll({
-                include: ["question_options"],
+                include    : ["question_options"],
                 transaction: transaction
             });
         }).then(value => {
@@ -50,10 +50,10 @@ class QuestionTransporter extends Abstract {
     async get(id) {
         return this.sequelize.transaction((transaction) => {
             return this.table.findOne({
-                where: {
+                where      : {
                     id: id
                 },
-                include: ["question_options"],
+                include    : ["question_options"],
                 transaction: transaction
             });
         }).then(value => {
@@ -67,10 +67,10 @@ class QuestionTransporter extends Abstract {
     async getAllByAlgorithmId(id) {
         return this.sequelize.transaction((transaction) => {
             return this.table.findAll({
-                where: {
+                where      : {
                     algorithm_id: id
                 },
-                include: ["question_options"],
+                include    : ["question_options"],
                 transaction: transaction
             });
         }).then(value => {
@@ -89,7 +89,7 @@ class QuestionTransporter extends Abstract {
             return this.table.create(data, {
                 transaction: transaction
             }).then((result) => {
-                if(data.question_options) {
+                if (data.question_options) {
                     Promise.all(data.question_options.forEach((option) => {
                         return this.database.question_option.create(option, {
                             transaction: transaction
@@ -113,10 +113,10 @@ class QuestionTransporter extends Abstract {
     async update(id, data) {
         return this.sequelize.transaction((transaction) => {
             return this.table.findOrCreate({
-                where: {
+                where      : {
                     id: id
                 },
-                defaults: data,
+                defaults   : data,
                 transaction: transaction
             }).spread((result, created) => {
                 if (!created) { //not created
@@ -135,7 +135,7 @@ class QuestionTransporter extends Abstract {
                 }
                 return result;
             });
-            
+
         }).then((result) => {
             console.log(result);
             return result;
@@ -147,7 +147,7 @@ class QuestionTransporter extends Abstract {
     async deleteAll(id) {
         return this.sequelize.transaction((transaction) => {
             return this.table.destroy({
-                where: {
+                where      : {
                     algorithm_id: id
                 },
                 transaction: transaction
