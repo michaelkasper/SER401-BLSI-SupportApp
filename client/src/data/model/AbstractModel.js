@@ -1,3 +1,5 @@
+import {toJS} from "mobx";
+
 export default class AbstractModel {
     store;
 
@@ -26,11 +28,26 @@ export default class AbstractModel {
         for (let field in json) {
             if (field in this) {
                 this[field] = json[field];
-                // delete this.trackingFields[field];
             }
         }
 
         return this;
+    }
+
+    toJson() {
+        let obj  = toJS(this);
+        let data = {};
+        for (let field in obj) {
+            if (!['store'].includes(field)) {
+                data[field] = obj[field];
+            }
+        }
+        return data;
+    }
+
+
+    save() {
+        return this.store.save( this.toJson());
     }
 
 }

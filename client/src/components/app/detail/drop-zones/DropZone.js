@@ -1,7 +1,7 @@
 import React from 'react';
 import {observer} from "mobx-react";
 import withStyles from "@material-ui/core/es/styles/withStyles";
-import {withDrop} from "../../hoc/DragAndDrop";
+import {withDrop} from "../../../hoc/DragAndDrop";
 
 
 @observer

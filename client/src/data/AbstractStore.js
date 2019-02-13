@@ -70,6 +70,15 @@ class AbstractStore {
             .then(this.processResult.bind(this));
     }
 
+    save(json) {
+        let id = json[this.primaryKey];
+        if (!id) {
+            return this.post(json);
+        }
+
+        return this.patch(json, json);
+    }
+
     delete(model) {
         let url = this.compileEndpointUrl(model);
 

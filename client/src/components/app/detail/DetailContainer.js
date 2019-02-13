@@ -2,54 +2,46 @@ import React from 'react';
 import {observer} from "mobx-react";
 import AppBar from "@material-ui/core/AppBar";
 import Divider from '@material-ui/core/Divider';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import MuiTableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 import {withDrop} from "../../hoc/DragAndDrop";
-import QuestionDropZone from "./QuestionDropZone";
-import RecommendationDropZone from "./RecommendationDropZone";
-import NextBadStateDropZone from "./NextBadStateDropZone";
-import NextGoodStateDropZone from "./NextGoodStateDropZone";
-
-
-const TableCell = withStyles(theme => ({
-    body: {
-        color: '#4d4d4d'
-    }
-}))(MuiTableCell);
+import QuestionDropZone from "./drop-zones/QuestionDropZone";
+import RecommendationDropZone from "./drop-zones/RecommendationDropZone";
+import StateDropZone from "./drop-zones/StateDropZone";
+import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
+import Toolbar from "@material-ui/core/Toolbar";
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 
 @observer
 class DetailContainer extends React.Component {
-    state = {
-        questions      : [
-            {
-                id       : 0,
-                question : 'Phasellus eget diam rutrum, molestie orci ut, interdum augue.',
-                type     : 'number',
-                deleteBtn: '-'
-            },
-            {id: 1, question: 'Duis maximus nibh ut volutpat volutpat.', type: 'boolean', deleteBtn: '-'},
-            {id: 2, question: 'Aliquam pulvinar orci ut magna ultricies rutrum.', type: 'string', deleteBtn: '-'}],
-        recommendations: [
-            {id: 0, recommendation: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', deleteBtn: '-'},
-            {
-                id            : 1,
-                recommendation: 'Aenean ullamcorper augue ultrices mi dapibus, nec feugiat ipsum porttitor.',
-                deleteBtn     : '-'
-            },
-            {
-                id            : 2,
-                recommendation: 'Pellentesque euismod metus sed ex sagittis, in ultricies ligula tincidunt.',
-                deleteBtn     : '-'
-            }]
+
+    onClose = () => {
+        this.props.onStateChange(null);
+    };
+
+    switchState = (state) => () => {
+        this.props.onStateChange(state.id);
+    };
+
+    removeRecommendation = (recommendation) => () => {
+        this.props.state.removeRecommendation(recommendation).save();
+    };
+
+    removeQuestion = (question) => () => {
+        this.props.state.removeQuestion(question).save();
+    };
+
+    clearBadState = () => {
+        this.props.state.linkNextBadState(null).save();
+    };
+
+    clearGoodState = () => {
+        this.props.state.linkNextGoodState(null).save();
     };
 
     render() {
-        let {classes, algorithm, state}  = this.props;
-        let {questions, recommendations} = this.state;
+        let {classes, algorithm, state, canDrop} = this.props;
 
         return (
             <div className={classes.root}>
@@ -57,59 +49,138 @@ class DetailContainer extends React.Component {
 
                 <QuestionDropZone state={state}/>
                 <RecommendationDropZone state={state}/>
-
-                <div className={classes.stateDropZone}>
-                    <div className={classes.stateDropZoneGood}>
-                        <NextGoodStateDropZone state={state}/>
-                    </div>
-                    <div className={classes.stateDropZoneBad}>
-                        <NextBadStateDropZone state={state} className={classes.stateDropZoneBadStyle}/>
-                    </div>
-                </div>
+                <StateDropZone state={state}/>
 
 
                 <AppBar position='static' color='primary' className={classes.containerHeader}>
-                    State Details
+                    <Toolbar>
+                        <Typography variant="h6" color="inherit" style={{flexGrow: 1}}>
+                            State Details ({state.id})
+                        </Typography>
+
+                        <Button color="inherit" onClick={this.onClose}>Close</Button>
+                    </Toolbar>
                 </AppBar>
 
                 <div className={classes.content}>
-
-                    <Typography align='left' className={classes.idContainer}>
-                        State Id: {state.id}
-                    </Typography>
-
                     <Divider/>
 
                     <Typography align='left' className={classes.addContent}>
                         Questions (Drop here to add)
                     </Typography>
 
-                    <Table>
-                        <TableBody>
-                            {questions.map(row => (
-                                <TableRow key={row.id}>
-                                    <TableCell className={classes.cellPadding}>{row.question}</TableCell>
-                                    <TableCell>{row.type}</TableCell>
-                                    <TableCell>{/* Placeholder for delete button */}{row.deleteBtn}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+
+                    <div className={classes.section}>
+                        {state.questions.map(row => (
+                            <Grid container
+                                  direction="row"
+                                  alignItems="center"
+                                  key={row.id}
+                                  className={classes.sectionRow}
+                            >
+                                <Grid item xs={7}>
+                                    {row.question}
+                                </Grid>
+                                <Grid item xs={3}>
+                                    {row.type}
+                                </Grid>
+                                <Grid item xs={1}>
+                                    <Button onClick={this.removeQuestion(row)}><RemoveCircleIcon/></Button>
+                                </Grid>
+                            </Grid>
+                        ))}
+                    </div>
 
                     <Typography align='left' className={classes.addContent}>
                         Recommendations (Drop here to add)
                     </Typography>
 
-                    <Table>
-                        <TableBody>
-                            {recommendations.map(row => (
-                                <TableRow key={row.id}>
-                                    <TableCell className={classes.cellPadding}>{row.recommendation}</TableCell>
-                                    <TableCell>{/* Placeholder for delete button */}{row.deleteBtn}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                    <div className={classes.section}>
+                        {state.recommendations.map(row => (
+                            <Grid container
+                                  direction="row"
+                                  alignItems="center"
+                                  key={row.id}
+                                  className={classes.sectionRow}
+                            >
+                                <Grid item xs={10}>
+                                    {row.title}
+                                </Grid>
+                                <Grid item xs={1}>
+                                    <Button onClick={this.removeRecommendation(row)}><RemoveCircleIcon/></Button>
+                                </Grid>
+                            </Grid>
+                        ))}
+                    </div>
+
+
+                    <Typography align='left' className={classes.addContent}>
+                        Next States (Drop here to add)
+                    </Typography>
+
+                    <div className={classes.section}>
+                        <Grid container
+                              direction="row"
+                              alignItems="center"
+                              className={classes.sectionRow}
+                        >
+                            {
+                                state.nextGoodState &&
+                                <>
+                                    <Grid item xs={7}>
+                                        Good State Id: {state.nextGoodState.id}
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Button onClick={this.switchState(state.nextGoodState)}>View</Button>
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                        <Button onClick={this.clearGoodState}><RemoveCircleIcon/></Button>
+                                    </Grid>
+                                </>
+                            }
+
+                            {
+                                !state.nextGoodState &&
+                                <>
+                                    <Grid item xs={11} style={{paddingTop: 10, paddingBottom: 10}}>
+                                        Good State Id: none
+                                    </Grid>
+                                </>
+                            }
+                        </Grid>
+
+                        <Grid container
+                              direction="row"
+                              alignItems="center"
+                              className={classes.sectionRow}
+                        >
+
+                            {
+                                state.nextBadState &&
+                                <>
+                                    <Grid item xs={7}>
+                                        Bad State Id: {state.nextBadState.id}
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Button onClick={this.switchState(state.nextBadState)}>View</Button>
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                        <Button onClick={this.clearBadState}><RemoveCircleIcon/></Button>
+                                    </Grid>
+                                </>
+                            }
+
+                            {
+                                !state.nextBadState &&
+                                <>
+                                    <Grid item xs={11} style={{paddingTop: 10, paddingBottom: 10}}>
+                                        Bad State Id: none
+                                    </Grid>
+                                </>
+                            }
+                        </Grid>
+                    </div>
+
                 </div>
             </div>
         );
@@ -118,7 +189,7 @@ class DetailContainer extends React.Component {
 
 
 const styles = theme => ({
-    root             : {
+    root           : {
         position       : "absolute",
         backgroundColor: theme.palette.background.default,
         width          : 400,
@@ -127,56 +198,36 @@ const styles = theme => ({
         height         : "calc(100vh - 68px)",
         boxShadow      : "-3px 0px 10px -5px #888888"
     },
-    containerHeader  : {
-        padding: 16
+    containerHeader: {},
+    section        : {
+        paddingTop   : 8,
+        paddingBottom: 8,
+        paddingRight : 16,
+        paddingLeft  : 16,
     },
-    idContainer      : {
-        padding   : 16,
-        marginLeft: 8
+    sectionRow     : {
+        color       : "#4d4d4d",
+        fontSize    : "0.8125rem",
+        fontWeight  : 400,
+        textAlign   : "left",
+        borderBottom: "1px solid rgba(224, 224, 224, 1)",
     },
-    addContent       : {
+    addContent     : {
         padding        : 16,
-        marginLeft     : 8,
         backgroundColor: '#f2f2f2',
         color          : '#404040',
         fontWeight     : 'bold'
     },
-    cellPadding      : {
+    cellPadding    : {
         paddingRight: 6
     },
-    content          : {
-        overflow : "hidden",
-        height   : "calc(100% - 48px)",
-        overflowY: "scroll"
-    },
-    stateDropZone    : {
-        position : "absolute",
-        width    : 400,
-        right    : "0px",
-        top      : "0px",
-        height   : "calc(100vh - 68px)",
-        boxShadow: "-3px 0px 10px -5px #888888"
-    },
-    stateDropZoneGood: {
-        position : "absolute",
-        width    : 400,
-        right    : "0px",
-        top      : "0px",
-        height   : "calc((100vh - 68px)/2)",
-        boxShadow: "-3px 0px 10px -5px #888888"
-    },
-    stateDropZoneBad : {
-        position : "absolute",
-        width    : 400,
-        right    : "0px",
-        top      : "calc((100vh - 68px)/2)",
-        height   : "calc((100vh - 68px)/2)",
-        boxShadow: "-3px 0px 10px -5px #888888"
-    },
-    stateDropZoneBadStyle: {
-        backgroundColor : 'red'
-    },
+    content        : {
+        paddingLeft: 8,
+        overflow   : "hidden",
+        height     : "calc(100% - 48px)",
+        overflowY  : "scroll"
+    }
 });
 
 
-export default withDrop('row')(withStyles(styles, {withTheme: true})(DetailContainer));
+export default withDrop('state')(withStyles(styles, {withTheme: true})(DetailContainer));
