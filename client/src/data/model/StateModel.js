@@ -1,73 +1,73 @@
 import AbstractModel from "./AbstractModel";
-import {observable} from "mobx";
+import {observable, computed, action} from "mobx";
 
 export default class StateModel extends AbstractModel {
     @observable id                 = null;
     @observable algorithm_id       = null;
     @observable state_id_next_good = null;
     @observable state_id_next_bad  = null;
-    @observable questions_id       = [];
-    @observable recommendations_id = [];
+    @observable question_ids       = [];
+    @observable recommendation_ids = [];
 
 
-    get nextGoodState() {
+    @computed get nextGoodState() {
         return this.rootStore.stateStore.get(this.state_id_next_good);
     }
 
-    get nextBadState() {
+    @computed get nextBadState() {
         return this.rootStore.stateStore.get(this.state_id_next_bad);
     }
 
-    get questions() {
-        return this.questions_id.map(id => this.rootStore.questionStore.get(id));
+    @computed get questions() {
+        return this.question_ids.map(id => this.rootStore.questionStore.get(id));
     }
 
-    get recommendations() {
-        return this.recommendations_id.map(id => this.rootStore.recommendationStore.get(id));
+    @computed get recommendations() {
+        return this.recommendation_ids.map(id => this.rootStore.recommendationStore.get(id));
     }
 
     hasQuestion(question) {
-        return this.questions_id.includes(question.id);
+        return this.question_ids.includes(question.id);
     }
 
     hasRecommendation(recommendation) {
-        return this.recommendations_id.includes(recommendation.id);
+        return this.recommendation_ids.includes(recommendation.id);
     }
 
-    addQuestion(question) {
+    @action.bound addQuestion(question) {
         if (!this.hasQuestion(question)) {
-            this.questions_id.push(question.id);
+            this.question_ids.push(question.id);
         }
         return this;
     }
 
-    addRecommendation(recommendation) {
+    @action.bound addRecommendation(recommendation) {
         if (!this.hasRecommendation(recommendation)) {
-            this.recommendations_id.push(recommendation.id);
+            this.recommendation_ids.push(recommendation.id);
         }
         return this;
     }
 
-    removeQuestion(question) {
+    @action.bound removeQuestion(question) {
         if (this.hasQuestion(question)) {
-            this.questions_id.splice(this.questions_id.indexOf(question.id), 1);
+            this.question_ids.splice(this.question_ids.indexOf(question.id), 1);
         }
         return this;
     }
 
-    removeRecommendation(recommendation) {
+    @action.bound removeRecommendation(recommendation) {
         if (this.hasRecommendation(recommendation)) {
-            this.recommendations_id.splice(this.recommendations_id.indexOf(recommendation.id), 1);
+            this.recommendation_ids.splice(this.recommendation_ids.indexOf(recommendation.id), 1);
         }
         return this;
     }
 
-    linkNextGoodState(state) {
+    @action.bound linkNextGoodState(state) {
         this.state_id_next_good = state ? state.id : null;
         return this;
     }
 
-    linkNextBadState(state) {
+    @action.bound linkNextBadState(state) {
         this.state_id_next_bad = state ? state.id : null;
         return this;
     }

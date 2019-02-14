@@ -1,5 +1,5 @@
 import uuidv1 from "uuid/v1";
-import {observable} from "mobx";
+import {action, observable} from "mobx";
 import Environment from "../common/Environment";
 import Mustache from "mustache";
 
@@ -63,20 +63,16 @@ class AbstractStore {
             .then(this.processResult.bind(this));
     }
 
-    patch(changeSet, object, options) {
+    put(object, options) {
         let url = this.compileEndpointUrl(object);
         return this.transportLayer
-            .patch(url, changeSet, options)
+            .put(url, object, options)
             .then(this.processResult.bind(this));
     }
 
     save(json) {
         let id = json[this.primaryKey];
-        if (!id) {
-            return this.post(json);
-        }
-
-        return this.patch(json, json);
+        return !id ? this.post(json) : this.put(json);
     }
 
     delete(model) {
@@ -105,7 +101,7 @@ class AbstractStore {
         return new Response(res);
     }
 
-    register(json) {
+    @action.bound register(json) {
         let id    = json[this.primaryKey];
         let model = !(id in this.collection) ? this.newModel() : this.collection[id];
 

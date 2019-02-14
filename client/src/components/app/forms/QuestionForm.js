@@ -43,6 +43,7 @@ class QuestionForm extends React.Component {
                 localModel: {
                     type_key        : question.type_key,
                     question        : question.question,
+                    prompt          : question.prompt,
                     question_options: question.question_options
                 }
             }, this.setDefaultOptions);

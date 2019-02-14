@@ -21,45 +21,21 @@ class RecommendationTransporter extends Abstract {
                 allowNull: false,
             },
             title            : {
-                type     : Sequelize.STRING,
+                type     : Sequelize.TEXT,
                 allowNull: false
             },
-            description      : Sequelize.STRING,
-            short_description: Sequelize.STRING,
+            description      : Sequelize.TEXT,
+            short_description: Sequelize.TEXT,
         };
 
         super(database, sequelize, "recommendation", fields);
     }
 
     async getAllByAlgorithmId(id) {
-        return this.sequelize.transaction((transaction) => {
-            return this.table.findAll({
-                where      : {
-                    algorithm_id: id
-                },
-                transaction: transaction
-            });
-        }).then(value => {
-            console.log(value);
-            return value;
-        }).catch(err => {
-            console.log(err);
-        });
-    }
-
-    async deleteAll(id) {
-        return this.sequelize.transaction((transaction) => {
-            return this.table.destroy({
-                where      : {
-                    algorithm_id: id
-                },
-                transaction: transaction
-            });
-        }).then(value => {
-            console.log(value);
-            return value;
-        }).catch(err => {
-            console.log(err);
+        return this.table.findAll({
+            where: {
+                algorithm_id: id
+            }
         });
     }
 }

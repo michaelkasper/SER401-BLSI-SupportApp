@@ -47,13 +47,19 @@ class TabsContainer extends React.Component {
         })
     };
 
-    selectState = (state = null) => {
-        let {algorithm} = this.props;
-
-        if (state === null) {
-            state = this.props.rootStore.stateStore.new({algorithm_id: algorithm.id});
-        }
+    selectState = (state) => {
         this.props.onStateChange(state);
+    };
+
+    createState = () => {
+        let {algorithm, rootStore} = this.props;
+
+        rootStore.stateStore.post({algorithm_id: algorithm.id})
+            .then(res => res.result)
+            .then(state => {
+                console.log(state);
+                this.props.onStateChange(state)
+            });
     };
 
     showQuestionForm = (question = true) => {
@@ -116,7 +122,7 @@ class TabsContainer extends React.Component {
                                     dir={theme.direction}
                                     content={algorithm.states}
                                     onSelect={this.selectState}
-                                    onCreate={this.selectState}
+                                    onCreate={this.createState}
                                     row={StateRow}
                                 />
                             }

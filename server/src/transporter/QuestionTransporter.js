@@ -20,161 +20,74 @@ class QuestionTransporter extends Abstract {
                 type     : Sequelize.INTEGER.UNSIGNED,
                 allowNull: false,
             },
+            question    : {
+                type     : Sequelize.TEXT,
+                allowNull: false
+            },
             prompt      : {
-                type     : Sequelize.STRING,
+                type     : Sequelize.TEXT,
                 allowNull: false
             },
             type_key    : Sequelize.STRING,
-            answer      : Sequelize.STRING
         };
 
         super(database, sequelize, "question", fields);
     }
 
     async getAll() {
-        return this.sequelize.transaction((transaction) => {
-            return this.table.findAll({
-                include    : ["question_options"],
-                transaction: transaction
-            });
-        }).then(value => {
-            //transaction committed
-            console.log(value);
-            return value;
-        }).catch(err => {
-            //transaction rolledback
-            console.log(err);
+        return this.table.findAll({
+            include: ["question_options"],
         });
+
     }
 
     async get(id) {
-        return this.sequelize.transaction((transaction) => {
-            return this.table.findOne({
-                where      : {
-                    id: id
-                },
-                include    : ["question_options"],
-                transaction: transaction
-            });
-        }).then(value => {
-            console.log(value);
-            return value;
-        }).catch(err => {
-            console.log(err);
+        return super.get(id, {
+            include: ["question_options"],
         });
     }
 
     async getAllByAlgorithmId(id) {
-        return this.sequelize.transaction((transaction) => {
-            return this.table.findAll({
-                where      : {
-                    algorithm_id: id
-                },
-                include    : ["question_options"],
-                transaction: transaction
-            });
-        }).then(value => {
-            console.log(value);
-            return value;
-        }).catch(err => {
-            console.log(err);
+        return this.query({
+            where  : {
+                algorithm_id: id
+            },
+            include: ["question_options"]
         });
     }
 
-    async create(data) {
-        if (data.id) {
-            delete data.id;
-        }
-        return this.sequelize.transaction((transaction) => {
-            return this.table.create(data, {
-                transaction: transaction
-            }).then((result) => {
-                if (data.question_options) {
-                    Promise.all(data.question_options.forEach((option) => {
-                        return this.database.question_option.create(option, {
-                            transaction: transaction
-                        }).then((resultData) => {
-                            result.push(resultData);
-                        });
-                    }));
-                }
-                return result;
-            });
-        }).then(value => {
-            //transaction committed
-            console.log(value);
-            return value;
-        }).catch(err => {
-            //transaction rolledback
-            console.log(err);
-        });
-    }
 
-    async update(id, data) {
-        return this.sequelize.transaction((transaction) => {
-            return this.table.findOrCreate({
-                where      : {
-                    id: id
-                },
-                defaults   : data,
-                transaction: transaction
-            }).spread((result, created) => {
-                if (!created) { //not created
-                    Promise.resolve(this.table.update(data, {
-                        where: {
-                            id: id
-                        }
-                    }));
-                }
-                return result;
-            }).then((result) => {
-                if (data.question_options) {
-                    Promise.all(data.question_options.forEach((option, index) => {
-                        return this.database.question_option.update(option.id, option);
-                    }));
-                }
-                return result;
-            });
+    // async deleteAll(id) {
+    //     return this.sequelize.transaction((transaction) => {
+    //         return this.table.destroy({
+    //             where      : {
+    //                 algorithm_id: id
+    //             },
+    //             transaction: transaction
+    //         });
+    //     }).then(value => {
+    //         console.log(value);
+    //         return value;
+    //     }).catch(err => {
+    //         console.log(err);
+    //     });
+    // }
 
-        }).then((result) => {
-            console.log(result);
-            return result;
-        }).catch(err => {
-            console.log(err);
-        });
-    }
-
-    async deleteAll(id) {
-        return this.sequelize.transaction((transaction) => {
-            return this.table.destroy({
-                where      : {
-                    algorithm_id: id
-                },
-                transaction: transaction
-            });
-        }).then(value => {
-            console.log(value);
-            return value;
-        }).catch(err => {
-            console.log(err);
-        });
-    }
-
-    setTypeCheckbox() {
-        this.typeKey = 'checkbox';
-    }
-
-    setTypeTextField() {
-        this.typeKey = 'textfield';
-    }
-
-    setTypeButtons() {
-        this.typeKey = 'buttons';
-    }
-
-    setTypeDropdown() {
-        this.typeKey = 'dropdown';
-    }
+    // setTypeCheckbox() {
+    //     this.typeKey = 'checkbox';
+    // }
+    //
+    // setTypeTextField() {
+    //     this.typeKey = 'textfield';
+    // }
+    //
+    // setTypeButtons() {
+    //     this.typeKey = 'buttons';
+    // }
+    //
+    // setTypeDropdown() {
+    //     this.typeKey = 'dropdown';
+    // }
 
 }
 

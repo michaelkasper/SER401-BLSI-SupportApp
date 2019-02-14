@@ -30,38 +30,6 @@ class QuestionOptionTransporter extends Abstract {
 
         super(database, sequelize, "question_option", fields);
     }
-
-    async getAllByQuestionId(id) {
-        return this.sequelize.transaction((transaction) => {
-            return this.table.findAll({
-                where      : {
-                    question_id: id
-                },
-                transaction: transaction
-            });
-        }).then(value => {
-            console.log(value);
-            return value;
-        }).catch(err => {
-            console.log(err);
-        });
-    }
-
-    async deleteAll(id) {
-        return this.sequelize.transaction((transaction) => {
-            return this.table.destroy({
-                where      : {
-                    question_id: id
-                },
-                transaction: transaction
-            });
-        }).then(value => {
-            console.log(value);
-            return value;
-        }).catch(err => {
-            console.log(err);
-        });
-    }
 }
 
 module.exports = QuestionOptionTransporter;

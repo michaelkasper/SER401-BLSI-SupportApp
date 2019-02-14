@@ -1,4 +1,4 @@
-import {toJS} from "mobx";
+import {action, toJS} from "mobx";
 
 export default class AbstractModel {
     store;
@@ -23,8 +23,7 @@ export default class AbstractModel {
     /**
      * Update this project with information from the server
      */
-    fromJson(json) {
-        // any transformations?// map our new values
+    @action.bound fromJson(json) {
         for (let field in json) {
             if (field in this) {
                 this[field] = json[field];
@@ -47,7 +46,7 @@ export default class AbstractModel {
 
 
     save() {
-        return this.store.save( this.toJson());
+        return this.store.save(this.toJson());
     }
 
 }

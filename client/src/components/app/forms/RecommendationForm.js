@@ -42,12 +42,17 @@ class RecommendationForm extends React.Component {
 
     onSave = () => {
         let {recommendation, algorithm, rootStore} = this.props;
+        let promise;
         if (!recommendation) {
-            recommendation = rootStore.recommendationStore.new({algorithm_id: algorithm.id});
+            promise = rootStore.recommendationStore.post({algorithm_id: algorithm.id, ...this.state.localModel})
+                .then(res => res.result);
+        } else {
+            promise = recommendation.fromJson(this.state.localModel).save();
         }
-        recommendation.fromJson(this.state.localModel);
-        // recommendation.save(); //TODO:: Comment out when connected to backend **/
-        this.props.onClose();
+
+        promise.then(q => {
+            this.props.onClose();
+        });
     };
 
     render() {

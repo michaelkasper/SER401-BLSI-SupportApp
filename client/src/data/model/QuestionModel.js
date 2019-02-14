@@ -1,5 +1,5 @@
 import AbstractModel from "./AbstractModel";
-import {observable} from "mobx";
+import {observable, action} from "mobx";
 
 export default class QuestionModel extends AbstractModel {
     @observable id               = null;
@@ -23,7 +23,7 @@ export class QuestionOptionModel {
     /**
      * Update this project with information from the server
      */
-    fromJson(json) {
+    @action.bound fromJson(json) {
         // any transformations?// map our new values
         for (let field in json) {
             if (field in this) {

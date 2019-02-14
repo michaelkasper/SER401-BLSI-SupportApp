@@ -26,18 +26,10 @@ class KeyTransporter extends Abstract {
     }
 
     exists(data) {
-        return this.sequelize.transaction((transaction) => {
-            return this.table.findOne({
-                where      : {
-                    key: data
-                },
-                transaction: transaction
-            });
-        }).then(value => {
-            console.log(value);
-            return value;
-        }).catch(err => {
-            console.log(err.toString());
+        return this.table.findOne({
+            where: {
+                key: data
+            }
         });
     }
 }

@@ -17,17 +17,17 @@ export default class Transport {
     get(url, query) {
         return this.buildRequest(this.http.get(url, {
             params: query
-        })).then(res => {
-            return res.data;
-        });
+        })).then(res => res.data);
     }
 
     post(url, data = null) {
-        return this.buildRequest(this.http.post(url, data));
+        return this.buildRequest(this.http.post(url, data))
+            .then(res => res.data);
     }
 
-    patch(url, data = null) {
-        return this.buildRequest(this.http.patch(url, data));
+    put(url, data = null) {
+        return this.buildRequest(this.http.put(url, data))
+            .then(res => res.data);
     }
 
     buildRequest(request) {

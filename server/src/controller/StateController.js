@@ -3,10 +3,10 @@
 /**
  * Written by Taylor Greeff (tgreeff)
  */
-
+const Sequelize        = require("sequelize");
 var AbstractController = require('./AbstractController');
-var ApiErrorModel = require('../model/ApiErrorModel');
-var JsonModel = require('../model/JsonModel');
+var ApiErrorModel      = require('../model/ApiErrorModel');
+var JsonModel          = require('../model/JsonModel');
 
 class StateController extends AbstractController {
     constructor(request, response, serviceManager) {
@@ -21,139 +21,107 @@ class StateController extends AbstractController {
 
     getAllAction(query, params, data) {
         console.log("==== GET All ====");
-        
-        if(query.algorithm_id) {
+
+        if (query.algorithm_id) {
             let id = query.algorithm_id;
-            return new Promise((resolve, reject) => {
-                resolve(this.database.state.getAllByAlgorithmId(id));
-            }).then(collection => {
-                Promise.all(collection.map((element) => {
-                    if (element.question_ids) {
-                        element.question_ids = JSON.parse(element.question_ids);
-                    }
-                    if (element.recommendation_ids) {
-                        element.recommendation_ids = JSON.parse(element.recommendation_ids);
-                    }
-                    return element;
-                    
-                })).then((data) => {
-                    console.log(data);
+            return this.database.state.getAllByAlgorithmId(id)
+                .then(collection => {
+                    return new JsonModel({
+                        collection: collection
+                    });
                 });
-                return new JsonModel({
-                    collection: collection
-                });
-            });
         }
-        else {
-            Promise.resolve(new ApiErrorModel(400, "Needs Id"));
-        }
+
+        return Promise.resolve(new ApiErrorModel(400, "Needs Id"));
     }
 
-    getAction(params, data) {
+    getAction(id) {
         console.log("==== GET ====");
-        return new Promise((resolve, reject) => {
-            let id = parseInt(params.id);
-            resolve(this.database.state.get(id));
-        }).then(data => {
-            if (data.question_ids) {
-                data.question_ids = JSON.parse(data.question_ids);
-            }
-            if (data.recommendation_ids) {
-                data.recommendation_ids = JSON.parse(data.recommendation_ids);
-            }
-            return new JsonModel(data);
-        });
+
+        return this.database.state.get(id)
+            .then(data => new JsonModel(data));
     }
 
     postAction(params, data) {
-        if (data.collection) {
-            return Promise.all(data.collection.forEach(element => {
-                return this.postAction(params, element);
-            })).then((data) => {
-                return new JsonModel(data);
-            }).catch(err => {
-                console.log("finished");
-                return new JsonModel(data);
-            });
-        }
-
         console.log("==== POST ====");
-        return new Promise((resolve, reject) => {
-            if (data[this.dataType]) {
-                data = data[this.dataType];
-            }
-            if (data.question_ids) {
-                data.question_ids = JSON.stringify(data.question_ids);
-            }
-            if (data.recommendation_ids) {
-                data.recommendation_ids = JSON.stringify(data.recommendation_ids);
-            }
-            resolve(this.database.state.create(data));
-        }).then(data => {
-            return new JsonModel(data);
-        });
-    }
-
-    putAction(params, data) {
-        if (data.collection) {
-            return Promise.all(data.collection.forEach(element => {
-                return this.putAction(params, element);
-            })).then((data) => {
-                return new JsonModel(data);
-            }).catch(err => {
-                console.log("finished");
-                return new JsonModel(data);
-            });
+        if (data.question_ids) {
+            delete data.question_ids;
+        }
+        if (data.recommendation_ids) {
+            delete data.recommendation_ids;
         }
 
+        return this.database.startTransaction((transaction) => {
+            return this.database.state.create(data, transaction)
+                .then(data => new JsonModel(data));
+        });
+    }
+
+    putAction(id, params, data) {
         console.log("==== PUT ====");
-        return new Promise((resolve, reject) => {
-            if (data[this.dataType]) {
-                data = data[this.dataType];
-            }
-            if(data.question_ids) {
-                data.question_ids = JSON.stringify(data.question_ids);
-            }
-            if (data.recommendation_ids) {
-                data.recommendation_ids = JSON.stringify(data.recommendation_ids);
-            }
-            let id = parseInt(params.id); //Make sure id is an int
-            resolve(this.database.state.update(id, data));
-        }).then((data) => {
-            return new JsonModel(data);
-        });
+
+        let recommendation_ids = data.recommendation_ids;
+        let question_ids       = data.question_ids;
+
+        delete data.recommendation_ids;
+        delete data.question_ids;
+
+        return this.database.startTransaction((transaction) => {
+
+            return this.database.state.update(id, data, transaction)
+                .then(res => {
+                    // delete existing linked questions and relations
+                    return Promise.all([
+                        this.database.stateQuestionTable.destroy({
+                            where      : {
+                                state_id: id
+                            },
+                            transaction: transaction
+                        }),
+                        this.database.stateRecommendationTable.destroy({
+                            where      : {
+                                state_id: id
+                            },
+                            transaction: transaction
+                        }),
+                    ])
+                })
+                .then(res => {
+                    // create passed in questions and relations link
+                    let promises = [];
+                    if (recommendation_ids && Array.isArray(recommendation_ids)) {
+                        promises = promises.concat(
+                            recommendation_ids.map(recommendation_id => {
+                                return this.database.state_recommendation.create({
+                                    state_id         : id,
+                                    recommendation_id: recommendation_id
+                                }, transaction);
+                            })
+                        )
+                    }
+
+                    if (question_ids && Array.isArray(question_ids)) {
+                        promises = promises.concat(
+                            question_ids.map(question_id => {
+                                return this.database.state_question.create({
+                                    state_id   : id,
+                                    question_id: question_id
+                                }, transaction);
+                            })
+                        )
+                    }
+                    return Promise.all(promises);
+                })
+        }).then(res => this.getAction(id))
     }
 
-    headAction(params, data) {
-        return new ApiErrorModel(405, `method not allowed`);
-    }
-
-    deleteAllAction(query, params, data) {
+    deleteAction(id, params, data) {
         console.log("==== DELETE ====");
-        let id = parseInt(query.algorithm_id); //Make sure id is an int
-        return new Promise((resolve, reject) => {
-            resolve(this.database.state.deleteAll(id));
-        }).then(data => {
-            return new JsonModel(data);
+
+        return this.database.startTransaction((transaction) => {
+            return this.database.state.delete(id, transaction)
+                .then(data => new JsonModel(data));
         });
-    }
-
-    deleteAction(params, data) {
-        console.log("==== DELETE ====");
-        return new Promise((resolve, reject) => {
-            let id = parseInt(params.id);
-            resolve(this.database.state.delete(id));
-        }).then(data => {
-            return new JsonModel(data);
-        });
-    }
-
-    traceAction(params, data) {
-        return new ApiErrorModel(405, `method not allowed`);
-    }
-
-    patchAction(params, data) {
-        return new ApiErrorModel(405, `method not allowed`);
     }
 }
 

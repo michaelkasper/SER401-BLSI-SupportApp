@@ -56,44 +56,43 @@ class AbstractController {
     dispatch() {
         try {
             // if (this.secure && !this.clientKey) {
-            //     this.response.response = new ApiErrorModel(400, 'missing client key');
+            //     this.response.response = Promise.resolve(new ApiErrorModel(400, 'missing client key'));
             //     return;
             // }
 
-            console.log(this.params);
-            console.log(this.body);
-            let response = () => {
-            };
+            let id = 'id' in this.params ? parseInt(this.params.id) : null;
+            let response;
+
             switch (this.requestMethod) {
                 case "GET_ALL":
-                    response = () => this.getAllAction(this.query, this.params, this.body);
+                    response = this.getAllAction(this.query, this.params, this.body);
                     break;
                 case "GET":
-                    response = () => this.getAction(this.params, this.body);
+                    response = this.getAction(id, this.params, this.body);
                     break;
                 case "POST":
-                    response = () => this.postAction(this.params, this.body);
+                    response = this.postAction(this.params, this.body);
                     break;
                 case "HEAD":
-                    response = () => this.headAction(this.params, this.body);
+                    response = this.headAction(this.params, this.body);
                     break;
                 case "PUT":
-                    response = () => this.putAction(this.params, this.body);
+                    response = this.putAction(id, this.params, this.body);
                     break;
                 case "DELETE_ALL":
-                    response = () => this.deleteAllAction(this.query, this.params, this.body);
+                    response = this.deleteAllAction(this.query, this.params, this.body);
                     break;
                 case "DELETE":
-                    response = () => this.deleteAction(this.params, this.body);
+                    response = this.deleteAction(id, this.params, this.body);
                     break;
                 case "TRACE":
-                    response = () => this.traceAction(this.params, this.body);
+                    response = this.traceAction(this.params, this.body);
                     break;
                 case "PATCH":
-                    response = () => this.patchAction(this.params, this.body);
+                    response = this.patchAction(this.params, this.body);
                     break;
                 default:
-                    response = () => new ApiErrorModel(405, 'method not allowed');
+                    response = Promise.resolve(new ApiErrorModel(405, `method not allowed`));
                     break;
             }
 
@@ -116,52 +115,53 @@ class AbstractController {
                     return new ApiErrorModel(400, 'Invalid key');
                 });
             } else {*/
-            this.response.response = Promise.resolve(response()).catch(err => {
-                console.log(err);
-                return new ApiErrorModel(400, 'Invalid key');
-            });
+            this.response.response = response
+                .catch(err => {
+                    console.log(err);
+                    return new ApiErrorModel(400, 'Invalid key');
+                });
             //}
 
         } catch (e) {
             console.log(e.toString());
-            return new ApiErrorModel(500, 'Invalid input');
+            this.response.response = Promise.resolve(new ApiErrorModel(500, 'Invalid input'));
         }
     }
 
     getAllAction(query, params, data) {
-        return new ApiErrorModel(405, `method not allowed`);
+        return Promise.resolve(new ApiErrorModel(405, `method not allowed`));
     }
 
-    getAction(params, data) {
-        return new ApiErrorModel(405, `method not allowed`);
+    getAction(id, params, data) {
+        return Promise.resolve(new ApiErrorModel(405, `method not allowed`));
     }
 
-    putAction(params, data) {
-        return new ApiErrorModel(405, `method not allowed`);
+    putAction(id, params, data) {
+        return Promise.resolve(new ApiErrorModel(405, `method not allowed`));
     }
 
     postAction(params, data) {
-        return new ApiErrorModel(405, `method not allowed`);
+        return Promise.resolve(new ApiErrorModel(405, `method not allowed`));
     }
 
     headAction(params, data) {
-        return new ApiErrorModel(405, `method not allowed`);
+        return Promise.resolve(new ApiErrorModel(405, `method not allowed`));
     }
 
     deleteAllAction(query, params, data) {
-        return new ApiErrorModel(405, `method not allowed`);
+        return Promise.resolve(new ApiErrorModel(405, `method not allowed`));
     }
 
-    deleteAction(params, data) {
-        return new ApiErrorModel(405, `method not allowed`);
+    deleteAction(id, params, data) {
+        return Promise.resolve(new ApiErrorModel(405, `method not allowed`));
     }
 
     traceAction(params, data) {
-        return new ApiErrorModel(405, `method not allowed`);
+        return Promise.resolve(new ApiErrorModel(405, `method not allowed`));
     }
 
     patchAction(params, data) {
-        return new ApiErrorModel(405, `method not allowed`);
+        return Promise.resolve(new ApiErrorModel(405, `method not allowed`));
     }
 
     param(key, defaultVal) {

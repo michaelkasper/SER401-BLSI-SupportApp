@@ -6,7 +6,8 @@ services:
     restart: always
     volumes:
       - './data/mysql/db:/var/lib/mysql'
-      - './data/database_schema.sql:/docker-entrypoint-initdb.d/database_schema.sql'
+      - './docker/sql-dumps:/docker-entrypoint-initdb.d:cached'
+      - './docker/mysql/my.cnf:/etc/mysql/my.cnf'
     ports:
       - '3366:3306'
     environment:

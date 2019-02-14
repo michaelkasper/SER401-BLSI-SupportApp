@@ -5,8 +5,8 @@
  */
 
 var AbstractController = require('./AbstractController');
-var ApiErrorModel = require('../model/ApiErrorModel');
-var JsonModel = require('../model/JsonModel');
+var ApiErrorModel      = require('../model/ApiErrorModel');
+var JsonModel          = require('../model/JsonModel');
 
 class QuestionController extends AbstractController {
     constructor(request, response, serviceManager) {
@@ -24,102 +24,87 @@ class QuestionController extends AbstractController {
 
         if (query.algorithm_id) {
             let id = query.algorithm_id;
-            return new Promise((resolve, reject) => {
-                resolve(this.database.question.getAllByAlgorithmId(id));
-            }).then(collection => {
-                return new JsonModel({
-                    collection: collection
+
+            return this.database.question.getAllByAlgorithmId(id)
+                .then(collection => {
+                    return new JsonModel({
+                        collection: collection
+                    });
                 });
-            });
-        } else {
-            Promise.resolve(new ApiErrorModel(400, "Needs Id"));
         }
+
+        return Promise.resolve(new ApiErrorModel(400, "Needs Id"));
     }
 
-    getAction(params, data) {
+    getAction(id, params, data) {
         console.log("==== GET ====");
-        return new Promise((resolve, reject) => {
-            let id = parseInt(params.id);
-            resolve(this.database.question.get(id));
-        }).then(data => {
-            return new JsonModel(data);
-        });
+
+        return this.database.question.get(id)
+            .then(data => new JsonModel(data));
     }
 
-    putAction(params, data) {
-        if (data.collection) {
-            return Promise.all(data.collection.forEach(element => {
-                return this.putAction(params, element);
-            })).then((data) => {
-                return new JsonModel(data);
-            }).catch(err => {
-                console.log("finished");
-                return new JsonModel(data);
-            });
-        }
-
+    putAction(id, params, data) {
         console.log("==== PUT ====");
-        return new Promise((resolve, reject) => {
-            if (data[this.dataType]) {
-                data = data[this.dataType];
-            }
-            let id = parseInt(params.id); //Make sure id is an int
-            resolve(this.database.question.update(id, data));
-        }).then(data => {
-            return new JsonModel(data);
-        });
+
+        let questionOptions = data.question_options;
+        delete data.question_options;
+
+        return this.database.startTransaction((transaction) => {
+            return this.database.question.update(id, data, transaction)
+                .then(res => {
+                    // delete existing question options
+                    return this.database.questionOptionTable.destroy({
+                        where      : {
+                            question_id: id
+                        },
+                        transaction: transaction
+                    })
+                })
+                .then(res => {
+                    if (questionOptions) {
+                        return Promise.all(questionOptions.map((option) => {
+                            option.question_id = id;
+                            return this.database.question_option.create(option, transaction);
+                        }))
+                    }
+                    return res;
+                })
+        })
+            .then(res => this.getAction(id));
+
     }
 
     postAction(params, data) {
-        if (data.collection) {
-            return Promise.all(data.collection.forEach(element => {
-                return this.postAction(params, element);
-            })).then((data) => {
-                return new JsonModel(data);
-            }).catch(err => {
-                console.log("finished");
-                return new JsonModel(data);
-            });
-        }
-        
         console.log("==== POST ====");
-        return new Promise((resolve, reject) => {
-            resolve(this.database.question.create(data));
-        }).then((data) => {  
-            return new JsonModel(data);
-        });
+
+        return this.database.startTransaction((transaction) => {
+
+            let questionOptions = data.question_options;
+            delete data.question_options;
+
+            return this.database.question.create(data, transaction)
+                .then(question => {
+                    if (questionOptions) {
+                        return Promise.all(questionOptions.map((option) => {
+                            option.question_id = question.id;
+                            return this.database.question_option.create(option, transaction);
+                        }))
+                            .then(() => question);
+                    }
+                    return question;
+                })
+        })
+            .then(question => this.getAction(question.id));
+
     }
 
-    headAction(params, data) {
-        return new ApiErrorModel(405, `method not allowed`);
-    }
-
-    deleteAllAction(query, params, data) {
+    deleteAction(id, params, data) {
         console.log("==== DELETE ====");
-        let id = parseInt(query.algorithm_id); //Make sure id is an int
-        return new Promise((resolve, reject) => {
-            resolve(this.database.question.deleteAll(id));
-        }).then(data => {
-            return new JsonModel(data);
+        return this.database.startTransaction((transaction) => {
+
+            return this.database.question.delete(id, transaction)
+                .then(data => new JsonModel(data));
         });
-    }
-
-    deleteAction(params, data) {
-        console.log("==== DELETE ====");
-        return new Promise((resolve, reject) => {
-            let id = parseInt(params.id);
-            resolve(this.database.question.delete(id));
-        }).then(data => {
-            return new JsonModel(data);
-        });
-    }
-
-    traceAction(params, data) {
-        return new ApiErrorModel(405, `method not allowed`);
-    }
-
-    patchAction(params, data) {
-        return new ApiErrorModel(405, `method not allowed`);
     }
 }
 
