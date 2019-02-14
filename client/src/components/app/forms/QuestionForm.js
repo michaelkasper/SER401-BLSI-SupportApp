@@ -27,6 +27,7 @@ class QuestionForm extends React.Component {
             question_options: []
         },
         invalidQuestion     : false,
+        invalidOption       : null
     };
 
     setDefaultOptions = () => {
@@ -92,10 +93,14 @@ class QuestionForm extends React.Component {
         this.setState({localModel: localModel}, this.setDefaultOptions);
     };
 
+    validateOption = (validation) => {
+        this.setState({invalidOption: validation});
+    };
+
     render() {
         let {classes, question} = this.props;
         let {localModel}        = this.state;
-
+        console.log('QuestionForm.render: ' + this.state.invalidOption);
         return (
             <Fragment>
                 <DialogTitle id="max-width-dialog-title">Question</DialogTitle>
@@ -165,6 +170,7 @@ class QuestionForm extends React.Component {
                                         option={option}
                                         onRemoveOption={this.onRemoveOption(index)}
                                         key={index}
+                                        validateOption={this.validateOption}
                                     />
                                     : <NumberOption
                                         option={option}
