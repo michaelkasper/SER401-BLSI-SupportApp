@@ -26,15 +26,16 @@ class RecommendationForm extends React.Component {
                 localModel: {
                     title      : recommendation.title,
                     description: recommendation.description
-                }
+                },
+                invalidTitle: false
             });
         }
     }
 
     onChange = (field) => (e) => {
         let localModel    = {...this.state.localModel};
-        if (field === 'title' && field.length > 0) {
-            this.setState({invalidTitle: false});
+        if (field === 'title') {
+            this.setState({invalidTitle: e.target.value.length < 1});
         }
         localModel[field] = e.target.value;
         this.setState({localModel: localModel});
@@ -46,17 +47,12 @@ class RecommendationForm extends React.Component {
 
     onSave = () => {
         let {recommendation, algorithm, rootStore} = this.props;
-        if (this.state.localModel.title.length > 0) {
-            if (!recommendation) {
-                recommendation = rootStore.recommendationStore.new({algorithm_id: algorithm.id});
-            }
-            recommendation.fromJson(this.state.localModel);
-            // recommendation.save(); //TODO:: Comment out when connected to backend **/
-            this.props.onClose();
+        if (!recommendation) {
+            recommendation = rootStore.recommendationStore.new({algorithm_id: algorithm.id});
         }
-        else {
-            this.setState({invalidTitle: true});
-        }
+        recommendation.fromJson(this.state.localModel);
+        // recommendation.save(); //TODO:: Comment out when connected to backend **/
+        this.props.onClose();
     };
 
     render() {
@@ -80,7 +76,7 @@ class RecommendationForm extends React.Component {
                         variant="outlined"
                         required
                         error={this.state.invalidTitle}
-                        helperText={this.state.invalidTitle === true ? "A title is required" : ""}
+                        helperText={this.state.invalidTitle ? "Required field" : ""}
                     />
 
 
@@ -102,7 +98,7 @@ class RecommendationForm extends React.Component {
                     <Button onClick={this.onCancel} color="secondary">
                         Cancel
                     </Button>
-                    <Button onClick={this.onSave} color="primary" autoFocus>
+                    <Button onClick={this.onSave} color="primary" autoFocus disabled={this.state.localModel.title.length < 1}>
                         {
                             !recommendation &&
                             "Create"
