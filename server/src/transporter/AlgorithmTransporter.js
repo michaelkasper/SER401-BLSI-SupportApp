@@ -51,7 +51,11 @@ class AlgorithmTransporter extends Abstract {
         data["version_number"] += 0.1;
         return super.update(id, data, transaction);
     }
-}
 
+    async create(id, data, transaction) {
+        data.version_number = (data.version_number ? data.version_number : 0.0);
+        return super.create(id, data, transaction);
+    }
+}
 
 module.exports = AlgorithmTransporter;
