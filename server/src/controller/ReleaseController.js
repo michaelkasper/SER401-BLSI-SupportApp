@@ -7,6 +7,7 @@
 var AbstractController = require('./AbstractController');
 var ApiErrorModel = require('./../model/ApiErrorModel');
 var JsonModel = require('./../model/JsonModel');
+var Promise = require('bluebird');
 
 class ReleaseController extends AbstractController {
     constructor(request, response, serviceManager) {
@@ -34,30 +35,29 @@ class ReleaseController extends AbstractController {
 
     postAction(params, data) {
         console.log("==== POST ====");
-        return this.database.algorithm.get(data.algorithm_id)
-            .then((result) => {
-                return [this.database.question.getAllByAlgorithmId(data.algorithm_id),
-                    this.database.recommendation.getAllByAlgorithmId(data.algorithm_id),
-                    this.database.state.getAllByAlgorithmId(data.algorithm_id),
-                    result
-                ];
-            }).spread((questions, recommendations, states, algorithm) => {
-                algorithm["questions"] = questions;
-                algorithm["recommendations"] = recommendations;
-                algorithm["states"] = states;
-                return algorithm;
-            }).then((algorithm) => {
-                return this.database.startTransaction((transaction) => {
-                    return this.database.release.create({
-                            algorithm: JSON.stringify(algorithm),
-                            algorithm_id: algorithm.id,
-                            version_number: algorithm.version_number
-                        }, transaction)
-                        .then((data) => {
-                            return new JsonModel(data);
-                        });
-                });
-            })
+        return Promise.all([
+            this.database.algorithm.get(data.algorithm_id),
+            this.database.question.getAllByAlgorithmId(data.algorithm_id),
+            this.database.recommendation.getAllByAlgorithmId(data.algorithm_id),
+            this.database.state.getAllByAlgorithmId(data.algorithm_id)
+        ]).spread((algorithm, questions, recommendations, states) => {
+            algorithm["questions"] = questions;
+            algorithm["recommendations"] = recommendations;
+            algorithm["states"] = states;
+            return algorithm;
+        }).then((algorithm) => {
+            return this.database.startTransaction((transaction) => {
+                return this.database.release.create({
+                        algorithm_json: JSON.stringify(algorithm),
+                        algorithm_id: algorithm.id,
+                        version_number: algorithm.version_number,
+                        name: algorithm.name
+                    }, transaction)
+                    .then((data) => {
+                        return new JsonModel(data);
+                    });
+            });
+        })
 
     }
 
