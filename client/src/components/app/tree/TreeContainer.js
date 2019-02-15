@@ -1,124 +1,58 @@
 import {
-    DiagramEngine,
-    DiagramModel,
-    DefaultNodeModel,
-    DefaultPortFactory,
-    LinkModel,
-    DiagramWidget,
-    DefaultLinkModel
+    DiagramWidget
 } from "storm-react-diagrams";
-import React, {Fragment} from 'react';
+import React from 'react';
 import withStyles from "@material-ui/core/es/styles/withStyles";
-import {distributeElements} from "../../../common/dagre-utils";
-import {Node, NodeFactory, LinkFactory} from "./Node";
+import TreeDiagram from "../../ui/TreeDiagram";
 
-require("storm-react-diagrams/dist/style.min.css");
+require("../../ui/TreeDiagramElements/TreeDiagram.css");
 
-function getDistributedModel(engine, model) {
-    const serialized                   = model.serializeDiagram();
-    const distributedSerializedDiagram = distributeElements(serialized);
-
-    //deserialize the model
-    let deSerializedModel = new DiagramModel();
-    deSerializedModel.deSerializeDiagram(distributedSerializedDiagram, engine);
-    return deSerializedModel;
-}
 
 class TreeContainer extends React.Component {
 
     nodes = {};
     state = {
-        engine: null
+        diagram: null
     };
 
     componentDidMount() {
-        let {algorithm} = this.props;
+        let {algorithm, selectedState, onStateChange} = this.props;
 
-        //1) setup the diagram engine
-        let engine = new DiagramEngine();
-        engine.installDefaultFactories();
-        engine.registerNodeFactory(new NodeFactory());
-        engine.registerLinkFactory(new LinkFactory());
-
-
-        let model      = new DiagramModel();
-        let startState = algorithm.startState;
-
-
-        let rootNodeWrapper = this.getNode(model, startState);
-        this.addNode(model, rootNodeWrapper, startState);
-
-        let model2 = getDistributedModel(engine, model);
-        model2.setLocked(true);
-
-        //5) load model into engine
-        engine.setDiagramModel(model2);
-
-        this.setState({engine: engine})
-    }
-
-    shouldComponentUpdate(nextProps, nextState, nextContext) {
-        return true;
-    }
-
-    getNode(model, state) {
-        if (state.id in this.nodes) {
-            this.nodes[state.id].new = false;
-            return this.nodes[state.id];
-        }
-
-        let node = new Node(state, "Node " + state.id);
-        model.addNode(node);
-
-        this.nodes[state.id] = {
-            new : true,
-            node: node,
-            port: {
-                in : node.addInPort("in"),
-                out: node.addOutPort("out"),
-            }
-        };
-
-        return this.nodes[state.id];
+        this.setState({
+            diagram: new TreeDiagram(algorithm, selectedState, onStateChange)
+        })
     }
 
 
-    addNode(model, parentNodeWrapper, state) {
-        if (state.goodState || state.badState) {
-            [state.goodState, state.badState].forEach(nextState => {
-                if (nextState) {
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        let {algorithm, diagramId, selectedState, onStateChange} = this.props;
 
-                    let nodeWrapper = this.getNode(model, nextState);
-
-                    let link = new DefaultLinkModel();
-                    link.setSourcePort(parentNodeWrapper.port.out);
-                    link.setTargetPort(nodeWrapper.port.in);
-                    link.addLabel("Hello World!");
-                    link.color = "#000000";
-
-                    model.addLink(link);
-                    if (nodeWrapper.new) {
-                        this.addNode(model, nodeWrapper, nextState);
-                    }
-                }
-            });
+        if (prevProps.diagramId !== diagramId) {
+            this.setState({
+                diagram: new TreeDiagram(algorithm, selectedState, onStateChange)
+            })
+        } else if (selectedState !== prevProps.selectedState) {
+            this.state.diagram.setSelectedState(selectedState);
+            this.setState({
+                diagram: this.state.diagram
+            })
         }
     }
 
 
     render() {
         let {classes} = this.props;
-        let {engine}  = this.state;
+        let {diagram} = this.state;
 
         return (
             <div className={classes.root}>
                 {
-                    engine &&
+                    diagram &&
                     <DiagramWidget
                         className="srd-demo-canvas"
-                        diagramEngine={engine}
+                        diagramEngine={diagram.build()}
                         allowLooseLinks={false}
-                        maxNumberPointsPerLink={0}
+                        maxNumberPointsPerLink={4}
                     />
                 }
             </div>

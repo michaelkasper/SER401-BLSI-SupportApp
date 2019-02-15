@@ -1,6 +1,7 @@
 import AbstractModel from "./AbstractModel";
-import {observable} from "mobx";
+import {computed, observable, toJS} from "mobx";
 import BluebirdPromise from "../../common/BluebirdPromise";
+import TreeDiagram from "../../components/ui/TreeDiagram";
 
 export default class AlgorithmModel extends AbstractModel {
     @observable id                = null;
@@ -23,6 +24,13 @@ export default class AlgorithmModel extends AbstractModel {
 
     get startState() {
         return this.rootStore.stateStore.get(this.state_id_start);
+    }
+
+    get stateDiagramId() {
+        return this.states
+            .sort(function(a, b){return a.id - b.id})
+            .map(state => state.diagramId)
+            .join('-');
     }
 
     load = () => {

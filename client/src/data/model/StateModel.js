@@ -26,6 +26,10 @@ export default class StateModel extends AbstractModel {
         return this.recommendation_ids.map(id => this.rootStore.recommendationStore.get(id));
     }
 
+    @computed get diagramId() {
+        return `${this.id}.${this.state_id_next_good}.${this.state_id_next_bad}`;
+    }
+
     hasQuestion(question) {
         return this.question_ids.includes(question.id);
     }

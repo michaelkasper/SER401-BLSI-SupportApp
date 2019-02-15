@@ -150,10 +150,13 @@
     "react-test-renderer": "^16.7.0"
   },
   "scripts": {
-    "start-client": "node client/scripts/start.js",
+    "dev-client": "node client/scripts/start.js",
+    "dev-server": "nodemon server/src/app.js",
     "build-client": "node client/scripts/build.js",
     "test-client": "node client/scripts/test.js",
-    "start-server": "nodemon server/src/app.js",
+    "start-client": "node client/scripts/start.js",
+    "start-server": "node server/src/app.js",
+    "dev": "concurrently \"npm:dev-*\"",
     "start": "concurrently \"npm:start-*\""
   }
 }

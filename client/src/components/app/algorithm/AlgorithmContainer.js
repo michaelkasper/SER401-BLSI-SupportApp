@@ -48,12 +48,24 @@ class AlgorithmContainer extends React.Component {
 
         return (
             <div className={classes.root}>
-                <TabsContainer algorithm={algorithm} onStateChange={this.onStateChange}/>
-                {/*<TreeContainer algorithm={algorithm} onStateChange={this.onStateChange}/>*/}
+                <TabsContainer
+                    algorithm={algorithm}
+                    onStateChange={this.onStateChange}
+                />
+                <TreeContainer
+                    algorithm={algorithm}
+                    diagramId={algorithm.stateDiagramId}
+                    onStateChange={this.onStateChange}
+                    selectedState={selectedState}
+                />
 
                 {
                     selectedState &&
-                    <DetailContainer algorithm={algorithm} state={selectedState} onStateChange={this.onStateChange}/>
+                    <DetailContainer
+                        algorithm={algorithm}
+                        state={selectedState}
+                        onStateChange={this.onStateChange}
+                    />
                 }
 
             </div>
