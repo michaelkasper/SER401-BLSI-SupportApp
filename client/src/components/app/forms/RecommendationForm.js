@@ -27,7 +27,7 @@ class RecommendationForm extends React.Component {
                     title      : recommendation.title,
                     description: recommendation.description
                 },
-                invalidTitle: false
+                invalidTitle   : false
             });
         }
     }
@@ -98,7 +98,12 @@ class RecommendationForm extends React.Component {
                     <Button onClick={this.onCancel} color="secondary">
                         Cancel
                     </Button>
-                    <Button onClick={this.onSave} color="primary" autoFocus disabled={this.state.localModel.title.length < 1}>
+                    <Button 
+                        onClick={this.onSave} 
+                        color="primary" 
+                        autoFocus 
+                        disabled={this.state.localModel.title.length < 1}
+                    >
                         {
                             !recommendation &&
                             "Create"

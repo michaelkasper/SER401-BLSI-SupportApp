@@ -27,6 +27,7 @@ class QuestionForm extends React.Component {
             question_options: []
         },
         invalidQuestion     : false,
+        disabledSave        : true,
         invalidOption       : null
     };
 
@@ -45,7 +46,9 @@ class QuestionForm extends React.Component {
                     type_key        : question.type_key,
                     question        : question.question,
                     question_options: question.question_options
-                }
+                },
+                invalidQuestion     : false,
+                disabledSave        : false
             }, this.setDefaultOptions);
         } else {
             this.setDefaultOptions();
@@ -54,8 +57,9 @@ class QuestionForm extends React.Component {
 
     onChange = (field) => (e) => {
         let localModel    = {...this.state.localModel};
-        if (field === 'question' && field.length > 0) {
-            this.setState({invalidQuestion: false});
+        if (field === 'question') {
+            this.setState({invalidQuestion: e.target.value.length < 1});
+            this.setState({disabledSave: e.target.value.length < 1});
         }
         localModel[field] = e.target.value;
         this.setState({localModel: localModel});
@@ -67,18 +71,13 @@ class QuestionForm extends React.Component {
 
     onSave = () => {
         let {question, algorithm, rootStore} = this.props;
-        if (this.state.localModel.question.length > 0) {
-            if (!question) {
-                question = rootStore.questionStore.new({algorithm_id: algorithm.id});
-            }
-            question.fromJson(this.state.localModel);
-            console.log(question);
-            // question.save(); //TODO:: Comment out when connected to backend **/
-            this.props.onClose();
+        if (!question) {
+            question = rootStore.questionStore.new({algorithm_id: algorithm.id});
         }
-        else {
-            this.setState({invalidQuestion: true});
-        }
+        question.fromJson(this.state.localModel);
+        console.log(question);
+        // question.save(); //TODO:: Comment out when connected to backend **/
+        this.props.onClose();
     };
 
     onAddOption = () => {
@@ -127,7 +126,7 @@ class QuestionForm extends React.Component {
                                 variant="outlined"
                                 required
                                 error={this.state.invalidQuestion}
-                                helperText={this.state.invalidQuestion === true ? "A question is required" : ""}
+                                helperText={this.state.invalidQuestion === true ? "Required field" : ""}
                             />
                         </Grid>
 
@@ -186,7 +185,7 @@ class QuestionForm extends React.Component {
                     <Button onClick={this.onCancel} color="secondary">
                         Cancel
                     </Button>
-                    <Button onClick={this.onSave} color="primary" autoFocus>
+                    <Button onClick={this.onSave} color="primary" autoFocus disabled={this.state.disabledSave}>
                         {
                             !question &&
                             "Create"
