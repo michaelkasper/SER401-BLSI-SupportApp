@@ -200,8 +200,7 @@
   /*pointer-events : all;*/
 }
 
-.srd-node--selected .srd-default-node{
-  color: #1E1E1E;
+.srd-default-node{
   font-weight: bold;
 }
 

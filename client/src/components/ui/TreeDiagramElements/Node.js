@@ -1,5 +1,5 @@
 import {
-    DefaultNodeFactory, DefaultNodeModel, DefaultNodeWidget, BaseWidget, DefaultLinkFactory, DefaultLinkWidget
+    DefaultNodeFactory, DefaultNodeModel, DefaultNodeWidget
 } from "storm-react-diagrams";
 import * as React from "react";
 import * as _ from "lodash";
@@ -10,17 +10,17 @@ export class NodeModel extends DefaultNodeModel {
     inPortGood;
     inPortBad;
     outPort;
-    defaultColor;
+    stateSelected;
 
     constructor(stateObj, onSelect, name, color) {
         super(name, color);
         this.onSelect = onSelect;
         this.stateObj = stateObj;
 
-        this.inPortGood   = this.addInPort(" ");
-        this.inPortBad    = this.addInPort(" ");
-        this.outPort      = this.addOutPort(" ");
-        this.defaultColor = this.color;
+        this.inPortGood    = this.addInPort(" ");
+        this.inPortBad     = this.addInPort(" ");
+        this.outPort       = this.addOutPort(" ");
+        this.stateSelected = false;
     }
 
     serialize() {
@@ -37,13 +37,7 @@ export class NodeModel extends DefaultNodeModel {
     }
 
     setStateSelected(isSelected) {
-        if (isSelected) {
-            this.color    = "#FFFFCC";
-            this.selected = true;
-        } else {
-            this.color    = this.defaultColor;
-            this.selected = false;
-        }
+        this.stateSelected = isSelected;
     }
 }
 
@@ -56,7 +50,7 @@ export class NodeFactory extends DefaultNodeFactory {
     }
 
     generateReactWidget(diagramEngine, node) {
-        return <DefaultNodeWidget node={node} diagramEngine={diagramEngine}/>;
+        return <NodeWidget node={node} diagramEngine={diagramEngine}/>;
     }
 
     getNewInstance(config) {
@@ -66,3 +60,27 @@ export class NodeFactory extends DefaultNodeFactory {
         return new NodeModel(stateObj, () => this.onNodeSelected(stateObj), config);
     }
 }
+
+
+export class NodeWidget extends DefaultNodeWidget {
+    render() {
+        let {node} = this.props;
+
+        return (
+            <div {...this.getProps()} style={{background: node.stateSelected ? '#FFFFCC' : node.color}}>
+                <div className={this.bem("__title")} style={{color: node.stateSelected ? '#1E1E1E' : 'inherit'}}>
+                    <div className={this.bem("__name")}>{node.name}</div>
+                </div>
+                <div className={this.bem("__ports")}>
+                    <div className={this.bem("__in")}>
+                        {_.map(node.getInPorts(), this.generatePort.bind(this))}
+                    </div>
+                    <div className={this.bem("__out")}>
+                        {_.map(node.getOutPorts(), this.generatePort.bind(this))}
+                    </div>
+                </div>
+            </div>
+        );
+    }
+}
+
