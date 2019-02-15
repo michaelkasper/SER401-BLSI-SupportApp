@@ -5,8 +5,9 @@
  */
 
 var AbstractController = require('./AbstractController');
-var ApiErrorModel      = require('../model/ApiErrorModel');
-var JsonModel          = require('../model/JsonModel');
+var ApiErrorModel = require('../model/ApiErrorModel');
+var JsonModel = require('../model/JsonModel');
+var Promise = require('bluebird');
 
 class RecommendationController extends AbstractController {
     constructor(request, response, serviceManager) {
@@ -45,9 +46,11 @@ class RecommendationController extends AbstractController {
     postAction(params, data) {
         console.log("==== POST ====");
         return this.database.startTransaction((transaction) => {
-            return this.database.recommendation.create(data, transaction)
-                .then(data => new JsonModel(data));
-        });
+                return this.database.recommendation.create(data, transaction)
+                    .then(data => new JsonModel(data));
+            }).then((res) => {
+                return [this.database.algorithm.updateDateModified(data.algorithm_id), res];
+            }).spread((res, recomm) => recomm);
     }
 
     putAction(id, params, data) {
@@ -56,7 +59,9 @@ class RecommendationController extends AbstractController {
         return this.database.startTransaction((transaction) => {
             return this.database.recommendation.update(id, data, transaction)
                 .then((data) => new JsonModel(data));
-        });
+        }).then((res) => {
+            return [this.database.algorithm.updateDateModified(data.algorithm_id), res];
+        }).spread((res, recomm) => recomm); 
     }
 
     deleteAction(id, params, data) {

@@ -41,14 +41,16 @@ class ReleaseController extends AbstractController {
             this.database.recommendation.getAllByAlgorithmId(data.algorithm_id),
             this.database.state.getAllByAlgorithmId(data.algorithm_id)
         ]).spread((algorithm, questions, recommendations, states) => {
-            algorithm["questions"] = questions;
-            algorithm["recommendations"] = recommendations;
-            algorithm["states"] = states;
-            return algorithm;
-        }).then((algorithm) => {
+            let attributes = {};
+            attributes["questions"] = questions;
+            attributes["recommendations"] = recommendations;
+            attributes["states"] = states;
+            return [algorithm, attributes];
+        }).spread((algorithm, attributes) => {
             return this.database.startTransaction((transaction) => {
                 return this.database.release.create({
                         algorithm_json: JSON.stringify(algorithm),
+                        attribute_json: JSON.stringify(attributes),
                         algorithm_id: algorithm.id,
                         version_number: algorithm.version_number,
                         name: algorithm.name
