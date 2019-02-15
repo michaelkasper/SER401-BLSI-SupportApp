@@ -23,7 +23,9 @@ class AlgorithmTransporter extends Abstract {
             version_number   : Sequelize.FLOAT(8, 2),
             state_id_start   : Sequelize.INTEGER.UNSIGNED,
             description      : Sequelize.TEXT,
-            short_description: Sequelize.TEXT
+            short_description: Sequelize.TEXT,
+            date_modified: Sequelize.TEXT,
+            date_created: Sequelize.TEXT
         };
 
         super(database, sequelize, "algorithm", fields);
@@ -47,11 +49,26 @@ class AlgorithmTransporter extends Abstract {
     //     });
     // }
 
+    async updateDateModified(id) {
+        return this.database.algorithm.get(id)
+        .then((algo) => {
+            algo["version_number"] += 0.1;
+            algo.date_modified = new Date().toDateString();
+            return this.database.algorithm.update(id, algo);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    }
+
     async update(id, data, transaction) {
-        data["version_number"] += 0.1;
+        
         return super.update(id, data, transaction);
     }
-}
 
+    async create(id, data, transaction) {
+        return super.create(id, data, transaction);
+    }
+}
 
 module.exports = AlgorithmTransporter;

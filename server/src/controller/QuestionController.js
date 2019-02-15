@@ -5,8 +5,9 @@
  */
 
 var AbstractController = require('./AbstractController');
-var ApiErrorModel      = require('../model/ApiErrorModel');
-var JsonModel          = require('../model/JsonModel');
+var ApiErrorModel = require('../model/ApiErrorModel');
+var JsonModel = require('../model/JsonModel');
+var Promise = require('bluebird');
 
 class QuestionController extends AbstractController {
     constructor(request, response, serviceManager) {
@@ -54,13 +55,12 @@ class QuestionController extends AbstractController {
                 .then(res => {
                     // delete existing question options
                     return this.database.questionOptionTable.destroy({
-                        where      : {
+                        where: {
                             question_id: id
                         },
                         transaction: transaction
                     })
-                })
-                .then(res => {
+                }).then(res => {
                     if (questionOptions) {
                         return Promise.all(questionOptions.map((option) => {
                             option.question_id = id;
@@ -68,10 +68,10 @@ class QuestionController extends AbstractController {
                         }))
                     }
                     return res;
-                })
-        })
-            .then(res => this.getAction(id));
-
+                }).then((res) => {
+                    return this.database.algorithm.updateDateModified(data.algorithm_id);
+                });
+        }).then(res => this.getAction(id));
     }
 
     postAction(params, data) {
@@ -79,22 +79,24 @@ class QuestionController extends AbstractController {
 
         return this.database.startTransaction((transaction) => {
 
-            let questionOptions = data.question_options;
-            delete data.question_options;
+                let questionOptions = data.question_options;
+                delete data.question_options;
 
-            return this.database.question.create(data, transaction)
-                .then(question => {
-                    if (questionOptions) {
-                        return Promise.all(questionOptions.map((option) => {
-                            option.question_id = question.id;
-                            return this.database.question_option.create(option, transaction);
-                        }))
-                            .then(() => question);
-                    }
-                    return question;
-                })
-        })
-            .then(question => this.getAction(question.id));
+                return this.database.question.create(data, transaction)
+                    .then(question => {
+                        if (questionOptions) {
+                            return Promise.all(questionOptions.map((option) => {
+                                    option.question_id = question.id;
+                                    return this.database.question_option.create(option, transaction);
+                                }))
+                                .then(() => question);
+                        }
+                        return question;
+                    }).then((res) => {
+                        return [this.database.algorithm.updateDateModified(data.algorithm_id), res];
+                    })
+            })
+            .spread((res, question) => this.getAction(question.id));
 
     }
 
