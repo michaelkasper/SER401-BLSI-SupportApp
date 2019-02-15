@@ -27,12 +27,25 @@ class ReleaseTransporter extends Abstract {
                 type: Sequelize.FLOAT(8, 2),
                 primaryKey: true,
             },
-            algorithm_json: {
+            algorithm_json: { //stores algorithm
+                type: Sequelize.TEXT
+            },
+            attribute_json: { //Stores question, reccomendation, and states
                 type: Sequelize.TEXT
             }
         };
 
         super(database, sequelize, "release", fields);
+    }
+
+    async getAll() {
+        return this.table.findAll({})
+            .then((results) => {
+                return Promise.all(results.map(({dataValues: result}) => delete result.attribute_json))
+                    .then(() => {
+                        return results;
+                    });
+            });
     }
 }
 

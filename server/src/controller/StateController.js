@@ -7,6 +7,7 @@ const Sequelize        = require("sequelize");
 var AbstractController = require('./AbstractController');
 var ApiErrorModel      = require('../model/ApiErrorModel');
 var JsonModel          = require('../model/JsonModel');
+var Promise = require('bluebird');
 
 class StateController extends AbstractController {
     constructor(request, response, serviceManager) {
@@ -54,7 +55,9 @@ class StateController extends AbstractController {
         return this.database.startTransaction((transaction) => {
             return this.database.state.create(data, transaction)
                 .then(data => new JsonModel(data));
-        });
+        }).then((res) => {
+            return [this.database.algorithm.updateDateModified(data.algorithm_id), res];
+        }).spread((res, state) => state);
     }
 
     putAction(id, params, data) {
@@ -111,8 +114,9 @@ class StateController extends AbstractController {
                         )
                     }
                     return Promise.all(promises);
-                })
-        }).then(res => this.getAction(id))
+                }).then((res) => {
+            return [this.database.algorithm.updateDateModified(data.algorithm_id), res];
+        })}).spread((res, state) => this.getAction(id));
     }
 
     deleteAction(id, params, data) {

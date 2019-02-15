@@ -39,7 +39,9 @@ class AlgorithmController extends AbstractController {
 
     putAction(id, params, data) {
         console.log("==== PUT ====");
-
+        data.version_number += 0.1;
+        data.date_modified = new Date().toDateString();
+        
         return this.database.startTransaction((transaction) => {
             return this.database.algorithm.update(id, data, transaction)
                 .then(data => {
@@ -50,6 +52,9 @@ class AlgorithmController extends AbstractController {
 
     postAction(params, data) {
         console.log("==== POST ====");
+        data.version_number = (data.version_number ? data.version_number : 0.0);
+        data.date_created = new Date().toDateString();
+        data.date_modified = new Date().toDateString();
 
         return this.database.startTransaction((transaction) => {
             return this.database.algorithm.create(data, transaction)
