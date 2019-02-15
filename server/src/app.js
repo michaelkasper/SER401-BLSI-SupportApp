@@ -17,6 +17,7 @@ const AlgorithmController      = require('./controller/AlgorithmController');
 const QuestionController       = require('./controller/QuestionController');
 const RecommendationController = require('./controller/RecommendationController');
 const StateController          = require('./controller/StateController');
+const ReleaseController        = require('./controller/ReleaseController');
 
 //Model
 const ApiErrorModel = require('./model/ApiErrorModel');
@@ -34,7 +35,8 @@ const routes = {
     "algorithm"     : AlgorithmController,
     "question"      : QuestionController,
     "recommendation": RecommendationController,
-    "state"         : StateController
+    "state"         : StateController,
+    "release"       : ReleaseController
 };
 
 const serviceManager = {
