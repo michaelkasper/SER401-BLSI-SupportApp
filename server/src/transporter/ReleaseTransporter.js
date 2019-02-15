@@ -12,7 +12,6 @@ class ReleaseTransporter extends Abstract {
         let fields = {
             id: {
                 type: Sequelize.INTEGER.UNSIGNED,
-                primaryKey: true,
                 autoIncrement: true,
                 unique: true
             },
@@ -21,6 +20,7 @@ class ReleaseTransporter extends Abstract {
             },
             algorithm_id: {
                 type: Sequelize.INTEGER.UNSIGNED,
+                primaryKey: true,
                 allowNull: false
             },
             version_number: {

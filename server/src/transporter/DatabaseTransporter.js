@@ -15,14 +15,15 @@ const KeyTransporter = require("./KeyTransporter");
 const ReleaseTransporter = require("./ReleaseTransporter")
 
 const Sequelize = require("sequelize");
+var database = require("../../env/database");
 
 class DatabaseTransporter {
     constructor() {
-        this.sequelize = new Sequelize("blsi", "user", "password", {
+        this.sequelize = new Sequelize(database.database, database.username, database.password, {
 
-            host: "localhost",
-            port: 3366,
-            dialect: "mysql",
+            host: database.host,
+            port: database.port,
+            dialect: database.dialect,
             pool: {
                 max: 5,
                 min: 0,
