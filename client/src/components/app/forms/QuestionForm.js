@@ -26,9 +26,7 @@ class QuestionForm extends React.Component {
             question        : "",
             question_options: []
         },
-        invalidQuestion     : false,
-        disabledSave        : true,
-        invalidOption       : null
+        invalidQuestion     : false    // UI only, does not affect functionality
     };
 
     setDefaultOptions = () => {
@@ -47,8 +45,7 @@ class QuestionForm extends React.Component {
                     question        : question.question,
                     question_options: question.question_options
                 },
-                invalidQuestion     : false,
-                disabledSave        : false
+                invalidQuestion     : false
             }, this.setDefaultOptions);
         } else {
             this.setDefaultOptions();
@@ -57,10 +54,7 @@ class QuestionForm extends React.Component {
 
     onChange = (field) => (e) => {
         let localModel    = {...this.state.localModel};
-        if (field === 'question') {
-            this.setState({invalidQuestion: e.target.value.length < 1});
-            this.setState({disabledSave: e.target.value.length < 1});
-        }
+        this.setState({invalidQuestion: e.target.value.length < 1});
         localModel[field] = e.target.value;
         this.setState({localModel: localModel});
     };
@@ -92,14 +86,29 @@ class QuestionForm extends React.Component {
         this.setState({localModel: localModel}, this.setDefaultOptions);
     };
 
-    validateOption = (validation) => {
-        this.setState({invalidOption: validation});
+    emptyPicklistLabel(option) {
+        return option.label.length < 1;
     };
+
+    invalidPicklistOption = () => {
+        let options = this.state.localModel.question_options;
+        let localModel = this.state.localModel;
+
+        if (options.some(this.emptyPicklistLabel)) {
+            return true;
+        }
+        else if (localModel.question.length < 1) {
+            return true
+        }
+        else {
+            return false;
+        }
+    }
 
     render() {
         let {classes, question} = this.props;
         let {localModel}        = this.state;
-        console.log('QuestionForm.render: ' + this.state.invalidOption);
+
         return (
             <Fragment>
                 <DialogTitle id="max-width-dialog-title">Question</DialogTitle>
@@ -169,7 +178,6 @@ class QuestionForm extends React.Component {
                                         option={option}
                                         onRemoveOption={this.onRemoveOption(index)}
                                         key={index}
-                                        validateOption={this.validateOption}
                                     />
                                     : <NumberOption
                                         option={option}
@@ -185,7 +193,12 @@ class QuestionForm extends React.Component {
                     <Button onClick={this.onCancel} color="secondary">
                         Cancel
                     </Button>
-                    <Button onClick={this.onSave} color="primary" autoFocus disabled={this.state.disabledSave}>
+                    <Button 
+                        onClick={this.onSave} 
+                        color="primary" 
+                        autoFocus 
+                        disabled={this.invalidPicklistOption()}
+                    >
                         {
                             !question &&
                             "Create"

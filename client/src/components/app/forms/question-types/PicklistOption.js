@@ -11,12 +11,11 @@ import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 @observer
 class PicklistOption extends React.Component {
     state = {
-        invalidOption: true
+        invalidOption: false    // UI only, does not affect functionality
     };
 
     onChange = (field) => (e) => {
-        this.setState({invalidOption: field.length < 1});
-        this.props.validateOption(this.state.invalidOption);
+        this.setState({invalidOption: e.target.value.length < 1});
         this.props.option[field] = e.target.value;
     };
 
@@ -26,14 +25,11 @@ class PicklistOption extends React.Component {
 
     render() {
         let {option, classes, onRemoveOption} = this.props;
-        this.state.invalidOption = option.label.length < 1;
-        console.log('PickListOption.render: ' + this.state.invalidOption);
 
         return (
             <FormGroup row className={classes.root}>
                 <RemoveCircleIcon className={classes.delete} onClick={onRemoveOption}/>
                 <TextField
-                    required
                     id="label-input"
                     label="Option Label"
                     className={classes.textField}
@@ -43,7 +39,7 @@ class PicklistOption extends React.Component {
                     required
                     onChange={this.onChange('label')}
                     error={this.state.invalidOption}
-                    helperText={this.state.invalidOption ? "A label is required" : ""}
+                    helperText={this.state.invalidOption ? "Required field" : ""}
                 />
 
                 <FormControlLabel

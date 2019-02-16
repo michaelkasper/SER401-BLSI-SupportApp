@@ -16,7 +16,7 @@ class RecommendationForm extends React.Component {
             title      : "",
             description: ""
         },
-        invalidTitle   : false
+        invalidTitle   : false  // UI only, does not affect functionality
     };
 
     componentDidMount() {
