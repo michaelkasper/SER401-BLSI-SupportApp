@@ -86,17 +86,26 @@ class QuestionForm extends React.Component {
         this.setState({localModel: localModel}, this.setDefaultOptions);
     };
 
+    invalidQuestion = () => {
+        if (this.state.localModel.type_key === 'picklist') {
+            return this.invalidPicklistOption();
+        }
+        else {
+            return this.invalidNumberOption();
+        }
+    }
+
     invalidPicklistOption = () => {
         let options = this.state.localModel.question_options;
-        let localModel = this.state.localModel;
-        
-        if (localModel.question.length < 1) {
+        let question = this.state.localModel.question;
+
+        if (question.length < 1) {
             return true
         }
         else if (options.some(this.emptyPicklistLabel)) {
             return true;
         }
-        else if (options.every(this.allPositivePicklistChecks) || options.every(this.allNegativePicklistChecks)) {
+        else if (options.every(this.allPositiveChecks) || options.every(this.allNegativeChecks)) {
             return true;
         }
         else {
@@ -104,16 +113,49 @@ class QuestionForm extends React.Component {
         }
     }
     
+    invalidNumberOption = () => {
+        let options = this.state.localModel.question_options;
+        let question = this.state.localModel.question;
+
+        if (question.length < 1) {
+            return true;
+        }
+        else if (options.some(this.emptyMinNumber) || options.some(this.emptyMaxNumber)) {
+            return true;
+        }
+        else if (options.some(this.maxValueLessThanOrEqualToMinValue)) {
+            return true;
+        }
+        else if (options.every(this.allPositiveChecks) || options.every(this.allNegativeChecks)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+
     emptyPicklistLabel(option) {
         return option.label.length < 1;
     };
 
-    allPositivePicklistChecks(option) {
+    allPositiveChecks(option) {
         return option.is_good;
     };
 
-    allNegativePicklistChecks(option) {
+    allNegativeChecks(option) {
         return !option.is_good;
+    };
+
+    maxValueLessThanOrEqualToMinValue(option) {
+        return option.max_value <= option.min_value;
+    };
+
+    emptyMinNumber(option) {
+        return option.min_value.length < 1;
+    };
+
+    emptyMaxNumber(option) {
+        return option.max_value.length < 1;
     };
 
     render() {
@@ -208,7 +250,7 @@ class QuestionForm extends React.Component {
                         onClick={this.onSave} 
                         color="primary" 
                         autoFocus 
-                        disabled={this.invalidPicklistOption()}
+                        disabled={this.invalidQuestion()}
                     >
                         {
                             !question &&
