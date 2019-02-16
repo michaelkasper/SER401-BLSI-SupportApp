@@ -86,24 +86,35 @@ class QuestionForm extends React.Component {
         this.setState({localModel: localModel}, this.setDefaultOptions);
     };
 
-    emptyPicklistLabel(option) {
-        return option.label.length < 1;
-    };
-
     invalidPicklistOption = () => {
         let options = this.state.localModel.question_options;
         let localModel = this.state.localModel;
-
-        if (options.some(this.emptyPicklistLabel)) {
+        
+        if (localModel.question.length < 1) {
+            return true
+        }
+        else if (options.some(this.emptyPicklistLabel)) {
             return true;
         }
-        else if (localModel.question.length < 1) {
-            return true
+        else if (options.every(this.allPositivePicklistChecks) || options.every(this.allNegativePicklistChecks)) {
+            return true;
         }
         else {
             return false;
         }
     }
+    
+    emptyPicklistLabel(option) {
+        return option.label.length < 1;
+    };
+
+    allPositivePicklistChecks(option) {
+        return option.is_good;
+    };
+
+    allNegativePicklistChecks(option) {
+        return !option.is_good;
+    };
 
     render() {
         let {classes, question} = this.props;
