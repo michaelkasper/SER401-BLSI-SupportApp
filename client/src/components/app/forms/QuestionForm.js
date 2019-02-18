@@ -26,7 +26,8 @@ class QuestionForm extends React.Component {
             question        : "",
             prompt          : "",
             question_options: []
-        }
+        },
+        invalidQuestion     : false    // UI only, does not affect functionality
     };
 
     setDefaultOptions = () => {
@@ -45,7 +46,8 @@ class QuestionForm extends React.Component {
                     question        : question.question,
                     prompt          : question.prompt,
                     question_options: question.question_options
-                }
+                },
+                invalidQuestion     : false
             }, this.setDefaultOptions);
         } else {
             this.setDefaultOptions();
@@ -54,6 +56,7 @@ class QuestionForm extends React.Component {
 
     onChange = (field) => (e) => {
         let localModel    = {...this.state.localModel};
+        this.setState({invalidQuestion: e.target.value.length < 1});
         localModel[field] = e.target.value;
         this.setState({localModel: localModel});
     };
@@ -89,6 +92,78 @@ class QuestionForm extends React.Component {
         this.setState({localModel: localModel}, this.setDefaultOptions);
     };
 
+    invalidQuestion = () => {
+        if (this.state.localModel.type_key === 'picklist') {
+            return this.invalidPicklistOption();
+        }
+        else {
+            return this.invalidNumberOption();
+        }
+    }
+
+    invalidPicklistOption = () => {
+        let options = this.state.localModel.question_options;
+        let question = this.state.localModel.question;
+
+        if (question.length < 1) {
+            return true
+        }
+        else if (options.some(this.emptyPicklistLabel)) {
+            return true;
+        }
+        else if (options.every(this.allPositiveChecks) || options.every(this.allNegativeChecks)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
+    invalidNumberOption = () => {
+        let options = this.state.localModel.question_options;
+        let question = this.state.localModel.question;
+
+        if (question.length < 1) {
+            return true;
+        }
+        else if (options.some(this.emptyMinNumber) || options.some(this.emptyMaxNumber)) {
+            return true;
+        }
+        else if (options.some(this.maxValueLessThanOrEqualToMinValue)) {
+            return true;
+        }
+        else if (options.every(this.allPositiveChecks) || options.every(this.allNegativeChecks)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+
+    emptyPicklistLabel(option) {
+        return option.label.length < 1;
+    };
+
+    allPositiveChecks(option) {
+        return option.is_good;
+    };
+
+    allNegativeChecks(option) {
+        return !option.is_good;
+    };
+
+    maxValueLessThanOrEqualToMinValue(option) {
+        return option.max_value <= option.min_value;
+    };
+
+    emptyMinNumber(option) {
+        return option.min_value.length < 1;
+    };
+
+    emptyMaxNumber(option) {
+        return option.max_value.length < 1;
+    };
+
     render() {
         let {classes, question} = this.props;
         let {localModel}        = this.state;
@@ -118,6 +193,8 @@ class QuestionForm extends React.Component {
                                 margin="normal"
                                 variant="outlined"
                                 required
+                                error={this.state.invalidQuestion}
+                                helperText={this.state.invalidQuestion === true ? "Required field" : ""}
                             />
                         </Grid>
 
@@ -198,7 +275,12 @@ class QuestionForm extends React.Component {
                     <Button onClick={this.onCancel} color="secondary">
                         Cancel
                     </Button>
-                    <Button onClick={this.onSave} color="primary" autoFocus>
+                    <Button 
+                        onClick={this.onSave} 
+                        color="primary" 
+                        autoFocus 
+                        disabled={this.invalidQuestion()}
+                    >
                         {
                             !question &&
                             "Create"

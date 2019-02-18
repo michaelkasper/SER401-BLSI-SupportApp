@@ -15,7 +15,8 @@ class RecommendationForm extends React.Component {
         localModel: {
             title      : "",
             description: ""
-        }
+        },
+        invalidTitle   : false  // UI only, does not affect functionality
     };
 
     componentDidMount() {
@@ -25,13 +26,17 @@ class RecommendationForm extends React.Component {
                 localModel: {
                     title      : recommendation.title,
                     description: recommendation.description
-                }
+                },
+                invalidTitle   : false
             });
         }
     }
 
     onChange = (field) => (e) => {
         let localModel    = {...this.state.localModel};
+        if (field === 'title') {
+            this.setState({invalidTitle: e.target.value.length < 1});
+        }
         localModel[field] = e.target.value;
         this.setState({localModel: localModel});
     };
@@ -75,6 +80,8 @@ class RecommendationForm extends React.Component {
                         margin="normal"
                         variant="outlined"
                         required
+                        error={this.state.invalidTitle}
+                        helperText={this.state.invalidTitle ? "Required field" : ""}
                     />
 
 
@@ -96,7 +103,12 @@ class RecommendationForm extends React.Component {
                     <Button onClick={this.onCancel} color="secondary">
                         Cancel
                     </Button>
-                    <Button onClick={this.onSave} color="primary" autoFocus>
+                    <Button 
+                        onClick={this.onSave} 
+                        color="primary" 
+                        autoFocus 
+                        disabled={this.state.localModel.title.length < 1}
+                    >
                         {
                             !recommendation &&
                             "Create"
