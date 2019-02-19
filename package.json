@@ -66,6 +66,7 @@
   "scripts": {
     "start-client": "node client/scripts/start.js",
     "build-client": "node client/scripts/build.js",
+    "test": "jest --watchAll",
     "test-client": "node client/scripts/test.js",
     "start-server": "echo '>>> need server start script'",
     "start": "concurrently \"npm:start-*\""
