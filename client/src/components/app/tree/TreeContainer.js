@@ -3,7 +3,7 @@ import {
 } from "storm-react-diagrams";
 import React from 'react';
 import withStyles from "@material-ui/core/es/styles/withStyles";
-import TreeDiagram from "../../ui/TreeDiagram";
+import TreeDiagram from "../../ui/TreeDiagram/TreeDiagram";
 
 require("../../ui/TreeDiagramElements/TreeDiagram.css");
 

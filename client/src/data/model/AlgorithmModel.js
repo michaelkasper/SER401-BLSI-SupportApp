@@ -1,7 +1,7 @@
 import AbstractModel from "./AbstractModel";
 import {computed, observable, toJS} from "mobx";
 import BluebirdPromise from "../../common/BluebirdPromise";
-import TreeDiagram from "../../components/ui/TreeDiagram";
+import TreeDiagram from "../../components/ui/TreeDiagram/TreeDiagram";
 
 export default class AlgorithmModel extends AbstractModel {
     @observable id                = null;

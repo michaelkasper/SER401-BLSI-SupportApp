@@ -49,10 +49,16 @@ class AlgorithmSelectorContainer extends React.Component {
             <div className={classes.root}>
                 <AppBar position="static" color="default">
                     <Toolbar>
-                        <Typography variant="h6" color="inherit">
+                        <Typography variant="h6" color="inherit" style={{flexGrow: 1}}>
                             Algorithm: {selectedAlgorithm ? selectedAlgorithm.name : '...'}
+
+                            <Button color="inherit" onClick={this.showModal}>Change</Button>
+
                         </Typography>
-                        <Button color="inherit" onClick={this.showModal}>Change</Button>
+
+                        <Button color="secondary">Dump Mysql</Button>
+                        <Button color="primary">New Release</Button>
+
                     </Toolbar>
                 </AppBar>
 

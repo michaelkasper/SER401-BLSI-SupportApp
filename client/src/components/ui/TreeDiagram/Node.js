@@ -57,7 +57,7 @@ export class NodeFactory extends DefaultNodeFactory {
         let stateObj = config.stateObj;
         delete config.stateObj;
 
-        return new NodeModel(stateObj, () => this.onNodeSelected(stateObj), config);
+        return new NodeModel(stateObj, () => this.onNodeSelected(stateObj.id), config);
     }
 }
 

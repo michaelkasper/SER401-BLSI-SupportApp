@@ -48,7 +48,7 @@ class TabsContainer extends React.Component {
     };
 
     selectState = (state) => {
-        this.props.onStateChange(state);
+        this.props.onStateChange(state.id);
     };
 
     createState = () => {

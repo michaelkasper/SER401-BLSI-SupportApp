@@ -1,7 +1,7 @@
 import {DiagramEngine, DiagramModel} from "storm-react-diagrams";
-import {distributeElements} from "../../common/dagre-utils";
-import {LinkFactory, LinkModel} from "./TreeDiagramElements/Line";
-import {NodeFactory, NodeModel} from "./TreeDiagramElements/Node";
+import {distributeElements} from "../../../common/dagre-utils";
+import {LinkFactory, LinkModel} from "./Line";
+import {NodeFactory, NodeModel} from "./Node";
 
 
 class TreeDiagram {
@@ -114,7 +114,7 @@ class TreeDiagram {
     }
 
     createNode(state) {
-        this.nodes[state.id] = new NodeModel(state, () => this.onStateChange(state), state.id);
+        this.nodes[state.id] = new NodeModel(state, () => this.onStateChange(state.id), state.id);
         this.model.addNode(this.nodes[state.id]);
         return this.nodes[state.id];
     }

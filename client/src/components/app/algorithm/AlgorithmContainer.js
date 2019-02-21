@@ -1,12 +1,13 @@
 import React from 'react';
 import TabsContainer from "../tabs/TabsContainer";
 import DetailContainer from "../detail/DetailContainer";
-import {observer} from "mobx-react";
+import {inject, observer} from "mobx-react";
 import Loading from "../../ui/Loading";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 import withDragAndDrop from "../../hoc/DragAndDrop";
 import TreeContainer from "../tree/TreeContainer";
 
+@inject("rootStore")
 @observer
 class AlgorithmContainer extends React.Component {
 
@@ -34,7 +35,11 @@ class AlgorithmContainer extends React.Component {
             })
     };
 
-    onStateChange = (state) => {
+    onStateChange = (stateId) => {
+        let state = null;
+        if (stateId) {
+            state = this.props.rootStore.stateStore.get(stateId);
+        }
         this.setState({selectedState: state});
     };
 

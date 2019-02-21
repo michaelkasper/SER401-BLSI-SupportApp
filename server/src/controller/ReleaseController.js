@@ -5,9 +5,9 @@
  */
 
 var AbstractController = require('./AbstractController');
-var ApiErrorModel = require('./../model/ApiErrorModel');
-var JsonModel = require('./../model/JsonModel');
-var Promise = require('bluebird');
+var ApiErrorModel      = require('./../model/ApiErrorModel');
+var JsonModel          = require('./../model/JsonModel');
+var Promise            = require('bluebird');
 
 class ReleaseController extends AbstractController {
     constructor(request, response, serviceManager) {
@@ -41,20 +41,21 @@ class ReleaseController extends AbstractController {
             this.database.recommendation.getAllByAlgorithmId(data.algorithm_id),
             this.database.state.getAllByAlgorithmId(data.algorithm_id)
         ]).spread((algorithm, questions, recommendations, states) => {
-            let attributes = {};
-            attributes["questions"] = questions;
-            attributes["recommendations"] = recommendations;
-            attributes["states"] = states;
+            let attributes = {
+                questions      : questions,
+                recommendations: recommendations,
+                states         : states,
+            };
             return [algorithm, attributes];
         }).spread((algorithm, attributes) => {
             return this.database.startTransaction((transaction) => {
                 return this.database.release.create({
-                        algorithm_json: JSON.stringify(algorithm),
-                        attribute_json: JSON.stringify(attributes),
-                        algorithm_id: algorithm.id,
-                        version_number: algorithm.version_number,
-                        name: algorithm.name
-                    }, transaction)
+                    algorithm_json: JSON.stringify(algorithm),
+                    attribute_json: JSON.stringify(attributes),
+                    algorithm_id  : algorithm.id,
+                    version_number: algorithm.version_number,
+                    name          : algorithm.name
+                }, transaction)
                     .then((data) => {
                         return new JsonModel(data);
                     });

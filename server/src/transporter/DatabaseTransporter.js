@@ -4,44 +4,44 @@
  * Written by Taylor Greeff (tgreeff)
  */
 
-const AlgorithmTransporter = require("./AlgorithmTransporter");
-const QuestionTransporter = require("./QuestionTransporter");
-const RecommendationTransporter = require("./RecommendationTransporter");
-const QuestionOptionTransporter = require("./QuestionOptionTransporter");
-const StateTransporter = require("./StateTransporter");
-const StateQuestionTransporter = require("./StateQuestionTransporter");
+const AlgorithmTransporter           = require("./AlgorithmTransporter");
+const QuestionTransporter            = require("./QuestionTransporter");
+const RecommendationTransporter      = require("./RecommendationTransporter");
+const QuestionOptionTransporter      = require("./QuestionOptionTransporter");
+const StateTransporter               = require("./StateTransporter");
+const StateQuestionTransporter       = require("./StateQuestionTransporter");
 const StateRecommendationTransporter = require("./StateRecommendationTransporter");
-const KeyTransporter = require("./KeyTransporter");
-const ReleaseTransporter = require("./ReleaseTransporter")
+const KeyTransporter                 = require("./KeyTransporter");
+const ReleaseTransporter             = require("./ReleaseTransporter")
 
 const Sequelize = require("sequelize");
-var database = require("../../env/database");
+var database    = require("../../env/database");
 
 class DatabaseTransporter {
     constructor() {
         this.sequelize = new Sequelize(database.database, database.username, database.password, {
 
-            host: database.host,
-            port: database.port,
-            dialect: database.dialect,
-            pool: {
-                max: 5,
-                min: 0,
+            host            : database.host,
+            port            : database.port,
+            dialect         : database.dialect,
+            pool            : {
+                max    : 5,
+                min    : 0,
                 acquire: 30000,
-                idle: 10000
+                idle   : 10000
             },
             operatorsAliases: false
         });
 
-        this.algorithm = new AlgorithmTransporter(this, this.sequelize);
-        this.question = new QuestionTransporter(this, this.sequelize);
-        this.recommendation = new RecommendationTransporter(this, this.sequelize);
-        this.question_option = new QuestionOptionTransporter(this, this.sequelize);
-        this.state = new StateTransporter(this, this.sequelize);
-        this.state_question = new StateQuestionTransporter(this, this.sequelize);
+        this.algorithm            = new AlgorithmTransporter(this, this.sequelize);
+        this.question             = new QuestionTransporter(this, this.sequelize);
+        this.recommendation       = new RecommendationTransporter(this, this.sequelize);
+        this.question_option      = new QuestionOptionTransporter(this, this.sequelize);
+        this.state                = new StateTransporter(this, this.sequelize);
+        this.state_question       = new StateQuestionTransporter(this, this.sequelize);
         this.state_recommendation = new StateRecommendationTransporter(this, this.sequelize);
-        this.key = new KeyTransporter(this, this.sequelize);
-        this.release = new ReleaseTransporter(this, this.sequelize);
+        this.key                  = new KeyTransporter(this, this.sequelize);
+        this.release              = new ReleaseTransporter(this, this.sequelize);
 
         this.addAssociations();
     }
@@ -96,52 +96,52 @@ class DatabaseTransporter {
         //Algorithm & state association
         this.algorithmTable.hasMany(this.stateTable, {
             //as: "states",
-            foreignKey: "algorithm_id",
-            targetKey: "id",
+            foreignKey          : "algorithm_id",
+            targetKey           : "id",
             foreignKeyConstraint: false
         });
         this.stateTable.belongsTo(this.algorithmTable, {
-            foreignKey: "algorithm_id",
-            targetKey: "id",
+            foreignKey          : "algorithm_id",
+            targetKey           : "id",
             foreignKeyConstraint: false
         });
 
         //algo & question assoc
         this.algorithmTable.hasMany(this.questionTable, {
             //as: "questions",
-            foreignKey: "algorithm_id",
-            sourceKey: "id",
+            foreignKey          : "algorithm_id",
+            sourceKey           : "id",
             foreignKeyConstraint: false
         });
         this.questionTable.belongsTo(this.algorithmTable, {
-            foreignKey: "algorithm_id",
-            targetKey: "id",
+            foreignKey          : "algorithm_id",
+            targetKey           : "id",
             foreignKeyConstraint: false
         });
 
         //algo & recommendation assoc
         this.algorithmTable.hasMany(this.recommendationTable, {
             //as: "recommendations",
-            foreignKey: "algorithm_id",
-            sourceKey: "id",
+            foreignKey          : "algorithm_id",
+            sourceKey           : "id",
             foreignKeyConstraint: false
         });
         this.recommendationTable.belongsTo(this.algorithmTable, {
-            foreignKey: "algorithm_id",
-            targetKey: "id",
+            foreignKey          : "algorithm_id",
+            targetKey           : "id",
             foreignKeyConstraint: false
         });
 
         //Question & question_option association
         this.questionTable.hasMany(this.questionOptionTable, {
             //as: "question_options",
-            foreignKey: "question_id",
-            sourceKey: "id",
+            foreignKey          : "question_id",
+            sourceKey           : "id",
             foreignKeyConstraint: false
         });
         this.questionOptionTable.belongsTo(this.questionTable, {
-            foreignKey: "question_id",
-            targetKey: "id",
+            foreignKey          : "question_id",
+            targetKey           : "id",
             foreignKeyConstraint: false
         });
 
@@ -166,7 +166,7 @@ class DatabaseTransporter {
         });
         this.releaseTable.belongsTo(this.algorithmTable, {
             foreignKey: "algorithm_id"
-        })
+        });
 
         /*
         //State & question association
