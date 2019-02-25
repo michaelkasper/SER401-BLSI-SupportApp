@@ -28,10 +28,13 @@ class ReleaseTransporter extends Abstract {
                 primaryKey: true,
             },
             algorithm_json: { //stores algorithm
-                type: Sequelize.TEXT
+                type: Sequelize.BLOB
             },
             attribute_json: { //Stores question, reccomendation, and states
-                type: Sequelize.TEXT
+                type: Sequelize.BLOB
+            },
+            date_created  : {
+                type: Sequelize.DATE
             }
         };
 
