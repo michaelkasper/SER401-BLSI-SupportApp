@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `question` (
   UNIQUE KEY `id` (`id`),
   KEY `algorithm_id` (`algorithm_id`),
   CONSTRAINT `question_ibfk_1` FOREIGN KEY (`algorithm_id`) REFERENCES `algorithm` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 DEFAULT CHARSET = latin1;
+) ENGINE = InnoDB AUTO_INCREMENT = 19 DEFAULT CHARSET = latin1;
 
 # ------------------------------------------------------------
 # SCHEMA DUMP FOR TABLE: question_option
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `question_option` (
   UNIQUE KEY `id` (`id`),
   KEY `question_id` (`question_id`),
   CONSTRAINT `question_option_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `question` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 DEFAULT CHARSET = latin1;
+) ENGINE = InnoDB AUTO_INCREMENT = 41 DEFAULT CHARSET = latin1;
 
 # ------------------------------------------------------------
 # SCHEMA DUMP FOR TABLE: recommendation
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `recommendation` (
   UNIQUE KEY `id` (`id`),
   KEY `algorithm_id` (`algorithm_id`),
   CONSTRAINT `recommendation_ibfk_1` FOREIGN KEY (`algorithm_id`) REFERENCES `algorithm` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 DEFAULT CHARSET = latin1;
+) ENGINE = InnoDB AUTO_INCREMENT = 69 DEFAULT CHARSET = latin1;
 
 # ------------------------------------------------------------
 # SCHEMA DUMP FOR TABLE: release
@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `state` (
   UNIQUE KEY `id` (`id`),
   KEY `algorithm_id` (`algorithm_id`),
   CONSTRAINT `state_ibfk_1` FOREIGN KEY (`algorithm_id`) REFERENCES `algorithm` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 DEFAULT CHARSET = latin1;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 DEFAULT CHARSET = latin1;
 
 # ------------------------------------------------------------
 # SCHEMA DUMP FOR TABLE: state_question
@@ -154,13 +154,13 @@ INSERT INTO
 VALUES
   (
     1,
-    'test',
+    'BLSI Algorithm ',
     0.00,
+    1,
     NULL,
-    'this is a descript',
     NULL,
-    'Fri Feb 15 2019',
-    'Fri Feb 15 2019'
+    'Fri Mar 01 2019',
+    'Fri Mar 01 2019'
   );
 
 # ------------------------------------------------------------
@@ -181,7 +181,225 @@ INSERT INTO
     `type_key`
   )
 VALUES
-  (1, 1, '', 'this is a prompt', NULL);
+  (
+    1,
+    1,
+    'Suspected liver or spleen injury without peritonitis?',
+    '',
+    'picklist'
+  );
+INSERT INTO
+  `question` (
+    `id`,
+    `algorithm_id`,
+    `question`,
+    `prompt`,
+    `type_key`
+  )
+VALUES
+  (
+    2,
+    1,
+    'Does surgeon suspect ongoing or very recent bleeding?',
+    '',
+    'picklist'
+  );
+INSERT INTO
+  `question` (
+    `id`,
+    `algorithm_id`,
+    `question`,
+    `prompt`,
+    `type_key`
+  )
+VALUES
+  (
+    3,
+    1,
+    'Aspartate aminotransferase greater than 200U/L?',
+    '',
+    'picklist'
+  );
+INSERT INTO
+  `question` (
+    `id`,
+    `algorithm_id`,
+    `question`,
+    `prompt`,
+    `type_key`
+  )
+VALUES
+  (
+    4,
+    1,
+    'Abdominal wall trauma, tenderness or distension?',
+    '',
+    'picklist'
+  );
+INSERT INTO
+  `question` (
+    `id`,
+    `algorithm_id`,
+    `question`,
+    `prompt`,
+    `type_key`
+  )
+VALUES
+  (5, 1, 'Abnormal chest x-ray?', '', 'picklist');
+INSERT INTO
+  `question` (
+    `id`,
+    `algorithm_id`,
+    `question`,
+    `prompt`,
+    `type_key`
+  )
+VALUES
+  (
+    6,
+    1,
+    'Patient complaining of abdominal pain?',
+    '',
+    'picklist'
+  );
+INSERT INTO
+  `question` (
+    `id`,
+    `algorithm_id`,
+    `question`,
+    `prompt`,
+    `type_key`
+  )
+VALUES
+  (7, 1, 'Abnormal pancreatic enzymes?', '', 'picklist');
+INSERT INTO
+  `question` (
+    `id`,
+    `algorithm_id`,
+    `question`,
+    `prompt`,
+    `type_key`
+  )
+VALUES
+  (
+    8,
+    1,
+    'Injury grade?',
+    'Enter the grade on a scale from 1 - 5 (1 = Minor, 5 = Major):',
+    'picklist'
+  );
+INSERT INTO
+  `question` (
+    `id`,
+    `algorithm_id`,
+    `question`,
+    `prompt`,
+    `type_key`
+  )
+VALUES
+  (9, 1, 'Hb close to 7?', 'Enter Hb:', 'picklist');
+INSERT INTO
+  `question` (
+    `id`,
+    `algorithm_id`,
+    `question`,
+    `prompt`,
+    `type_key`
+  )
+VALUES
+  (10, 1, 'Patient symptomatic?', '', 'picklist');
+INSERT INTO
+  `question` (
+    `id`,
+    `algorithm_id`,
+    `question`,
+    `prompt`,
+    `type_key`
+  )
+VALUES
+  (11, 1, 'Patient Hb less than 7?', '', 'picklist');
+INSERT INTO
+  `question` (
+    `id`,
+    `algorithm_id`,
+    `question`,
+    `prompt`,
+    `type_key`
+  )
+VALUES
+  (12, 1, 'Hb stable?', '', 'picklist');
+INSERT INTO
+  `question` (
+    `id`,
+    `algorithm_id`,
+    `question`,
+    `prompt`,
+    `type_key`
+  )
+VALUES
+  (13, 1, 'Vitals normal?', '', 'picklist');
+INSERT INTO
+  `question` (
+    `id`,
+    `algorithm_id`,
+    `question`,
+    `prompt`,
+    `type_key`
+  )
+VALUES
+  (14, 1, 'Tolerating diet?', '', 'picklist');
+INSERT INTO
+  `question` (
+    `id`,
+    `algorithm_id`,
+    `question`,
+    `prompt`,
+    `type_key`
+  )
+VALUES
+  (15, 1, 'Minimal abdominal pain?', '', 'picklist');
+INSERT INTO
+  `question` (
+    `id`,
+    `algorithm_id`,
+    `question`,
+    `prompt`,
+    `type_key`
+  )
+VALUES
+  (
+    16,
+    1,
+    'Sustained response to LR or NS?',
+    '',
+    'picklist'
+  );
+INSERT INTO
+  `question` (
+    `id`,
+    `algorithm_id`,
+    `question`,
+    `prompt`,
+    `type_key`
+  )
+VALUES
+  (
+    17,
+    1,
+    'Has the patient been given 40mgL/kg PRBCs? or 4 units PRBCs?',
+    '',
+    'picklist'
+  );
+INSERT INTO
+  `question` (
+    `id`,
+    `algorithm_id`,
+    `question`,
+    `prompt`,
+    `type_key`
+  )
+VALUES
+  (18, 1, 'Recurrent hypotension?', '', 'picklist');
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: question_option
@@ -197,7 +415,436 @@ INSERT INTO
     `is_good`
   )
 VALUES
-  (1, 1, 'sddfgdfsd', NULL, NULL, NULL);
+  (1, 1, 'No', 0, 1, 1);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (2, 1, 'Yes', 0, 1, 0);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (3, 2, 'No', 0, 1, 1);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (4, 2, 'Yes', 0, 1, 0);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (5, 3, 'No', 0, 1, 1);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (6, 3, 'Yes', 0, 1, 0);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (7, 4, 'No', 0, 1, 1);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (8, 4, 'Yes', 0, 1, 0);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (9, 5, 'No', 0, 1, 1);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (10, 5, 'Yes', 0, 1, 0);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (11, 6, 'No', 0, 1, 1);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (12, 6, 'Yes', 0, 1, 0);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (13, 7, 'No', 0, 1, 1);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (14, 7, 'Yes', 0, 1, 0);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (15, 8, '1', 1, 5, 1);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (16, 8, '2', 5, 10, 0);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (17, 8, '3', 0, 1, 1);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (18, 8, '4', 0, 1, 1);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (19, 8, '5', 0, 1, 1);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (20, 9, 'Hb <= 6', 0, 6, 0);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (21, 9, '6 < Hb < 8', 6, 8, 1);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (22, 9, 'Hb >= 8', 8, 10, 0);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (23, 10, 'No', 0, 1, 1);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (24, 10, 'Yes', 0, 1, 0);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (25, 11, 'No', 0, 1, 1);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (26, 11, 'Yes', 0, 1, 0);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (27, 12, 'No', 0, 1, 0);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (28, 12, 'Yes', 0, 1, 1);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (29, 13, 'No', 0, 1, 0);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (30, 13, 'Yes', 0, 1, 1);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (31, 14, 'No', 0, 1, 0);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (32, 14, 'Yes', 0, 1, 1);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (33, 15, 'No', 0, 1, 0);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (34, 15, 'Yes', 0, 1, 1);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (35, 16, 'No', 0, 1, 0);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (36, 16, 'Yes', 0, 1, 1);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (37, 17, 'No', 0, 1, 0);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (38, 17, 'Yes', 0, 1, 1);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (39, 18, 'No', 0, 1, 1);
+INSERT INTO
+  `question_option` (
+    `id`,
+    `question_id`,
+    `label`,
+    `min_value`,
+    `max_value`,
+    `is_good`
+  )
+VALUES
+  (40, 18, 'Yes', 0, 1, 0);
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: recommendation
@@ -212,7 +859,977 @@ INSERT INTO
     `short_description`
   )
 VALUES
-  (1, 1, 'this is a title', 'this is a descript', NULL);
+  (
+    1,
+    1,
+    'Admit to non-ICU',
+    'An abbreviated period of bed rest of one day or less for stable patients is unequivocally supported for children whose hemoglobin has been documented to be stable. The use of bed rest on the day of admission will be discretionary until data is available. \nPatients not admitted to the ICU and without signs on ongoing bleeding may be allowed to drink and eat when comfortable and able.',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    2,
+    1,
+    'Take vitals every 2 hours 4 times, then every 4 hours',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    3,
+    1,
+    'Type and screen if Hb is close to 7.0',
+    'No evidence in the literature suggests routinely performing a type and screen in a hemodynamically stable patient, without evidence of ongoing bleeding, and with a stable hemoglobin, above the transfusion threshold is necessary. There is evidence to suggest that eliminating a type and screen in stable patients could potentially reduce the cost of care.',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (4, 1, 'Bed-rest overnight', '', NULL);
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    5,
+    1,
+    'Check Hb at 6 hours',
+    'The use of serial hemoglobin measurement every 6 hours is commonly used in all NOM studies, but no evidence supports a meaningful impact on management.',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    6,
+    1,
+    'Check Hb at 12 hours',
+    'The use of serial hemoglobin measurement every 6 hours is commonly used in all NOM studies, but no evidence supports a meaningful impact on management.',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    7,
+    1,
+    'Check Hb at 24 hours',
+    'The use of serial hemoglobin measurement every 6 hours is commonly used in all NOM studies, but no evidence supports a meaningful impact on management.',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (8, 1, 'Admit to floor', '', NULL);
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    9,
+    1,
+    'Administer 20 mL/kg of LR (lacerated ringer) or NS (normal saline)',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    10,
+    1,
+    'Give 10 mL/kg of PRBCs',
+    'Transfusion of red blood cells in response to shock is recommended, but no studies have evaluated if transfusion before surgery would improve the success rates of NOM.',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (11, 1, 'NPO', '', NULL);
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    12,
+    1,
+    'Bed-rest additional night',
+    'An abbreviated period of bed rest of one day or less for stable patients is unequivocally supported for children whose hemoglobin has been documented to be stable. The use of bed rest on the day of admission will be discretionary until data is available.',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    13,
+    1,
+    'Check Hb every 6 hours',
+    'The use of serial hemoglobin measurement every 6 hours is commonly used in all NOM studies, but no evidence supports a meaningful impact on management.',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (14, 1, 'Obtain abdominal CT scan', '', NULL);
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (15, 1, 'Admit to PICU', '', NULL);
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (16, 1, 'Bed-rest until Hb is stable', '', NULL);
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (17, 1, 'Consider embolization', '', NULL);
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    18,
+    1,
+    'Administer 10 - 20 ML/kg of PRBCs',
+    'Transfusion of red blood cells in response to shock is recommended, but no studies have evaluated if transfusion before surgery would improve the success rates of NOM.',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    19,
+    1,
+    'Consider other causes (head injury, tension pneumothorax, tamponade, pelvic hemorrhage)',
+    'Failure to stabilize as noted by persistent or recurrent hypotension cannot have NOM dictated by algorithm alone without taking into account local resources and other injuries. These patients should be considered for surgery, urgent embolization, or continued NOM, depending on other injuries and the center’s resources.\nWhere not contraindicated, a NOM guideline may be applied to patients with multiple injuries. In patients with other intra-abdominal injuries, such as pancreatic trauma or small bowel injury, the other injuries may take priority over the liver or spleen injury.',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    20,
+    1,
+    'Consider massive transfusion protocol',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (21, 1, 'Floor status for 18 hours', '', NULL);
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (22, 1, 'Give regular diet', '', NULL);
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (23, 1, 'Ambulate', '', NULL);
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (24, 1, 'Success of NOM by algorithm', '', NULL);
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    25,
+    1,
+    'Patient meets criteria for discharge',
+    'In children with isolated BLSI without signs of clinical bleeding at presentation and stable hemoglobin, discharge before 24 hours seems to be safe. Patients at risk for missed injury, need for operation, or recurrent bleeding are those with multiple identified abdominal injuries (especially pancreas), those with a contrast blush on CT scan, and those with bicycle handlebar injuries may not be candidates for early discharge. Since delayed bleeds have occurred (often outside of the APSA guideline period), standardized education remains an important component of discharge.',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    26,
+    1,
+    'Use caution if it was an abdominal wall injury (handlebar injury or seatbelt sign)',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    27,
+    1,
+    'Provide discharge instructions',
+    'In children with isolated BLSI without signs of clinical bleeding at presentation and stable hemoglobin, discharge before 24 hours seems to be safe. Patients at risk for missed injury, need for operation, or recurrent bleeding are those with multiple identified abdominal injuries (especially pancreas), those with a contrast blush on CT scan, and those with bicycle handlebar injuries may not be candidates for early discharge. Since delayed bleeds have occurred (often outside of the APSA guideline period), standardized education remains an important component of discharge.',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    28,
+    1,
+    'No ibuprofen, naproxen, or other drug store pain medications',
+    'Children are advised to avoid nonsteroidal anti-inflammatory drugs at the time of the discharge until follow-up is complete.',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (29, 1, 'Acetaminophen (tylenol) is okay', '', NULL);
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    30,
+    1,
+    'May go back to school when off narcotic pain medicines',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    31,
+    1,
+    'Restricted activity per APSA Guidelines for injury grade + 2 weeks',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    32,
+    1,
+    'No gym class',
+    'Children may return to school when comfortable and able to comply with ongoing sports and contact restrictions. Modifications to allow children to change class early should be used if there is concern about injury occurring between classes or elsewhere, depending on the child’s environment.',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    33,
+    1,
+    'No sports',
+    'Children may return to school when comfortable and able to comply with ongoing sports and contact restrictions. Modifications to allow children to change class early should be used if there is concern about injury occurring between classes or elsewhere, depending on the child’s environment.',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    34,
+    1,
+    'No rough play',
+    'Children may return to school when comfortable and able to comply with ongoing sports and contact restrictions. Modifications to allow children to change class early should be used if there is concern about injury occurring between classes or elsewhere, depending on the child’s environment.',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    35,
+    1,
+    'No recreational activities with wheels',
+    'Children may return to school when comfortable and able to comply with ongoing sports and contact restrictions. Modifications to allow children to change class early should be used if there is concern about injury occurring between classes or elsewhere, depending on the child’s environment.',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    36,
+    1,
+    'No activities where both feet leave the ground at the same time',
+    'Children may return to school when comfortable and able to comply with ongoing sports and contact restrictions. Modifications to allow children to change class early should be used if there is concern about injury occurring between classes or elsewhere, depending on the child’s environment.',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    37,
+    1,
+    'Trauma service will provide medical permission for early class change for students at risk of reinjury between classes',
+    'Children may return to school when comfortable and able to comply with ongoing sports and contact restrictions. Modifications to allow children to change class early should be used if there is concern about injury occurring between classes or elsewhere, depending on the child’s environment.',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    38,
+    1,
+    'Return to emergency department for increasing pain, paleness, dizziness, shortness of breath, vomiting, worsening shoulder pain, intestinal bleeding, or black tarry stools',
+    'Parents and patients are instructed to return to the emergency department for increasing pain, pallor, dizziness, difficulty breathing, vomiting, worsening shoulder pain, jaundice, gastrointestinal bleeding, or black tarry stools.',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    39,
+    1,
+    'Grade 1 – 2 injury: phone call follow-up at 2 weeks',
+    'Grade 1 – 2 injuries receive telephone follow-up at 2 weeks, and Grade 3 – 5 injuries receive office visit at 2 weeks.',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    40,
+    1,
+    'Grade 3 – 5 injury: office visit at 2 weeks',
+    'Grade 1 – 2 injuries receive telephone follow-up at 2 weeks, and Grade 3 – 5 injuries receive office visit at 2 weeks.',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    41,
+    1,
+    'No routine follow-up imaging is required unless symptoms develop',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (42, 1, 'Remain in PICU', '', NULL);
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    43,
+    1,
+    'Administer 10 - 30 mL/kg of PRBCs',
+    'Transfusion of red blood cells in response to shock is recommended, but no studies have evaluated if transfusion before surgery would improve the success rates of NOM.',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (44, 1, 'Bed-rest', '', NULL);
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (45, 1, 'Failure of NOM by algorithm', '', NULL);
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (46, 1, 'Angiography and embolization', '', NULL);
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (47, 1, 'Surgery', '', NULL);
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (48, 1, 'NOM at surgeon’s discretion', '', NULL);
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    49,
+    1,
+    'NOM in the face of peritonitis should be excluded from a PMG for SOI.',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    50,
+    1,
+    'A transfusion threshold of 7.0 g/dL is safe and reasonable for children undergoing NOM for BLSI.',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    51,
+    1,
+    'Management of pediatric BLSI may be based on hemodynamic status, rather than grade.',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    52,
+    1,
+    'Transfusion beyond 40 mL/kg or >4 U in pediatric trauma seems to be highly correlated with failure of NOM, and care beyond these thresholds should be individualized.',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    53,
+    1,
+    'Hemodynamic status at presentation may be used as a determinant for ICU admission regardless of grade, with the exception of Grade 5 injuries, which require ICU.',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    54,
+    1,
+    'AE may be used in the NOM of children with BLSI to improve splenic salvage and possibly complement available treatments of hepatic injury, but not all children with contrast extravasation need AE.',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    55,
+    1,
+    'Clinical determination of recent or ongoing bleeding in children requires integration of multiple factors to determine the relative importance of SOI bleeding. Important factors to consider are listed on the algorithm instructions to assist in the determination recent bleeding significant enough to suggest shock.',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    56,
+    1,
+    'Consider use of 1:1:1 transfusion ratios early in resuscitation.',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    57,
+    1,
+    'Consideration for TEG-directed therapy may be given based on adult data.',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    58,
+    1,
+    'Limiting crystalloid volume and early use of transfusion in children with significant bleeding should be considered based on the adult literature.',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    59,
+    1,
+    'A pediatric PMG may be used for all children < 18 years of age, but a caution about the use of the algorithm for children > 16 of age may be appropriate.',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    60,
+    1,
+    'While routine reimaging in all children with BLSI is not indicated, some cases may benefit from reimaging. Patients who might benefit have not been defined, but patients with high-grade injuries near the hilum seem to be at the greatest risk of developing pseudoaneurysms based on the reported cases of relevant pseudoaneurysms.',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    61,
+    1,
+    'ERCP can be considered as an adjunct in the management of blunt hepatic injury with biloma or ductal injury.',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    62,
+    1,
+    'Management of late-presenting liver or spleen injury beyond 24 hours of injury is at the discretion of the treating surgeon. Patient care should be based predominantly on the reason for finally seeking care (pain, ileus, etc.) rather than on the initial injury.',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    63,
+    1,
+    '8% of population; 52.6 risk of IAI; 11.9% risk of IAI intervention',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    64,
+    1,
+    'Additional 38% of the population; 12.6% risk of IAI; 4.0% risk of IAI -intervention',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    65,
+    1,
+    'Additional 2% of the population; 6.7% risk of IAI; 0.0% risk of IAI -intervention',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    66,
+    1,
+    'Additional 2% of the population; 2.3% risk of IAI; 0.0% risk of IAI -intervention',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    67,
+    1,
+    'Additional 17% of the population; 1.5% risk of IAI; 0.0% risk of IAI -intervention',
+    '',
+    NULL
+  );
+INSERT INTO
+  `recommendation` (
+    `id`,
+    `algorithm_id`,
+    `title`,
+    `description`,
+    `short_description`
+  )
+VALUES
+  (
+    68,
+    1,
+    'A hemoglobin drop of 0.5 g/dL the day of admission is expected form a 20-mL/kg bolus of crystalloid in a patient receiving maintenance and does not represent ongoing bleeding.',
+    '',
+    NULL
+  );
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: release
@@ -230,11 +1847,11 @@ INSERT INTO
 VALUES
   (
     1,
-    'test',
+    'BLSI Algorithm ',
     1,
     0.00,
-    '{\"id\":1,\"name\":\"test\",\"version_number\":0,\"state_id_start\":null,\"description\":\"this is a descript\",\"short_description\":null,\"date_modified\":\"Fri Feb 15 2019\",\"date_created\":\"Fri Feb 15 2019\"}',
-    '{\"questions\":[{\"id\":1,\"algorithm_id\":1,\"question\":\"\",\"prompt\":\"this is a prompt\",\"type_key\":null,\"question_options\":[{\"id\":1,\"question_id\":1,\"label\":\"sddfgdfsd\",\"min_value\":null,\"max_value\":null,\"is_good\":null}]}],\"recommendations\":[{\"id\":1,\"algorithm_id\":1,\"title\":\"this is a title\",\"description\":\"this is a descript\",\"short_description\":null}],\"states\":[{\"id\":1,\"algorithm_id\":1,\"state_id_next_good\":3,\"state_id_next_bad\":3,\"question_ids\":[],\"recommendation_ids\":[]}]}'
+    '{\"id\":1,\"name\":\"BLSI Algorithm \",\"version_number\":0,\"state_id_start\":null,\"description\":null,\"short_description\":null,\"date_modified\":\"Fri Mar 01 2019\",\"date_created\":\"Fri Mar 01 2019\"}',
+    '{\"questions\":[{\"id\":1,\"algorithm_id\":1,\"question\":\"Suspected liver or spleen injury without peritonitis?\",\"prompt\":\"\",\"type_key\":\"picklist\",\"question_options\":[{\"id\":1,\"question_id\":1,\"label\":\"No\",\"min_value\":0,\"max_value\":1,\"is_good\":true},{\"id\":2,\"question_id\":1,\"label\":\"Yes\",\"min_value\":0,\"max_value\":1,\"is_good\":false}]},{\"id\":2,\"algorithm_id\":1,\"question\":\"Does surgeon suspect ongoing or very recent bleeding?\",\"prompt\":\"\",\"type_key\":\"picklist\",\"question_options\":[{\"id\":3,\"question_id\":2,\"label\":\"No\",\"min_value\":0,\"max_value\":1,\"is_good\":true},{\"id\":4,\"question_id\":2,\"label\":\"Yes\",\"min_value\":0,\"max_value\":1,\"is_good\":false}]},{\"id\":3,\"algorithm_id\":1,\"question\":\"Aspartate aminotransferase greater than 200U/L?\",\"prompt\":\"\",\"type_key\":\"picklist\",\"question_options\":[{\"id\":5,\"question_id\":3,\"label\":\"No\",\"min_value\":0,\"max_value\":1,\"is_good\":true},{\"id\":6,\"question_id\":3,\"label\":\"Yes\",\"min_value\":0,\"max_value\":1,\"is_good\":false}]},{\"id\":4,\"algorithm_id\":1,\"question\":\"Abdominal wall trauma, tenderness or distension?\",\"prompt\":\"\",\"type_key\":\"picklist\",\"question_options\":[{\"id\":7,\"question_id\":4,\"label\":\"No\",\"min_value\":0,\"max_value\":1,\"is_good\":true},{\"id\":8,\"question_id\":4,\"label\":\"Yes\",\"min_value\":0,\"max_value\":1,\"is_good\":false}]},{\"id\":5,\"algorithm_id\":1,\"question\":\"Abnormal chest x-ray?\",\"prompt\":\"\",\"type_key\":\"picklist\",\"question_options\":[{\"id\":9,\"question_id\":5,\"label\":\"No\",\"min_value\":0,\"max_value\":1,\"is_good\":true},{\"id\":10,\"question_id\":5,\"label\":\"Yes\",\"min_value\":0,\"max_value\":1,\"is_good\":false}]},{\"id\":6,\"algorithm_id\":1,\"question\":\"Patient complaining of abdominal pain?\",\"prompt\":\"\",\"type_key\":\"picklist\",\"question_options\":[{\"id\":11,\"question_id\":6,\"label\":\"No\",\"min_value\":0,\"max_value\":1,\"is_good\":true},{\"id\":12,\"question_id\":6,\"label\":\"Yes\",\"min_value\":0,\"max_value\":1,\"is_good\":false}]},{\"id\":7,\"algorithm_id\":1,\"question\":\"Abnormal pancreatic enzymes?\",\"prompt\":\"\",\"type_key\":\"picklist\",\"question_options\":[{\"id\":13,\"question_id\":7,\"label\":\"No\",\"min_value\":0,\"max_value\":1,\"is_good\":true},{\"id\":14,\"question_id\":7,\"label\":\"Yes\",\"min_value\":0,\"max_value\":1,\"is_good\":false}]},{\"id\":8,\"algorithm_id\":1,\"question\":\"Injury grade?\",\"prompt\":\"Enter the grade on a scale from 1 - 5 (1 = Minor, 5 = Major):\",\"type_key\":\"picklist\",\"question_options\":[{\"id\":15,\"question_id\":8,\"label\":\"1\",\"min_value\":1,\"max_value\":5,\"is_good\":true},{\"id\":16,\"question_id\":8,\"label\":\"2\",\"min_value\":5,\"max_value\":10,\"is_good\":false},{\"id\":17,\"question_id\":8,\"label\":\"3\",\"min_value\":0,\"max_value\":1,\"is_good\":true},{\"id\":18,\"question_id\":8,\"label\":\"4\",\"min_value\":0,\"max_value\":1,\"is_good\":true},{\"id\":19,\"question_id\":8,\"label\":\"5\",\"min_value\":0,\"max_value\":1,\"is_good\":true}]},{\"id\":9,\"algorithm_id\":1,\"question\":\"Hb close to 7?\",\"prompt\":\"Enter Hb:\",\"type_key\":\"picklist\",\"question_options\":[{\"id\":20,\"question_id\":9,\"label\":\"Hb <= 6\",\"min_value\":0,\"max_value\":6,\"is_good\":false},{\"id\":21,\"question_id\":9,\"label\":\"6 < Hb < 8\",\"min_value\":6,\"max_value\":8,\"is_good\":true},{\"id\":22,\"question_id\":9,\"label\":\"Hb >= 8\",\"min_value\":8,\"max_value\":10,\"is_good\":false}]},{\"id\":10,\"algorithm_id\":1,\"question\":\"Patient symptomatic?\",\"prompt\":\"\",\"type_key\":\"picklist\",\"question_options\":[{\"id\":23,\"question_id\":10,\"label\":\"No\",\"min_value\":0,\"max_value\":1,\"is_good\":true},{\"id\":24,\"question_id\":10,\"label\":\"Yes\",\"min_value\":0,\"max_value\":1,\"is_good\":false}]},{\"id\":11,\"algorithm_id\":1,\"question\":\"Patient Hb less than 7?\",\"prompt\":\"\",\"type_key\":\"picklist\",\"question_options\":[{\"id\":25,\"question_id\":11,\"label\":\"No\",\"min_value\":0,\"max_value\":1,\"is_good\":true},{\"id\":26,\"question_id\":11,\"label\":\"Yes\",\"min_value\":0,\"max_value\":1,\"is_good\":false}]},{\"id\":12,\"algorithm_id\":1,\"question\":\"Hb stable?\",\"prompt\":\"\",\"type_key\":\"picklist\",\"question_options\":[{\"id\":27,\"question_id\":12,\"label\":\"No\",\"min_value\":0,\"max_value\":1,\"is_good\":false},{\"id\":28,\"question_id\":12,\"label\":\"Yes\",\"min_value\":0,\"max_value\":1,\"is_good\":true}]},{\"id\":13,\"algorithm_id\":1,\"question\":\"Vitals normal?\",\"prompt\":\"\",\"type_key\":\"picklist\",\"question_options\":[{\"id\":29,\"question_id\":13,\"label\":\"No\",\"min_value\":0,\"max_value\":1,\"is_good\":false},{\"id\":30,\"question_id\":13,\"label\":\"Yes\",\"min_value\":0,\"max_value\":1,\"is_good\":true}]},{\"id\":14,\"algorithm_id\":1,\"question\":\"Tolerating diet?\",\"prompt\":\"\",\"type_key\":\"picklist\",\"question_options\":[{\"id\":31,\"question_id\":14,\"label\":\"No\",\"min_value\":0,\"max_value\":1,\"is_good\":false},{\"id\":32,\"question_id\":14,\"label\":\"Yes\",\"min_value\":0,\"max_value\":1,\"is_good\":true}]},{\"id\":15,\"algorithm_id\":1,\"question\":\"Minimal abdominal pain?\",\"prompt\":\"\",\"type_key\":\"picklist\",\"question_options\":[{\"id\":33,\"question_id\":15,\"label\":\"No\",\"min_value\":0,\"max_value\":1,\"is_good\":false},{\"id\":34,\"question_id\":15,\"label\":\"Yes\",\"min_value\":0,\"max_value\":1,\"is_good\":true}]},{\"id\":16,\"algorithm_id\":1,\"question\":\"Sustained response to LR or NS?\",\"prompt\":\"\",\"type_key\":\"picklist\",\"question_options\":[{\"id\":35,\"question_id\":16,\"label\":\"No\",\"min_value\":0,\"max_value\":1,\"is_good\":false},{\"id\":36,\"question_id\":16,\"label\":\"Yes\",\"min_value\":0,\"max_value\":1,\"is_good\":true}]},{\"id\":17,\"algorithm_id\":1,\"question\":\"Has the patient been given 40mgL/kg PRBCs? or 4 units PRBCs?\",\"prompt\":\"\",\"type_key\":\"picklist\",\"question_options\":[{\"id\":37,\"question_id\":17,\"label\":\"No\",\"min_value\":0,\"max_value\":1,\"is_good\":false},{\"id\":38,\"question_id\":17,\"label\":\"Yes\",\"min_value\":0,\"max_value\":1,\"is_good\":true}]},{\"id\":18,\"algorithm_id\":1,\"question\":\"Recurrent hypotension?\",\"prompt\":\"\",\"type_key\":\"picklist\",\"question_options\":[{\"id\":39,\"question_id\":18,\"label\":\"No\",\"min_value\":0,\"max_value\":1,\"is_good\":true},{\"id\":40,\"question_id\":18,\"label\":\"Yes\",\"min_value\":0,\"max_value\":1,\"is_good\":false}]}],\"recommendations\":[{\"id\":1,\"algorithm_id\":1,\"title\":\"Admit to non-ICU\",\"description\":\"An abbreviated period of bed rest of one day or less for stable patients is unequivocally supported for children whose hemoglobin has been documented to be stable. The use of bed rest on the day of admission will be discretionary until data is available. \\nPatients not admitted to the ICU and without signs on ongoing bleeding may be allowed to drink and eat when comfortable and able.\",\"short_description\":null},{\"id\":2,\"algorithm_id\":1,\"title\":\"Take vitals every 2 hours 4 times, then every 4 hours\",\"description\":\"\",\"short_description\":null},{\"id\":3,\"algorithm_id\":1,\"title\":\"Type and screen if Hb is close to 7.0\",\"description\":\"No evidence in the literature suggests routinely performing a type and screen in a hemodynamically stable patient, without evidence of ongoing bleeding, and with a stable hemoglobin, above the transfusion threshold is necessary. There is evidence to suggest that eliminating a type and screen in stable patients could potentially reduce the cost of care.\",\"short_description\":null},{\"id\":4,\"algorithm_id\":1,\"title\":\"Bed-rest overnight\",\"description\":\"\",\"short_description\":null},{\"id\":5,\"algorithm_id\":1,\"title\":\"Check Hb at 6 hours\",\"description\":\"The use of serial hemoglobin measurement every 6 hours is commonly used in all NOM studies, but no evidence supports a meaningful impact on management.\",\"short_description\":null},{\"id\":6,\"algorithm_id\":1,\"title\":\"Check Hb at 12 hours\",\"description\":\"The use of serial hemoglobin measurement every 6 hours is commonly used in all NOM studies, but no evidence supports a meaningful impact on management.\",\"short_description\":null},{\"id\":7,\"algorithm_id\":1,\"title\":\"Check Hb at 24 hours\",\"description\":\"The use of serial hemoglobin measurement every 6 hours is commonly used in all NOM studies, but no evidence supports a meaningful impact on management.\",\"short_description\":null},{\"id\":8,\"algorithm_id\":1,\"title\":\"Admit to floor\",\"description\":\"\",\"short_description\":null},{\"id\":9,\"algorithm_id\":1,\"title\":\"Administer 20 mL/kg of LR (lacerated ringer) or NS (normal saline)\",\"description\":\"\",\"short_description\":null},{\"id\":10,\"algorithm_id\":1,\"title\":\"Give 10 mL/kg of PRBCs\",\"description\":\"Transfusion of red blood cells in response to shock is recommended, but no studies have evaluated if transfusion before surgery would improve the success rates of NOM.\",\"short_description\":null},{\"id\":11,\"algorithm_id\":1,\"title\":\"NPO\",\"description\":\"\",\"short_description\":null},{\"id\":12,\"algorithm_id\":1,\"title\":\"Bed-rest additional night\",\"description\":\"An abbreviated period of bed rest of one day or less for stable patients is unequivocally supported for children whose hemoglobin has been documented to be stable. The use of bed rest on the day of admission will be discretionary until data is available.\",\"short_description\":null},{\"id\":13,\"algorithm_id\":1,\"title\":\"Check Hb every 6 hours\",\"description\":\"The use of serial hemoglobin measurement every 6 hours is commonly used in all NOM studies, but no evidence supports a meaningful impact on management.\",\"short_description\":null},{\"id\":14,\"algorithm_id\":1,\"title\":\"Obtain abdominal CT scan\",\"description\":\"\",\"short_description\":null},{\"id\":15,\"algorithm_id\":1,\"title\":\"Admit to PICU\",\"description\":\"\",\"short_description\":null},{\"id\":16,\"algorithm_id\":1,\"title\":\"Bed-rest until Hb is stable\",\"description\":\"\",\"short_description\":null},{\"id\":17,\"algorithm_id\":1,\"title\":\"Consider embolization\",\"description\":\"\",\"short_description\":null},{\"id\":18,\"algorithm_id\":1,\"title\":\"Administer 10 - 20 ML/kg of PRBCs\",\"description\":\"Transfusion of red blood cells in response to shock is recommended, but no studies have evaluated if transfusion before surgery would improve the success rates of NOM.\",\"short_description\":null},{\"id\":19,\"algorithm_id\":1,\"title\":\"Consider other causes (head injury, tension pneumothorax, tamponade, pelvic hemorrhage)\",\"description\":\"Failure to stabilize as noted by persistent or recurrent hypotension cannot have NOM dictated by algorithm alone without taking into account local resources and other injuries. These patients should be considered for surgery, urgent embolization, or continued NOM, depending on other injuries and the centerâ€™s resources.\\nWhere not contraindicated, a NOM guideline may be applied to patients with multiple injuries. In patients with other intra-abdominal injuries, such as pancreatic trauma or small bowel injury, the other injuries may take priority over the liver or spleen injury.\",\"short_description\":null},{\"id\":20,\"algorithm_id\":1,\"title\":\"Consider massive transfusion protocol\",\"description\":\"\",\"short_description\":null},{\"id\":21,\"algorithm_id\":1,\"title\":\"Floor status for 18 hours\",\"description\":\"\",\"short_description\":null},{\"id\":22,\"algorithm_id\":1,\"title\":\"Give regular diet\",\"description\":\"\",\"short_description\":null},{\"id\":23,\"algorithm_id\":1,\"title\":\"Ambulate\",\"description\":\"\",\"short_description\":null},{\"id\":24,\"algorithm_id\":1,\"title\":\"Success of NOM by algorithm\",\"description\":\"\",\"short_description\":null},{\"id\":25,\"algorithm_id\":1,\"title\":\"Patient meets criteria for discharge\",\"description\":\"In children with isolated BLSI without signs of clinical bleeding at presentation and stable hemoglobin, discharge before 24 hours seems to be safe. Patients at risk for missed injury, need for operation, or recurrent bleeding are those with multiple identified abdominal injuries (especially pancreas), those with a contrast blush on CT scan, and those with bicycle handlebar injuries may not be candidates for early discharge. Since delayed bleeds have occurred (often outside of the APSA guideline period), standardized education remains an important component of discharge.\",\"short_description\":null},{\"id\":26,\"algorithm_id\":1,\"title\":\"Use caution if it was an abdominal wall injury (handlebar injury or seatbelt sign)\",\"description\":\"\",\"short_description\":null},{\"id\":27,\"algorithm_id\":1,\"title\":\"Provide discharge instructions\",\"description\":\"In children with isolated BLSI without signs of clinical bleeding at presentation and stable hemoglobin, discharge before 24 hours seems to be safe. Patients at risk for missed injury, need for operation, or recurrent bleeding are those with multiple identified abdominal injuries (especially pancreas), those with a contrast blush on CT scan, and those with bicycle handlebar injuries may not be candidates for early discharge. Since delayed bleeds have occurred (often outside of the APSA guideline period), standardized education remains an important component of discharge.\",\"short_description\":null},{\"id\":28,\"algorithm_id\":1,\"title\":\"No ibuprofen, naproxen, or other drug store pain medications\",\"description\":\"Children are advised to avoid nonsteroidal anti-inflammatory drugs at the time of the discharge until follow-up is complete.\",\"short_description\":null},{\"id\":29,\"algorithm_id\":1,\"title\":\"Acetaminophen (tylenol) is okay\",\"description\":\"\",\"short_description\":null},{\"id\":30,\"algorithm_id\":1,\"title\":\"May go back to school when off narcotic pain medicines\",\"description\":\"\",\"short_description\":null},{\"id\":31,\"algorithm_id\":1,\"title\":\"Restricted activity per APSA Guidelines for injury grade + 2 weeks\",\"description\":\"\",\"short_description\":null},{\"id\":32,\"algorithm_id\":1,\"title\":\"No gym class\",\"description\":\"Children may return to school when comfortable and able to comply with ongoing sports and contact restrictions. Modifications to allow children to change class early should be used if there is concern about injury occurring between classes or elsewhere, depending on the childâ€™s environment.\",\"short_description\":null},{\"id\":33,\"algorithm_id\":1,\"title\":\"No sports\",\"description\":\"Children may return to school when comfortable and able to comply with ongoing sports and contact restrictions. Modifications to allow children to change class early should be used if there is concern about injury occurring between classes or elsewhere, depending on the childâ€™s environment.\",\"short_description\":null},{\"id\":34,\"algorithm_id\":1,\"title\":\"No rough play\",\"description\":\"Children may return to school when comfortable and able to comply with ongoing sports and contact restrictions. Modifications to allow children to change class early should be used if there is concern about injury occurring between classes or elsewhere, depending on the childâ€™s environment.\",\"short_description\":null},{\"id\":35,\"algorithm_id\":1,\"title\":\"No recreational activities with wheels\",\"description\":\"Children may return to school when comfortable and able to comply with ongoing sports and contact restrictions. Modifications to allow children to change class early should be used if there is concern about injury occurring between classes or elsewhere, depending on the childâ€™s environment.\",\"short_description\":null},{\"id\":36,\"algorithm_id\":1,\"title\":\"No activities where both feet leave the ground at the same time\",\"description\":\"Children may return to school when comfortable and able to comply with ongoing sports and contact restrictions. Modifications to allow children to change class early should be used if there is concern about injury occurring between classes or elsewhere, depending on the childâ€™s environment.\",\"short_description\":null},{\"id\":37,\"algorithm_id\":1,\"title\":\"Trauma service will provide medical permission for early class change for students at risk of reinjury between classes\",\"description\":\"Children may return to school when comfortable and able to comply with ongoing sports and contact restrictions. Modifications to allow children to change class early should be used if there is concern about injury occurring between classes or elsewhere, depending on the childâ€™s environment.\",\"short_description\":null},{\"id\":38,\"algorithm_id\":1,\"title\":\"Return to emergency department for increasing pain, paleness, dizziness, shortness of breath, vomiting, worsening shoulder pain, intestinal bleeding, or black tarry stools\",\"description\":\"Parents and patients are instructed to return to the emergency department for increasing pain, pallor, dizziness, difficulty breathing, vomiting, worsening shoulder pain, jaundice, gastrointestinal bleeding, or black tarry stools.\",\"short_description\":null},{\"id\":39,\"algorithm_id\":1,\"title\":\"Grade 1 â€“ 2 injury: phone call follow-up at 2 weeks\",\"description\":\"Grade 1 â€“ 2 injuries receive telephone follow-up at 2 weeks, and Grade 3 â€“ 5 injuries receive office visit at 2 weeks.\",\"short_description\":null},{\"id\":40,\"algorithm_id\":1,\"title\":\"Grade 3 â€“ 5 injury: office visit at 2 weeks\",\"description\":\"Grade 1 â€“ 2 injuries receive telephone follow-up at 2 weeks, and Grade 3 â€“ 5 injuries receive office visit at 2 weeks.\",\"short_description\":null},{\"id\":41,\"algorithm_id\":1,\"title\":\"No routine follow-up imaging is required unless symptoms develop\",\"description\":\"\",\"short_description\":null},{\"id\":42,\"algorithm_id\":1,\"title\":\"Remain in PICU\",\"description\":\"\",\"short_description\":null},{\"id\":43,\"algorithm_id\":1,\"title\":\"Administer 10 - 30 mL/kg of PRBCs\",\"description\":\"Transfusion of red blood cells in response to shock is recommended, but no studies have evaluated if transfusion before surgery would improve the success rates of NOM.\",\"short_description\":null},{\"id\":44,\"algorithm_id\":1,\"title\":\"Bed-rest\",\"description\":\"\",\"short_description\":null},{\"id\":45,\"algorithm_id\":1,\"title\":\"Failure of NOM by algorithm\",\"description\":\"\",\"short_description\":null},{\"id\":46,\"algorithm_id\":1,\"title\":\"Angiography and embolization\",\"description\":\"\",\"short_description\":null},{\"id\":47,\"algorithm_id\":1,\"title\":\"Surgery\",\"description\":\"\",\"short_description\":null},{\"id\":48,\"algorithm_id\":1,\"title\":\"NOM at surgeonâ€™s discretion\",\"description\":\"\",\"short_description\":null},{\"id\":49,\"algorithm_id\":1,\"title\":\"NOM in the face of peritonitis should be excluded from a PMG for SOI.\",\"description\":\"\",\"short_description\":null},{\"id\":50,\"algorithm_id\":1,\"title\":\"A transfusion threshold of 7.0 g/dL is safe and reasonable for children undergoing NOM for BLSI.\",\"description\":\"\",\"short_description\":null},{\"id\":51,\"algorithm_id\":1,\"title\":\"Management of pediatric BLSI may be based on hemodynamic status, rather than grade.\",\"description\":\"\",\"short_description\":null},{\"id\":52,\"algorithm_id\":1,\"title\":\"Transfusion beyond 40 mL/kg or >4 U in pediatric trauma seems to be highly correlated with failure of NOM, and care beyond these thresholds should be individualized.\",\"description\":\"\",\"short_description\":null},{\"id\":53,\"algorithm_id\":1,\"title\":\"Hemodynamic status at presentation may be used as a determinant for ICU admission regardless of grade, with the exception of Grade 5 injuries, which require ICU.\",\"description\":\"\",\"short_description\":null},{\"id\":54,\"algorithm_id\":1,\"title\":\"AE may be used in the NOM of children with BLSI to improve splenic salvage and possibly complement available treatments of hepatic injury, but not all children with contrast extravasation need AE.\",\"description\":\"\",\"short_description\":null},{\"id\":55,\"algorithm_id\":1,\"title\":\"Clinical determination of recent or ongoing bleeding in children requires integration of multiple factors to determine the relative importance of SOI bleeding. Important factors to consider are listed on the algorithm instructions to assist in the determination recent bleeding significant enough to suggest shock.\",\"description\":\"\",\"short_description\":null},{\"id\":56,\"algorithm_id\":1,\"title\":\"Consider use of 1:1:1 transfusion ratios early in resuscitation.\",\"description\":\"\",\"short_description\":null},{\"id\":57,\"algorithm_id\":1,\"title\":\"Consideration for TEG-directed therapy may be given based on adult data.\",\"description\":\"\",\"short_description\":null},{\"id\":58,\"algorithm_id\":1,\"title\":\"Limiting crystalloid volume and early use of transfusion in children with significant bleeding should be considered based on the adult literature.\",\"description\":\"\",\"short_description\":null},{\"id\":59,\"algorithm_id\":1,\"title\":\"A pediatric PMG may be used for all children < 18 years of age, but a caution about the use of the algorithm for children > 16 of age may be appropriate.\",\"description\":\"\",\"short_description\":null},{\"id\":60,\"algorithm_id\":1,\"title\":\"While routine reimaging in all children with BLSI is not indicated, some cases may benefit from reimaging. Patients who might benefit have not been defined, but patients with high-grade injuries near the hilum seem to be at the greatest risk of developing pseudoaneurysms based on the reported cases of relevant pseudoaneurysms.\",\"description\":\"\",\"short_description\":null},{\"id\":61,\"algorithm_id\":1,\"title\":\"ERCP can be considered as an adjunct in the management of blunt hepatic injury with biloma or ductal injury.\",\"description\":\"\",\"short_description\":null},{\"id\":62,\"algorithm_id\":1,\"title\":\"Management of late-presenting liver or spleen injury beyond 24 hours of injury is at the discretion of the treating surgeon. Patient care should be based predominantly on the reason for finally seeking care (pain, ileus, etc.) rather than on the initial injury.\",\"description\":\"\",\"short_description\":null},{\"id\":63,\"algorithm_id\":1,\"title\":\"8% of population; 52.6 risk of IAI; 11.9% risk of IAI intervention\",\"description\":\"\",\"short_description\":null},{\"id\":64,\"algorithm_id\":1,\"title\":\"Additional 38% of the population; 12.6% risk of IAI; 4.0% risk of IAI -intervention\",\"description\":\"\",\"short_description\":null},{\"id\":65,\"algorithm_id\":1,\"title\":\"Additional 2% of the population; 6.7% risk of IAI; 0.0% risk of IAI -intervention\",\"description\":\"\",\"short_description\":null},{\"id\":66,\"algorithm_id\":1,\"title\":\"Additional 2% of the population; 2.3% risk of IAI; 0.0% risk of IAI -intervention\",\"description\":\"\",\"short_description\":null},{\"id\":67,\"algorithm_id\":1,\"title\":\"Additional 17% of the population; 1.5% risk of IAI; 0.0% risk of IAI -intervention\",\"description\":\"\",\"short_description\":null},{\"id\":68,\"algorithm_id\":1,\"title\":\"A hemoglobin drop of 0.5 g/dL the day of admission is expected form a 20-mL/kg bolus of crystalloid in a patient receiving maintenance and does not represent ongoing bleeding.\",\"description\":\"\",\"short_description\":null}],\"states\":[{\"id\":1,\"algorithm_id\":1,\"state_id_next_good\":null,\"state_id_next_bad\":2,\"question_ids\":[1],\"recommendation_ids\":[]},{\"id\":2,\"algorithm_id\":1,\"state_id_next_good\":4,\"state_id_next_bad\":3,\"question_ids\":[2],\"recommendation_ids\":[]},{\"id\":3,\"algorithm_id\":1,\"state_id_next_good\":null,\"state_id_next_bad\":5,\"question_ids\":[],\"recommendation_ids\":[9]},{\"id\":4,\"algorithm_id\":1,\"state_id_next_good\":null,\"state_id_next_bad\":null,\"question_ids\":[],\"recommendation_ids\":[1,2,3,4,5,6,7]},{\"id\":5,\"algorithm_id\":1,\"state_id_next_good\":null,\"state_id_next_bad\":null,\"question_ids\":[3],\"recommendation_ids\":[]},{\"id\":6,\"algorithm_id\":1,\"state_id_next_good\":null,\"state_id_next_bad\":null,\"question_ids\":[],\"recommendation_ids\":[]}]}'
   );
 
 # ------------------------------------------------------------
@@ -249,17 +1866,106 @@ INSERT INTO
     `state_id_next_bad`
   )
 VALUES
-  (1, 1, 3, 3);
+  (1, 1, NULL, 2);
+INSERT INTO
+  `state` (
+    `id`,
+    `algorithm_id`,
+    `state_id_next_good`,
+    `state_id_next_bad`
+  )
+VALUES
+  (2, 1, 4, 3);
+INSERT INTO
+  `state` (
+    `id`,
+    `algorithm_id`,
+    `state_id_next_good`,
+    `state_id_next_bad`
+  )
+VALUES
+  (3, 1, NULL, 5);
+INSERT INTO
+  `state` (
+    `id`,
+    `algorithm_id`,
+    `state_id_next_good`,
+    `state_id_next_bad`
+  )
+VALUES
+  (4, 1, NULL, NULL);
+INSERT INTO
+  `state` (
+    `id`,
+    `algorithm_id`,
+    `state_id_next_good`,
+    `state_id_next_bad`
+  )
+VALUES
+  (5, 1, NULL, NULL);
+INSERT INTO
+  `state` (
+    `id`,
+    `algorithm_id`,
+    `state_id_next_good`,
+    `state_id_next_bad`
+  )
+VALUES
+  (6, 1, NULL, NULL);
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: state_question
 # ------------------------------------------------------------
 
+INSERT INTO
+  `state_question` (`state_id`, `question_id`)
+VALUES
+  (1, 1);
+INSERT INTO
+  `state_question` (`state_id`, `question_id`)
+VALUES
+  (2, 2);
+INSERT INTO
+  `state_question` (`state_id`, `question_id`)
+VALUES
+  (5, 3);
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: state_recommendation
 # ------------------------------------------------------------
 
+INSERT INTO
+  `state_recommendation` (`state_id`, `recommendation_id`)
+VALUES
+  (4, 1);
+INSERT INTO
+  `state_recommendation` (`state_id`, `recommendation_id`)
+VALUES
+  (4, 2);
+INSERT INTO
+  `state_recommendation` (`state_id`, `recommendation_id`)
+VALUES
+  (4, 3);
+INSERT INTO
+  `state_recommendation` (`state_id`, `recommendation_id`)
+VALUES
+  (4, 4);
+INSERT INTO
+  `state_recommendation` (`state_id`, `recommendation_id`)
+VALUES
+  (4, 5);
+INSERT INTO
+  `state_recommendation` (`state_id`, `recommendation_id`)
+VALUES
+  (4, 6);
+INSERT INTO
+  `state_recommendation` (`state_id`, `recommendation_id`)
+VALUES
+  (4, 7);
+INSERT INTO
+  `state_recommendation` (`state_id`, `recommendation_id`)
+VALUES
+  (3, 9);
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
