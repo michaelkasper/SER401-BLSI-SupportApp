@@ -55,11 +55,17 @@ class TabContainer extends React.Component {
 
 const styles = theme => ({
     row: {
-        borderBottom: "1px solid #cccccc",
-        textAlign   : 'right',
-        cursor      : 'pointer',
-        '&:hover'   : {
+        borderBottom           : "1px solid #cccccc",
+        textAlign              : 'right',
+        cursor                 : 'pointer',
+        '&:hover'              : {
             backgroundColor: "#cccccc"
+        },
+        '&:hover .star'        : {
+            color: "#666666"
+        },
+        "&hover .star-selected": {
+            color: "#CFCF94"
         }
     },
     fab: {

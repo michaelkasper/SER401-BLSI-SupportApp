@@ -27,6 +27,10 @@ class TreeDiagram {
         this.model = new DiagramModel();
         this.model.setOffset(50, 50);
 
+        if(this.algorithm.state_id_start) {
+            this.addNode(this.algorithm.startState);
+        }
+
         this.algorithm.states.forEach(state => {
             this.addNode(state);
         });

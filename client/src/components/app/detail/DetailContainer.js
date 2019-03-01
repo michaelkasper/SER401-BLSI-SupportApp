@@ -12,6 +12,7 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Toolbar from "@material-ui/core/Toolbar";
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import StarSelectedIcon from "@material-ui/icons/StarTwoTone";
 
 @observer
 class DetailContainer extends React.Component {
@@ -63,7 +64,25 @@ class DetailContainer extends React.Component {
                 </AppBar>
 
                 <div className={classes.content}>
-                    <Divider/>
+
+
+                    {
+                        state.isStartState &&
+                        <>
+                            <Typography align='left' className={classes.startStateFlag}>
+                                <>
+                                    <StarSelectedIcon style={{
+                                        color: "#404040",
+                                    }}/>
+
+                                    Start State
+                                </>
+                            </Typography>
+
+                            <div className={classes.section}>
+                            </div>
+                        </>
+                    }
 
                     <Typography align='left' className={classes.addContent}>
                         Questions (Drop here to add)
@@ -182,52 +201,59 @@ class DetailContainer extends React.Component {
                     </div>
 
                 </div>
-            </div>
-        );
-    }
-}
+                <
+                /div>
+                );
+                }
+                }
 
 
-const styles = theme => ({
-    root           : {
-        position       : "absolute",
-        backgroundColor: theme.palette.background.default,
-        width          : 400,
-        right          : "0px",
-        top            : "0px",
-        height         : "calc(100vh - 68px)",
-        boxShadow      : "-3px 0px 10px -5px #888888"
-    },
-    containerHeader: {},
-    section        : {
-        paddingTop   : 8,
-        paddingBottom: 8,
-        paddingRight : 16,
-        paddingLeft  : 16,
-    },
-    sectionRow     : {
-        color       : "#4d4d4d",
-        fontSize    : "0.8125rem",
-        fontWeight  : 400,
-        textAlign   : "left",
-        borderBottom: "1px solid rgba(224, 224, 224, 1)",
-    },
-    addContent     : {
-        padding        : 16,
-        backgroundColor: '#f2f2f2',
-        color          : '#404040',
-        fontWeight     : 'bold'
-    },
-    cellPadding    : {
-        paddingRight: 6
-    },
-    content        : {
-        paddingLeft: 8,
-        overflow   : "hidden",
-        height     : "calc(100% - 48px)",
-        overflowY  : "scroll"
-    }
-});
+                const styles = theme => ({
+                root           : {
+                position       : "absolute",
+                backgroundColor: theme.palette.background.default,
+                width          : 400,
+                right          : "0px",
+                top            : "0px",
+                height         : "calc(100vh - 68px)",
+                boxShadow      : "-3px 0px 10px -5px #888888"
+            },
+                containerHeader: {},
+                section        : {
+                paddingTop   : 8,
+                paddingBottom: 8,
+                paddingRight : 16,
+                paddingLeft  : 16,
+            },
+                sectionRow     : {
+                color       : "#4d4d4d",
+                fontSize    : "0.8125rem",
+                fontWeight  : 400,
+                textAlign   : "left",
+                borderBottom: "1px solid rgba(224, 224, 224, 1)",
+            },
+                addContent     : {
+                padding        : 16,
+                backgroundColor: '#f2f2f2',
+                color          : '#404040',
+                fontWeight     : 'bold'
+            },
+                startStateFlag : {
+                padding        : 8,
+                backgroundColor: '#FAFA00',
+                color          : '#404040',
+                fontWeight     : 'bold'
+            },
+                cellPadding    : {
+                paddingRight: 6
+            },
+                content        : {
+                paddingLeft: 8,
+                overflow   : "hidden",
+                height     : "calc(100% - 48px)",
+                overflowY  : "scroll"
+            }
+            });
 
 
-export default withDrop('state')(withStyles(styles, {withTheme: true})(DetailContainer));
+                export default withDrop('state')(withStyles(styles, {withTheme: true})(DetailContainer));
