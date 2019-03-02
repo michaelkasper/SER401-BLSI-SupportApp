@@ -1,3 +1,6 @@
+//cssTransform.js causing issues with Jest config
+//Removing cssTransform from package.json clears error
+
 'use strict';
 
 // This is a custom Jest transformer turning style imports into empty objects.

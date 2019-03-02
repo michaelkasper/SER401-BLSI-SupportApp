@@ -1,3 +1,6 @@
+//fileTransform.js causing issues with Jest config
+//Removing fileTransform from package.json clears error
+
 'use strict';
 
 const path = require('path');
