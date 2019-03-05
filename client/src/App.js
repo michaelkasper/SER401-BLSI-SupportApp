@@ -5,12 +5,15 @@ import {inject, observer} from "mobx-react";
 import AlgorithmSelectorContainer from "./components/app/algorithm/AlgorithmSelectorContainer";
 import Loading from "./components/ui/Loading";
 import withStyles from "@material-ui/core/es/styles/withStyles";
+import Snackbar from '@material-ui/core/Snackbar';
+import Slide from "@material-ui/core/Slide";
 
 @inject("rootStore")
 @observer
 class App extends Component {
 
     state = {
+        message  : null,
         algorithm: null,
         loading  : true
     };
@@ -28,6 +31,18 @@ class App extends Component {
         });
     };
 
+    onRelease = () => {
+        this.setState({loading: true});
+        this.props.rootStore.releaseStore.post({algorithm_id: this.state.algorithm.id})
+            .then(res => {
+                this.setState({loading: false, algorithm: null, message: "Release Created!"});
+            })
+    };
+
+    handleCloseMessage = () => {
+        this.setState({message: null});
+    };
+
     render() {
         let {classes}            = this.props;
         let {algorithm, loading} = this.state;
@@ -38,11 +53,23 @@ class App extends Component {
 
         return (
             <div className={classes.root}>
-                <AlgorithmSelectorContainer onSelect={this.onSelect}/>
+                <AlgorithmSelectorContainer onSelect={this.onSelect} onRelease={this.onRelease}/>
                 {
                     algorithm &&
                     <AlgorithmContainer algorithm={algorithm}/>
                 }
+
+                <Snackbar
+                    anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+                    TransitionComponent={(props) => <Slide {...props} direction="down"/>}
+                    open={!!this.state.message}
+                    autoHideDuration={6000}
+                    onClose={this.handleCloseMessage}
+                    ContentProps={{
+                        'aria-describedby': 'message-id',
+                    }}
+                    message={<span id="message-id">{this.state.message}</span>}
+                />
             </div>
         );
     }

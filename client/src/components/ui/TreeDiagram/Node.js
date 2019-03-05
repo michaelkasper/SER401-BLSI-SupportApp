@@ -3,6 +3,7 @@ import {
 } from "storm-react-diagrams";
 import * as React from "react";
 import * as _ from "lodash";
+import StarSelectedIcon from "@material-ui/icons/StarTwoTone";
 
 export class NodeModel extends DefaultNodeModel {
     onSelect;
@@ -67,7 +68,19 @@ export class NodeWidget extends DefaultNodeWidget {
         let {node} = this.props;
 
         return (
-            <div {...this.getProps()} style={{background: node.stateSelected ? '#FFFFCC' : node.color}}>
+            <div {...this.getProps()}
+                 style={{position: 'relative', background: node.stateSelected ? '#FFFFCC' : node.color}}>
+
+                {
+                    node.stateObj.isStartState &&
+                    <StarSelectedIcon style={{
+                        color   : node.stateSelected ? node.color : "#FAFA00",
+                        position: 'absolute',
+                        top     : -1,
+                        left    : 1
+                    }}/>
+                }
+
                 <div className={this.bem("__title")} style={{color: node.stateSelected ? '#1E1E1E' : 'inherit'}}>
                     <div className={this.bem("__name")}>{node.name}</div>
                 </div>

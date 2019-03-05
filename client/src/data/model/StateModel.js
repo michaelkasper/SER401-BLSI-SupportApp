@@ -18,6 +18,10 @@ export default class StateModel extends AbstractModel {
         return this.rootStore.stateStore.get(this.state_id_next_bad);
     }
 
+    @computed get algorithm() {
+        return this.rootStore.algorithmStore.get(this.algorithm_id)
+    }
+
     @computed get questions() {
         return this.question_ids.map(id => this.rootStore.questionStore.get(id));
     }
@@ -28,6 +32,10 @@ export default class StateModel extends AbstractModel {
 
     @computed get diagramId() {
         return `${this.id}.${this.state_id_next_good}.${this.state_id_next_bad}`;
+    }
+
+    @computed get isStartState() {
+        return this.algorithm.state_id_start === this.id;
     }
 
     hasQuestion(question) {
@@ -73,6 +81,12 @@ export default class StateModel extends AbstractModel {
 
     @action.bound linkNextBadState(state) {
         this.state_id_next_bad = state ? state.id : null;
+        return this;
+    }
+
+    @action.bound toggleStartState() {
+        this.algorithm.state_id_start = this.isStartState ? null : this.id;
+        this.algorithm.save();
         return this;
     }
 }

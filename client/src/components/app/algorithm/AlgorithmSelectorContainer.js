@@ -57,7 +57,7 @@ class AlgorithmSelectorContainer extends React.Component {
                         </Typography>
 
                         <Button color="secondary">Dump Mysql</Button>
-                        <Button color="primary">New Release</Button>
+                        <Button color="primary" onClick={this.props.onRelease}>New Release</Button>
 
                     </Toolbar>
                 </AppBar>

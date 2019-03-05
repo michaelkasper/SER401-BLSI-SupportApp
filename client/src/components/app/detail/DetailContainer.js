@@ -1,7 +1,6 @@
 import React from 'react';
 import {observer} from "mobx-react";
 import AppBar from "@material-ui/core/AppBar";
-import Divider from '@material-ui/core/Divider';
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 import {withDrop} from "../../hoc/DragAndDrop";
@@ -12,6 +11,7 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Toolbar from "@material-ui/core/Toolbar";
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import StarSelectedIcon from "@material-ui/icons/StarTwoTone";
 
 @observer
 class DetailContainer extends React.Component {
@@ -63,7 +63,25 @@ class DetailContainer extends React.Component {
                 </AppBar>
 
                 <div className={classes.content}>
-                    <Divider/>
+
+
+                    {
+                        state.isStartState &&
+                        <>
+                            <Typography align='left' className={classes.startStateFlag}>
+                                <>
+                                    <StarSelectedIcon style={{
+                                        color: "#404040",
+                                    }}/>
+
+                                    Start State
+                                </>
+                            </Typography>
+
+                            <div className={classes.section}>
+                            </div>
+                        </>
+                    }
 
                     <Typography align='left' className={classes.addContent}>
                         Questions (Drop here to add)
@@ -215,6 +233,12 @@ const styles = theme => ({
     addContent     : {
         padding        : 16,
         backgroundColor: '#f2f2f2',
+        color          : '#404040',
+        fontWeight     : 'bold'
+    },
+    startStateFlag : {
+        padding        : 8,
+        backgroundColor: '#FAFA00',
         color          : '#404040',
         fontWeight     : 'bold'
     },
