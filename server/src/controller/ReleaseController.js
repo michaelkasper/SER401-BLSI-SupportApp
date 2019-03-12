@@ -61,7 +61,6 @@ class ReleaseController extends AbstractController {
                     });
             });
         })
-
     }
 
     deleteAction(id, params, data) {
@@ -73,6 +72,11 @@ class ReleaseController extends AbstractController {
                     return new JsonModel(data);
                 });
         });
+    }
+
+    connectAction(params, data) {
+        console.log("==== CONNECT ====");
+        return new JsonModel(true);
     }
 }
 

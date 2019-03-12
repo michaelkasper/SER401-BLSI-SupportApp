@@ -91,6 +91,9 @@ class AbstractController {
                 case "PATCH":
                     response = this.patchAction(this.params, this.body);
                     break;
+                case "CONNECT":
+                    response = this.connectAction(this.params, this.body);
+                    break;
                 default:
                     response = Promise.resolve(new ApiErrorModel(405, `method not allowed`));
                     break;
@@ -161,6 +164,10 @@ class AbstractController {
     }
 
     patchAction(params, data) {
+        return Promise.resolve(new ApiErrorModel(405, `method not allowed`));
+    }
+
+    connectAction(params, data) {
         return Promise.resolve(new ApiErrorModel(405, `method not allowed`));
     }
 
