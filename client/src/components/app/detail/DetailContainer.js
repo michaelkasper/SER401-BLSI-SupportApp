@@ -66,7 +66,7 @@ class DetailContainer extends React.Component {
 
 
                     {
-                        state.isStartState &&
+                        state.is_initial &&
                         <>
                             <Typography align='left' className={classes.startStateFlag}>
                                 <>
@@ -97,7 +97,7 @@ class DetailContainer extends React.Component {
                                   className={classes.sectionRow}
                             >
                                 <Grid item xs={7}>
-                                    {row.question}
+                                    {row.text}
                                 </Grid>
                                 <Grid item xs={3}>
                                     {row.type}

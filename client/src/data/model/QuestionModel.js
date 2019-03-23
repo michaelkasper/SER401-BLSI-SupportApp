@@ -4,7 +4,7 @@ import {observable, action} from "mobx";
 export default class QuestionModel extends AbstractModel {
     @observable id               = null;
     @observable algorithm_id     = null;
-    @observable question         = null;
+    @observable text             = null;
     @observable type_key         = null;
     @observable prompt           = null;
     @observable question_options = [];

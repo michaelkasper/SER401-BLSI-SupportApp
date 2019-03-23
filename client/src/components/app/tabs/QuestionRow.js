@@ -15,7 +15,7 @@ const QuestionRow = ({item: question, connectDragSource, classes}) => {
                 <Grid item xs={8} style={{
                     textAlign: 'left',
                 }}>
-                    {question.question}
+                    {question.text}
                 </Grid>
                 <Grid item xs={4} style={{
                     textAlign: 'left',

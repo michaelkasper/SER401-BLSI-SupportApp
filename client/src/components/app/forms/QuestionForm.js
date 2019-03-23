@@ -43,7 +43,7 @@ class QuestionForm extends React.Component {
             this.setState({
                 localModel: {
                     type_key        : question.type_key,
-                    question        : question.question,
+                    question        : question.text,
                     prompt          : question.prompt,
                     question_options: question.question_options
                 },
@@ -103,7 +103,7 @@ class QuestionForm extends React.Component {
 
     invalidPicklistOption = () => {
         let options = this.state.localModel.question_options;
-        let question = this.state.localModel.question;
+        let question = this.state.localModel.text;
 
         if (question.length < 1) {
             return true
@@ -121,7 +121,7 @@ class QuestionForm extends React.Component {
     
     invalidNumberOption = () => {
         let options = this.state.localModel.question_options;
-        let question = this.state.localModel.question;
+        let question = this.state.localModel.text;
 
         if (question.length < 1) {
             return true;
@@ -184,7 +184,7 @@ class QuestionForm extends React.Component {
                             <TextField
                                 id="outlined-full-width"
                                 label="Question"
-                                value={localModel.question}
+                                value={localModel.text}
                                 onChange={this.onChange('question')}
                                 multiline
                                 rowsMax="6"
