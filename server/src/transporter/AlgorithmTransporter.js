@@ -21,7 +21,6 @@ class AlgorithmTransporter extends Abstract {
                 allowNull: false
             },
             version_number   : Sequelize.FLOAT(8, 2),
-            state_id_start   : Sequelize.INTEGER.UNSIGNED,
             description      : Sequelize.TEXT,
             short_description: Sequelize.TEXT,
             date_modified: Sequelize.TEXT,

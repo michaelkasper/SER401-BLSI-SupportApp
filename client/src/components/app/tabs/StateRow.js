@@ -18,14 +18,14 @@ const StateRow = ({item: state, connectDragSource, classes}) => {
                     textAlign: 'left',
                 }}>
                     {
-                        !state.isStartState &&
+                        !state.is_initial &&
                         <StarIcon className={[classes.star, "star"].join(" ")} onClick={() => {
                             state.toggleStartState();
                         }}/>
                     }
 
                     {
-                        state.isStartState &&
+                        state.is_initial &&
                         <StarSelectedIcon className={[classes.starSelected, "star-selected"].join(" ")} onClick={() => {
                             state.toggleStartState();
                         }}/>

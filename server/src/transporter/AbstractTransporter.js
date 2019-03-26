@@ -16,6 +16,10 @@ class AbstractTransporter {
         this.database  = database;
     }
 
+    getTable() {
+        return this.table;
+    }
+
     async query(config) {
         return this.table.findAll(config);
     }

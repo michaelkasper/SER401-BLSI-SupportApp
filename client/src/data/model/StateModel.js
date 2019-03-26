@@ -8,6 +8,7 @@ export default class StateModel extends AbstractModel {
     @observable state_id_next_bad  = null;
     @observable question_ids       = [];
     @observable recommendation_ids = [];
+    @observable is_initial         = false;
 
 
     @computed get nextGoodState() {
@@ -32,10 +33,6 @@ export default class StateModel extends AbstractModel {
 
     @computed get diagramId() {
         return `${this.id}.${this.state_id_next_good}.${this.state_id_next_bad}`;
-    }
-
-    @computed get isStartState() {
-        return this.algorithm.state_id_start === this.id;
     }
 
     hasQuestion(question) {
@@ -85,8 +82,14 @@ export default class StateModel extends AbstractModel {
     }
 
     @action.bound toggleStartState() {
-        this.algorithm.state_id_start = this.isStartState ? null : this.id;
-        this.algorithm.save();
+        this.is_initial = !this.is_initial;
+        if (this.is_initial) {
+            this.algorithm.states.filter(state => state.id !== this.id && state.is_initial).forEach(state => {
+                state.is_initial = false;
+                state.save();
+            })
+        }
+        this.save();
         return this;
     }
 }
