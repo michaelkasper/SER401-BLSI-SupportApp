@@ -20,7 +20,7 @@ class QuestionTransporter extends Abstract {
                 type     : Sequelize.INTEGER.UNSIGNED,
                 allowNull: false,
             },
-            question    : {
+            text        : {
                 type     : Sequelize.TEXT,
                 allowNull: false
             },

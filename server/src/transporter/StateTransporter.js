@@ -20,6 +20,7 @@ class StateTransporter extends Abstract {
                 type     : Sequelize.INTEGER.UNSIGNED,
                 allowNull: false,
             },
+            is_initial        : Sequelize.BOOLEAN,
             state_id_next_good: {
                 type: Sequelize.INTEGER.UNSIGNED,
             },

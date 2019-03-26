@@ -3,7 +3,6 @@
 /**
  * Written by Taylor Greeff (tgreeff)
  */
-
 const Abstract  = require("./AbstractTransporter");
 const Sequelize = require("sequelize");
 
@@ -31,7 +30,13 @@ class ReleaseTransporter extends Abstract {
                 type: Sequelize.TEXT
             },
             attribute_json: { //Stores question, reccomendation, and states
-                type: Sequelize.TEXT
+                type: Sequelize.BLOB
+            },
+            is_active     : {
+                type: Sequelize.BOOLEAN,
+            },
+            date_created  : {
+                type: Sequelize.DATE
             }
         };
 
@@ -56,13 +61,47 @@ class ReleaseTransporter extends Abstract {
     }
 
     async getAll() {
-        return this.table.findAll({})
+        return super.query({
+            where: {
+                is_active: 1
+            }
+        })
             .then((results) => {
-                return Promise.all(results.map(({dataValues: result}) => delete result.attribute_json))
-                    .then(() => {
-                        return results;
-                    });
+                if (results) {
+                    return results.map(({dataValues: result}) => {
+                        delete result.attribute_json;
+                        return this.formatObject(result);
+                    })
+                }
+
+                return null
             });
+    }
+
+
+    async get(id) {
+        return super.get(id)
+            .then((result) => {
+                return this.formatObject(result);
+            });
+    }
+
+
+    formatObject(object) {
+
+        if ('attribute_json' in object) {
+            object.attribute_json = JSON.parse(this.jsonEscape(object.attribute_json));
+        }
+
+        if ('algorithm_json' in object) {
+            object.algorithm_json = JSON.parse(this.jsonEscape(object.algorithm_json));
+        }
+        return object;
+    }
+
+
+    jsonEscape(str) {
+        return str.replace(/\n/g, "\\\\n").replace(/\r/g, "\\\\r").replace(/\t/g, "\\\\t");
     }
 }
 

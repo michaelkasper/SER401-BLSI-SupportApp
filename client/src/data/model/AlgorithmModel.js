@@ -7,7 +7,6 @@ export default class AlgorithmModel extends AbstractModel {
     @observable name              = null;
     @observable short_description = null;
     @observable description       = null;
-    @observable state_id_start    = null;
 
     get questions() {
         return this.rootStore.questionStore.getAll().filter(item => item.algorithm_id === this.id);
@@ -19,10 +18,6 @@ export default class AlgorithmModel extends AbstractModel {
 
     get states() {
         return this.rootStore.stateStore.getAll().filter(item => item.algorithm_id === this.id);
-    }
-
-    get startState() {
-        return this.rootStore.stateStore.get(this.state_id_start);
     }
 
     get stateDiagramId() {

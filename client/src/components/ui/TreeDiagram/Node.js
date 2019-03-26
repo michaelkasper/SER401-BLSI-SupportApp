@@ -72,7 +72,7 @@ export class NodeWidget extends DefaultNodeWidget {
                  style={{position: 'relative', background: node.stateSelected ? '#FFFFCC' : node.color}}>
 
                 {
-                    node.stateObj.isStartState &&
+                    node.stateObj.is_initial &&
                     <StarSelectedIcon style={{
                         color   : node.stateSelected ? node.color : "#FAFA00",
                         position: 'absolute',

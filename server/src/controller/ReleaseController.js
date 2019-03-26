@@ -8,6 +8,7 @@ var AbstractController = require('./AbstractController');
 var ApiErrorModel      = require('./../model/ApiErrorModel');
 var JsonModel          = require('./../model/JsonModel');
 var Promise            = require('bluebird');
+const Sequelize = require("sequelize");
 
 class ReleaseController extends AbstractController {
     constructor(request, response, serviceManager) {
@@ -54,10 +55,17 @@ class ReleaseController extends AbstractController {
                     attribute_json: JSON.stringify(attributes),
                     algorithm_id  : algorithm.id,
                     version_number: algorithm.version_number,
-                    name          : algorithm.name
+                    name          : algorithm.name,
+                    is_active     : 1
                 }, transaction)
                     .then((data) => {
-                        return new JsonModel(data);
+                        return this.database.release.getTable().update(
+                            {is_active: 0},
+                            {
+                                where      : {id: {[Sequelize.Op.ne]: data.id}},
+                                transaction: transaction
+                            }
+                        ).then(() => new JsonModel(data))
                     });
             });
         })
