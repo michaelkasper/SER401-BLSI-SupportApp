@@ -43,23 +43,6 @@ class ReleaseTransporter extends Abstract {
         super(database, sequelize, "release", fields);
     }
 
-    async get(id, config = {}) {
-        return this.table.findAll({
-            where: {
-                algorithm_id: id
-            },
-            ...config
-        }).then(res => {
-            let latest = res[0];
-            res.forEach(element => {
-                if(element.version_number > latest.version_number) {
-                    latest = element;
-                }
-            });
-            return latest
-        });
-    }
-
     async getAll() {
         return super.query({
             where: {
