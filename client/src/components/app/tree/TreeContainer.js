@@ -1,9 +1,10 @@
-import {
-    DiagramWidget
-} from "storm-react-diagrams";
+// import {
+//     DiagramWidget
+// } from "storm-react-diagrams";
 import React from 'react';
 import withStyles from "@material-ui/core/es/styles/withStyles";
 import TreeDiagram from "../../ui/TreeDiagram/TreeDiagram";
+import MyDiagramWidget from "../../ui/TreeDiagram/MyDiagramWidget";
 
 require("../../ui/TreeDiagram/TreeDiagram.css");
 
@@ -20,6 +21,8 @@ class TreeContainer extends React.Component {
 
         this.setState({
             diagram: new TreeDiagram(algorithm, selectedState, onStateChange)
+        }, () => {
+            this.state.diagram.engine.zoomToFit();
         })
     }
 
@@ -39,6 +42,10 @@ class TreeContainer extends React.Component {
         }
     }
 
+    zoomToFit = () => {
+        this.state.diagram.engine.zoomToFit()
+    };
+
 
     render() {
         let {classes} = this.props;
@@ -48,10 +55,12 @@ class TreeContainer extends React.Component {
             <div className={classes.root}>
                 {
                     diagram &&
-                    <DiagramWidget
+                    <MyDiagramWidget
                         className="srd-demo-canvas"
                         diagramEngine={diagram.build()}
                         allowLooseLinks={false}
+                        allowCanvasTranslation={false}
+                        allowCanvasZoom={false}
                         maxNumberPointsPerLink={4}
                     />
                 }
@@ -66,7 +75,7 @@ const styles = theme => ({
         textAlign : 'right',
         padding   : 10,
         marginLeft: 400,
-        height    : '600px',
+        height    : "calc(100vh - 120px)",
         display   : 'flex',
         width     : 'calc(100% - 400px)'
     },

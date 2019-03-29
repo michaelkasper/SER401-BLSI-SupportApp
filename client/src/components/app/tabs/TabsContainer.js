@@ -188,13 +188,12 @@ class TabsContainer extends React.Component {
 
 const styles = theme => ({
     root       : {
-
         "position"     : "absolute",
         "top"          : "0px",
         "left"         : "0px",
         backgroundColor: theme.palette.background.default,
         width          : 400,
-        height         : "calc(100vh - 68px)",
+        height         : "calc(100vh - 80px)",
         boxShadow      : "3px 0px 10px -5px #888888"
     },
     tabRoot    : {

@@ -213,7 +213,7 @@ const styles = theme => ({
         width          : 400,
         right          : "0px",
         top            : "0px",
-        height         : "calc(100vh - 68px)",
+        height         : "calc(100vh - 80px)",
         boxShadow      : "-3px 0px 10px -5px #888888"
     },
     containerHeader: {},

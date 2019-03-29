@@ -8,6 +8,15 @@ export default class QuestionModel extends AbstractModel {
     @observable type_key         = null;
     @observable prompt           = null;
     @observable question_options = [];
+
+    get type(){
+        if(this.type_key === 'picklist'){
+            if(this.question_options.length === 2){
+                return "boolean";
+            }
+        }
+        return this.type_key
+    }
 }
 
 

@@ -37,33 +37,31 @@ class TreeDiagram {
         });
 
         let model = this.getDistributedModel();
-        this.engine.setDiagramModel(model);
-
 
         Object.values(model.getNodes()).forEach(node => {
-            // node.setLocked(true);
+            node.setLocked(true);
             Object.values(node.getPorts()).forEach(port => {
                 port.setLocked(true);
             });
         });
-
-    }
-
-
-    build() {
-
-        if (this.selectedState) {
-            Object.values(this.engine.getDiagramModel().getNodes()).forEach(node => {
-                node.setStateSelected(node.stateObj.id === this.selectedState.id);
-            });
-        }
-
 
         // Object.values(model.getLinks()).forEach(link => {
         //     link.setLocked(true);
         // });
 
         // model.setLocked(true);
+
+
+        this.engine.setDiagramModel(model);
+    }
+
+
+    build() {
+        if (this.selectedState) {
+            Object.values(this.engine.getDiagramModel().getNodes()).forEach(node => {
+                node.setStateSelected(node.stateObj.id === this.selectedState.id);
+            });
+        }
         return this.engine;
     }
 

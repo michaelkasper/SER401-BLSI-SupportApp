@@ -41,6 +41,10 @@ export class LinkFactory extends DefaultLinkFactory {
 
 export class LinkWidget extends DefaultLinkWidget {
 
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        return false;
+    }
+
     generateLink(path, extraProps, id) {
         let props = this.props;
 
