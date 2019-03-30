@@ -107,4 +107,12 @@ app.use(function (req, res, next) {
     }
 });
 
+
 app.listen(port, () => console.log(`Server listening on port ` + port));
+
+
+app.use(express.static(path.join(__dirname, "..", "dist")));
+app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "..", "dist", "index.html"));
+});
+
