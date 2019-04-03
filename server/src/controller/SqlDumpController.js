@@ -8,7 +8,7 @@ var AbstractController = require('./AbstractController');
 var ApiErrorModel = require('../model/ApiErrorModel');
 var JsonModel = require('../model/JsonModel');
 var dump = require("mysqldump");
-var database = require("../../env/database");
+var database = require("../../common/database");
 
 class AlgorithmController extends AbstractController {
     constructor(request, response, serviceManager) {

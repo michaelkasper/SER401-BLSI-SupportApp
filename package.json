@@ -25,9 +25,10 @@
     "cors": "^2.8.5",
     "css-loader": "1.0.0",
     "dagre": "^0.8.4",
-    "dotenv": "6.0.0",
+    "dotenv": "^7.0.0",
     "dotenv-expand": "4.2.0",
     "ejs": "^2.6.1",
+    "env-cmd": "^8.0.2",
     "eslint": "5.6.0",
     "eslint-config-react-app": "^3.0.6",
     "eslint-loader": "2.1.1",
@@ -151,13 +152,14 @@
     "react-test-renderer": "^16.7.0"
   },
   "scripts": {
-    "dev-client": "node client/scripts/start.js",
-    "dev-server": "nodemon server/src/app.js",
-    "build-client": "node client/scripts/build.js",
-    "test-client": "node client/scripts/test.js",
-    "start-client": "node client/scripts/start.js",
-    "start-server": "node server/src/app.js",
+    "dev-client": "env-cmd default,dev  node client/scripts/start.js",
+    "dev-server": "env-cmd default,dev  nodemon server/src/app.js",
+    "test-client": "env-cmd default,dev  node client/scripts/test.js",
+    "start-client": "env-cmd default,dev  node client/scripts/start.js",
+    "start-server": "env-cmd default,dev  node server/src/app.js",
     "dev": "concurrently \"npm:dev-*\"",
-    "start": "concurrently \"npm:start-*\""
+    "start": "concurrently \"npm:start-*\"",
+    "prod": "env-cmd default,prod  node client/scripts/build.js; env-cmd default,prod  node server/src/app.js",
+    "prod-server": "env-cmd default,prod  node server/src/app.js"
   }
 }

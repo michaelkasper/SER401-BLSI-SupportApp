@@ -15,7 +15,7 @@ const KeyTransporter                 = require("./KeyTransporter");
 const ReleaseTransporter             = require("./ReleaseTransporter")
 
 const Sequelize = require("sequelize");
-var database    = require("../../env/database");
+var database    = require("../../common/database");
 
 class DatabaseTransporter {
     constructor() {

@@ -5,11 +5,13 @@
  * Modified for use by Taylor Greeff - tgreeff
  */
 
+require('dotenv').config();
 const express    = require('express');
 const cors       = require('cors');
-const fs         = require('fs');
-const ejs        = require('ejs');
 const bodyParser = require('body-parser');
+const path       = require("path");
+
+const env = require('../common/Environment');
 
 //Controllers
 const KeyController            = require('./controller/KeyController');
@@ -19,9 +21,6 @@ const RecommendationController = require('./controller/RecommendationController'
 const StateController          = require('./controller/StateController');
 const ReleaseController        = require('./controller/ReleaseController');
 const SqlDumpController        = require("./controller/SqlDumpController");
-
-//Model
-const ApiErrorModel = require('./model/ApiErrorModel');
 
 //Transporter
 const Database = require("./transporter/DatabaseTransporter");
@@ -47,7 +46,7 @@ const serviceManager = {
 };
 
 const app  = express();
-const port = process.env.PORT || 3001;
+const port = env.http_port || 3001;
 
 app.use(cors({
     origin              : function (origin, callback) {
@@ -71,26 +70,8 @@ Object.keys(routes).forEach(route => {
     }
 });
 
-app.use('/', function (req, res, next) {
-    if (!('response' in res)) {
-        fs.stat(__dirname + "/../../public" + req.originalUrl, function (err, stat) {
-            if (err == null) {
-                //Bad request check. GET accepted
-                if (req.method.toUpperCase() !== 'GET') {
-                    res.response = new ApiErrorModel(405, 'method not allowed');
-                }
-            } else {
-                res.response = new ApiErrorModel(404, 'page not found');
-            }
-            next();
-        });
-    } else {
-        next();
-    }
-});
 
-
-app.use('/', express.static(__dirname + "/test/", {
+app.use('/test', express.static(__dirname + "/test/", {
     index: "test.html"
 }));
 
@@ -104,15 +85,18 @@ app.use(function (req, res, next) {
             .catch(e => {
                 console.log(e.toString());
             });
+    }else{
+        next();
     }
 });
 
 
-app.listen(port, () => console.log(`Server listening on port ` + port));
 
-
-app.use(express.static(path.join(__dirname, "..", "dist")));
+app.use(express.static(path.join(__dirname, "../..", env.build_dir)));
 app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "..", "dist", "index.html"));
+    res.sendFile(path.join(__dirname, "../..", env.build_dir, "index.html"));
 });
+
+
+app.listen(port, () => console.log(`Server listening on port ` + port));
 
