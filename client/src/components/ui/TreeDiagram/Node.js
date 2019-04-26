@@ -113,7 +113,7 @@ class NodeWidgetComponent extends DefaultNodeWidget {
                             <h5>Questions</h5>
                             <ol>
                             {node.stateObj.questions.map(row => (
-                                <li>{row.text}</li>
+                                <li key={row.id}>{row.text}</li>
                             ))}
                             </ol>
                         </div>
@@ -122,7 +122,7 @@ class NodeWidgetComponent extends DefaultNodeWidget {
                             <h5>Recommendations</h5>
                             <ol>
                                 {node.stateObj.recommendations.map(row => (
-                                    <li>{row.title}</li>
+                                    <li key={row.id}>{row.title}</li>
                                 ))}
                             </ol>
                         </div>

@@ -22,8 +22,6 @@ export default class MyLinkLayerWidget extends LinkLayerWidget {
 
     shouldComponentUpdate(nextProps, nextState, nextContext) {
         let newViewState = this.buildViewState(nextProps.diagramEngine.getDiagramModel());
-
-        console.log(newViewState, this.viewState);
         return newViewState !== this.viewState;
     }
 }
