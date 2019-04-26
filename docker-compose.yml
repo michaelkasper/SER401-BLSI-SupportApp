@@ -15,3 +15,24 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: password
       MYSQL_DATABASE: blsi
+  node:
+    container_name: blsi-server
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile-Node
+    volumes:
+      - ./:/app
+    ports:
+      - '8081:5000'
+    links:
+      - mysql
+    command: npm run prod
+  ngrok:
+    container_name: blsi-ngrok
+    image: wernight/ngrok
+    ports:
+      - 5000:4040
+    links:
+      - node:http
+    environment:
+      NGROK_PORT: http:5000

@@ -85,11 +85,10 @@ app.use(function (req, res, next) {
             .catch(e => {
                 console.log(e.toString());
             });
-    }else{
+    } else {
         next();
     }
 });
-
 
 
 app.use(express.static(path.join(__dirname, "../..", env.build_dir)));

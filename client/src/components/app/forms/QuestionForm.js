@@ -177,7 +177,7 @@ class QuestionForm extends React.Component {
                                 id="outlined-full-width"
                                 label="Question"
                                 value={localModel.text}
-                                onChange={this.onChange('question')}
+                                onChange={this.onChange('text')}
                                 multiline
                                 rowsMax="6"
                                 placeholder="Question"
