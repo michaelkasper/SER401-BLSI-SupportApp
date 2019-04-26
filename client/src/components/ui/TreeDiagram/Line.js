@@ -84,15 +84,15 @@ export class LinkWidget extends DefaultLinkWidget {
         // See @link{#isSmartRoutingApplicable()}.
         if (paths.length === 0) {
             if (points.length === 2) {
-                let isHorizontal = Math.abs(points[0].x - points[1].x) > Math.abs(points[0].y - points[1].y);
-                let xOrY         = isHorizontal ? "x" : "y";
+                // let isHorizontal = Math.abs(points[0].x - points[1].x) > Math.abs(points[0].y - points[1].y);
+                // let xOrY         = isHorizontal ? "x" : "y";
 
                 //draw the smoothing
                 //if the points are too close, just draw a straight line
-                let margin = 50;
-                if (Math.abs(points[0][xOrY] - points[1][xOrY]) < 50) {
-                    margin = 5;
-                }
+                // let margin = 50;
+                // if (Math.abs(points[0][xOrY] - points[1][xOrY]) < 50) {
+                //     margin = 5;
+                // }
 
                 let pointLeft  = points[0];
                 let pointRight = points[1];

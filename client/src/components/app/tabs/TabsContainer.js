@@ -5,7 +5,6 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 import TabContainer from "./TabContainer";
-import Modal from "@material-ui/core/Modal";
 import QuestionForm from "../forms/QuestionForm";
 import RecommendationForm from "../forms/RecommendationForm";
 import StateRow from "./StateRow";

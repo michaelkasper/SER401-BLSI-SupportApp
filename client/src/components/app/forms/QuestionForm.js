@@ -21,13 +21,13 @@ import Grid from "@material-ui/core/Grid";
 class QuestionForm extends React.Component {
 
     state = {
-        localModel: {
+        localModel     : {
             type_key        : 'picklist',
-            question        : "",
+            text            : "",
             prompt          : "",
             question_options: []
         },
-        invalidQuestion     : false    // UI only, does not affect functionality
+        invalidQuestion: false    // UI only, does not affect functionality
     };
 
     setDefaultOptions = () => {
@@ -41,13 +41,13 @@ class QuestionForm extends React.Component {
         let {question} = this.props;
         if (question) {
             this.setState({
-                localModel: {
+                localModel     : {
                     type_key        : question.type_key,
-                    question        : question.text,
+                    text            : question.text,
                     prompt          : question.prompt,
                     question_options: question.question_options
                 },
-                invalidQuestion     : false
+                invalidQuestion: false
             }, this.setDefaultOptions);
         } else {
             this.setDefaultOptions();
@@ -55,7 +55,7 @@ class QuestionForm extends React.Component {
     }
 
     onChange = (field) => (e) => {
-        let localModel    = {...this.state.localModel};
+        let localModel = {...this.state.localModel};
         this.setState({invalidQuestion: e.target.value.length < 1});
         localModel[field] = e.target.value;
         this.setState({localModel: localModel});
@@ -95,47 +95,39 @@ class QuestionForm extends React.Component {
     invalidQuestion = () => {
         if (this.state.localModel.type_key === 'picklist') {
             return this.invalidPicklistOption();
-        }
-        else {
+        } else {
             return this.invalidNumberOption();
         }
     }
 
     invalidPicklistOption = () => {
-        let options = this.state.localModel.question_options;
-        let question = this.state.localModel.text;
+        let options  = this.state.localModel.question_options;
+        let questionText = this.state.localModel.text;
 
-        if (question.length < 1) {
+        if (questionText.length < 1) {
             return true
-        }
-        else if (options.some(this.emptyPicklistLabel)) {
+        } else if (options.some(this.emptyPicklistLabel)) {
             return true;
-        }
-        else if (options.every(this.allPositiveChecks) || options.every(this.allNegativeChecks)) {
+        } else if (options.every(this.allPositiveChecks) || options.every(this.allNegativeChecks)) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
-    
-    invalidNumberOption = () => {
-        let options = this.state.localModel.question_options;
-        let question = this.state.localModel.text;
 
-        if (question.length < 1) {
+    invalidNumberOption = () => {
+        let options  = this.state.localModel.question_options;
+        let questionText = this.state.localModel.text;
+
+        if (questionText.length < 1) {
             return true;
-        }
-        else if (options.some(this.emptyMinNumber) || options.some(this.emptyMaxNumber)) {
+        } else if (options.some(this.emptyMinNumber) || options.some(this.emptyMaxNumber)) {
             return true;
-        }
-        else if (options.some(this.maxValueLessThanOrEqualToMinValue)) {
+        } else if (options.some(this.maxValueLessThanOrEqualToMinValue)) {
             return true;
-        }
-        else if (options.every(this.allPositiveChecks) || options.every(this.allNegativeChecks)) {
+        } else if (options.every(this.allPositiveChecks) || options.every(this.allNegativeChecks)) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     };
@@ -275,10 +267,10 @@ class QuestionForm extends React.Component {
                     <Button onClick={this.onCancel} color="secondary">
                         Cancel
                     </Button>
-                    <Button 
-                        onClick={this.onSave} 
-                        color="primary" 
-                        autoFocus 
+                    <Button
+                        onClick={this.onSave}
+                        color="primary"
+                        autoFocus
                         disabled={this.invalidQuestion()}
                     >
                         {

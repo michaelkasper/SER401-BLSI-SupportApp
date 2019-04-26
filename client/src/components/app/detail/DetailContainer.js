@@ -41,7 +41,7 @@ class DetailContainer extends React.Component {
     };
 
     render() {
-        let {classes, algorithm, state, canDrop} = this.props;
+        let {classes, state} = this.props;
 
         return (
             <div className={classes.root}>

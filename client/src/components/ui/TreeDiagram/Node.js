@@ -5,10 +5,8 @@ import * as React from "react";
 import * as _ from "lodash";
 import StarSelectedIcon from "@material-ui/icons/StarTwoTone";
 import Tooltip from "@material-ui/core/Tooltip";
-import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/es/styles/withStyles";
 import {Fragment} from "react";
-import Grid from "@material-ui/core/Grid";
 
 class NodeModel extends DefaultNodeModel {
     onSelect;
